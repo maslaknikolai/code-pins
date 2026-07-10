@@ -48,9 +48,12 @@ async function main() {
 		}),
 		esbuild.context({
 			...common,
-			entryPoints: ['src/webview/main.ts'],
+			entryPoints: ['src/webview/main.tsx'],
 			format: 'iife',
 			platform: 'browser',
+			jsx: 'automatic',
+			// React branches on this at runtime; browsers have no `process` global.
+			define: { 'process.env.NODE_ENV': production ? '"production"' : '"development"' },
 			outfile: 'dist/webview.js',
 		}),
 	]);

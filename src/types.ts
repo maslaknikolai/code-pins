@@ -31,6 +31,7 @@ export interface MapFile {
 export type WebviewToExtensionMessage =
 	| { type: 'ready' }
 	| { type: 'moveNode'; id: string; x: number; y: number }
+	| { type: 'removeNode'; id: string }
 	| { type: 'openLocation'; file: string; line: number };
 
 export type ExtensionToWebviewMessage = { type: 'setState'; nodes: GraphNode[] };

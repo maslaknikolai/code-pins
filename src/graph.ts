@@ -40,6 +40,14 @@ export class GraphManager {
 		}
 	}
 
+	remove(id: string): void {
+		const index = this.nodes.findIndex((n) => n.id === id);
+		if (index !== -1) {
+			this.nodes.splice(index, 1);
+			this._onDidChange.fire();
+		}
+	}
+
 	clear(): void {
 		this.nodes = [];
 		this._onDidChange.fire();

@@ -47,6 +47,9 @@ export class GraphPanel {
 			case 'moveNode':
 				this.graph.move(message.id, message.x, message.y);
 				break;
+			case 'removeNode':
+				this.graph.remove(message.id);
+				break;
 			case 'openLocation':
 				void this.openLocation(message.file, message.line);
 				break;
@@ -73,32 +76,23 @@ export class GraphPanel {
 
 	private getHtml(webview: vscode.Webview, extensionUri: vscode.Uri): string {
 		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'dist', 'webview.js'));
+		const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'dist', 'webview.css'));
 		const nonce = getNonce();
 		return /* html */ `<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="Content-Security-Policy"
-		content="default-src 'none'; style-src 'unsafe-inline'; script-src 'nonce-${nonce}';">
+		content="default-src 'none'; style-src 'unsafe-inline' ${webview.cspSource}; script-src 'nonce-${nonce}';">
+	<link rel="stylesheet" href="${styleUri}">
 	<style>
-		body {
-			padding: 0;
-			overflow: auto;
-		}
-		#canvas {
-			position: relative;
-			width: 4000px;
-			height: 4000px;
-		}
-		#arrows {
-			position: absolute;
-			inset: 0;
-			width: 100%;
+		html, body, #root {
 			height: 100%;
-			pointer-events: none;
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
 		}
-		.node {
-			position: absolute;
+		.pin {
 			min-width: 180px;
 			max-width: 420px;
 			font-family: var(--vscode-editor-font-family);
@@ -106,50 +100,65 @@ export class GraphPanel {
 			background: var(--vscode-editorWidget-background);
 			border: 1px solid var(--vscode-editorWidget-border);
 			border-radius: 4px;
-			cursor: grab;
 			user-select: none;
 			overflow: hidden;
 		}
-		.node.declaration {
+		.pin.declaration {
 			border-color: var(--vscode-charts-blue, #4a90d9);
 			border-width: 2px;
 		}
-		.node .header {
+		.pin .header {
 			padding: 3px 8px;
 			font-weight: bold;
 			background: var(--vscode-editorGroupHeader-tabsBackground);
 			border-bottom: 1px solid var(--vscode-editorWidget-border);
 			white-space: nowrap;
 		}
-		.node .header .path {
+		.pin .header .remove {
+			float: right;
+			margin-left: 8px;
+			padding: 0 4px;
+			border: none;
+			background: transparent;
+			color: inherit;
+			font: inherit;
+			cursor: pointer;
+			opacity: 0.5;
+		}
+		.pin .header .remove:hover {
+			opacity: 1;
+			color: var(--vscode-errorForeground, #f66);
+		}
+		.pin .header .path {
 			display: none;
 			font-weight: normal;
 			opacity: 0.7;
 			margin-right: 4px;
 		}
-		.node .header:hover .path {
+		.pin .header:hover .path {
 			display: inline;
 		}
-		.node .line {
+		.pin .line {
 			padding: 1px 8px;
 			white-space: pre;
 			cursor: pointer;
 		}
-		.node .line:hover {
+		.pin .line:hover {
 			background: var(--vscode-list-hoverBackground);
 		}
-		.node .hl {
+		.pin .hl {
 			background: var(--vscode-editor-findMatchHighlightBackground, rgba(234, 92, 0, 0.33));
 			border-radius: 2px;
 		}
-		.arrow-line {
-			stroke: var(--vscode-editorLineNumber-foreground, #888);
-			stroke-width: 1.5;
+		/* Edge anchors only — not user-connectable, so keep them invisible. */
+		.pin-handle {
+			opacity: 0;
+			pointer-events: none;
 		}
 	</style>
 </head>
 <body>
-	<div id="canvas"><svg id="arrows"></svg></div>
+	<div id="root"></div>
 	<script nonce="${nonce}" src="${scriptUri}"></script>
 </body>
 </html>`;
