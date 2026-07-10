@@ -1,26 +1,39 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { GraphManager } from './graph';
+import { GraphPanel } from './panel';
+import { buildPinnedNode } from './pin';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+	const graph = new GraphManager();
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "code-pins" is now active!');
+	context.subscriptions.push(
+		vscode.commands.registerCommand('code-pins.pin', async () => {
+			const editor = vscode.window.activeTextEditor;
+			if (!editor) {
+				vscode.window.showWarningMessage('Code Pins: open a file and place the cursor on a symbol.');
+				return;
+			}
+			const node = await buildPinnedNode(editor);
+			if (node) {
+				graph.add(node);
+				GraphPanel.createOrShow(context.extensionUri, graph);
+			}
+		}),
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('code-pins.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from code-pins!');
-	});
+		vscode.commands.registerCommand('code-pins.showMap', () => {
+			GraphPanel.createOrShow(context.extensionUri, graph);
+		}),
 
-	context.subscriptions.push(disposable);
+		vscode.commands.registerCommand('code-pins.saveMap', () => graph.save()),
+
+		vscode.commands.registerCommand('code-pins.openMap', async () => {
+			if (await graph.open()) {
+				GraphPanel.createOrShow(context.extensionUri, graph);
+			}
+		}),
+
+		vscode.commands.registerCommand('code-pins.newMap', () => graph.clear())
+	);
 }
 
-// This method is called when your extension is deactivated
 export function deactivate() {}

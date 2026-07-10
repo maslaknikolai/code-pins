@@ -14,8 +14,32 @@
   "contributes": {
     "commands": [
       {
-        "command": "code-pins.helloWorld",
-        "title": "Hello World"
+        "command": "code-pins.pin",
+        "title": "Code Pins: Pin Symbol to Map"
+      },
+      {
+        "command": "code-pins.showMap",
+        "title": "Code Pins: Show Map"
+      },
+      {
+        "command": "code-pins.saveMap",
+        "title": "Code Pins: Save Map"
+      },
+      {
+        "command": "code-pins.openMap",
+        "title": "Code Pins: Open Map"
+      },
+      {
+        "command": "code-pins.newMap",
+        "title": "Code Pins: New Map"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "code-pins.pin",
+        "key": "ctrl+y",
+        "mac": "cmd+y",
+        "when": "editorTextFocus"
       }
     ]
   },
