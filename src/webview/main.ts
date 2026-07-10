@@ -94,7 +94,8 @@ function makeDraggable(el: HTMLElement, node: GraphNode): void {
 		const startY = event.clientY;
 		const origX = node.x;
 		const origY = node.y;
-		el.setPointerCapture(event.pointerId);
+		// No pointer capture: it would retarget pointerup to the node element
+		// and suppress click events on the lines inside it.
 
 		const onMove = (moveEvent: PointerEvent): void => {
 			const dx = moveEvent.clientX - startX;
@@ -110,8 +111,8 @@ function makeDraggable(el: HTMLElement, node: GraphNode): void {
 			drawArrows();
 		};
 		const onUp = (): void => {
-			el.removeEventListener('pointermove', onMove);
-			el.removeEventListener('pointerup', onUp);
+			window.removeEventListener('pointermove', onMove);
+			window.removeEventListener('pointerup', onUp);
 			if (dragMoved) {
 				vscode.postMessage({ type: 'moveNode', id: node.id, x: node.x, y: node.y });
 			}
@@ -120,8 +121,8 @@ function makeDraggable(el: HTMLElement, node: GraphNode): void {
 				dragMoved = false;
 			}, 0);
 		};
-		el.addEventListener('pointermove', onMove);
-		el.addEventListener('pointerup', onUp);
+		window.addEventListener('pointermove', onMove);
+		window.addEventListener('pointerup', onUp);
 	});
 }
 

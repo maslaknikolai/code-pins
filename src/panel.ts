@@ -156,7 +156,12 @@ export class GraphPanel {
 	}
 }
 
-// TODO what is it for explain in this comment
+/**
+ * Random token for the webview's Content-Security-Policy. The CSP above blocks
+ * all scripts except ones tagged with this nonce (`script-src 'nonce-...'`),
+ * so only the <script> we emit ourselves can run — anything injected into the
+ * webview HTML by other means won't execute. Regenerated on every panel open.
+ */
 function getNonce(): string {
 	let text = '';
 	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

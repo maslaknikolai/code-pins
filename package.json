@@ -38,7 +38,7 @@
       {
         "command": "code-pins.pin",
         "key": "ctrl+y",
-        "mac": "cmd+y",
+        "mac": "ctrl+y",
         "when": "editorTextFocus"
       }
     ]
