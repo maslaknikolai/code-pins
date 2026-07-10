@@ -1,71 +1,61 @@
-# code-pins README
+# code-pins
 
-This is the README for your extension "code-pins". After writing up a brief description, we recommend including the following sections.
+A VS Code extension for building a visual flow map of your code.
+
+The developer decides which entities matter; the extension helps add them to the map and link them together.
+
+When the user spots an important entity in the code — a function, class, method, variable, component, hook, store, etc. — they place the cursor on it and press a hotkey, e.g. `cmd+Y`. The extension adds that entity to the graph as a node.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+### Example flow
 
-For example if there is an image subfolder under your extension project workspace:
+1. The user places the cursor on `updateCampaign()`.
+2. Presses `cmd+Y`.
+3. A `ReferenceNode` is added to the graph:
 
-\!\[feature X\]\(images/feature-x.png\)
+    ```bash
+    (path)/CampaignsList.tsx
+        const CampaignList
+            handleSubmit(() => {
+                  store.updateCampaign({
+    ```
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+    1. The path is hidden and only shown on hover.
+    2. Every line is clickable and opens the file focused on the selected line.
+4. Via `cmd+click` on `updateCampaign` in the code, the developer jumps to the method's declaration and places the cursor on `updateCampaign`.
+5. Presses `cmd+Y` again.
+6. A second node, `DeclarationNode`, is added to the graph:
+
+    ```bash
+    (path)/campaignsState.ts
+        class campaignsState {
+            updateCampaign = (options: UpdateCampaignOptions) => {
+    ```
+
+    1. `updateCampaign` is highlighted.
+7. Since both nodes refer to the same entity, an arrow shows the link between them.
+    1. Adding the new node triggered `vscode.executeDefinitionProvider` — same as pressing `cmd+click`.
+    2. The arrow is directed.
+8. `ReferenceNode` and `DeclarationNode` look different.
+9. Nodes can be dragged around.
+10. A map can be saved, a saved one opened, or a new one started.
+11. The saved data contains no object describing the arrow — it is a value computed from `definitionKey`.
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+None yet.
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+None yet.
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+None yet.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.0.1
 
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Initial scaffold.
