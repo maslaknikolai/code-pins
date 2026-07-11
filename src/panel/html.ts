@@ -4,6 +4,7 @@ import { panelStyles } from './styles';
 export function renderHtml(webview: vscode.Webview, extensionUri: vscode.Uri): string {
 	const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'dist', 'webview.js'));
 	const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'dist', 'webview.css'));
+	const tailwindUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'dist', 'tailwind.css'));
 	const nonce = getNonce();
 	return /* html */ `<!DOCTYPE html>
 <html lang="en">
@@ -11,6 +12,7 @@ export function renderHtml(webview: vscode.Webview, extensionUri: vscode.Uri): s
 	<meta charset="UTF-8">
 	<meta http-equiv="Content-Security-Policy"
 		content="default-src 'none'; style-src 'unsafe-inline' ${webview.cspSource}; script-src 'nonce-${nonce}';">
+	<link rel="stylesheet" href="${tailwindUri}">
 	<link rel="stylesheet" href="${styleUri}">
 	<style>${panelStyles}</style>
 </head>
