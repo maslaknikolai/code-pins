@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import { PinsStore } from './graph';
-import { addNode, clearMap } from './graph/actions';
+import { addPin, clearMap } from './graph/actions';
 import { openMap, saveMap } from './graph/persistence';
 import { showGraphPanel } from './panel/showGraphPanel';
-import { buildPinnedNode } from './pin';
+import { buildPin } from './pin';
 
 export function activate(context: vscode.ExtensionContext) {
 	const pinsStore = new PinsStore();
@@ -15,11 +15,11 @@ export function activate(context: vscode.ExtensionContext) {
 				vscode.window.showWarningMessage('Code Pins: open a file and place the cursor on a symbol.');
 				return;
 			}
-			const node = await buildPinnedNode(editor);
-			if (!node) {
+			const pin = await buildPin(editor);
+			if (!pin) {
 				return;
 			}
-			addNode(pinsStore, node);
+			addPin(pinsStore, pin);
 			showGraphPanel(context.extensionUri, pinsStore);
 		}),
 

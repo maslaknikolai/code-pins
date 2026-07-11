@@ -56,7 +56,7 @@ export function App() {
 	});
 
 	const onNodeDragStop = useEvent((_event: MouseEvent | TouchEvent, node: PinFlowNode) => {
-		vscode.postMessage({ type: WebviewMessageType.MoveNode, id: node.id, x: node.position.x, y: node.position.y });
+		vscode.postMessage({ type: WebviewMessageType.MovePin, id: node.id, x: node.position.x, y: node.position.y });
 	});
 
 	const colorMode = document.body.classList.contains('vscode-light') ? 'light' : 'dark';

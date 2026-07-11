@@ -26,8 +26,8 @@ export function PinNode({ data }: NodeProps<PinFlowNode>) {
 				<span>{pin.fileName}</span>
 				<button
 					className="nodrag float-right ml-2 cursor-pointer px-1 opacity-50 hover:opacity-100 hover:text-(--vscode-errorForeground,#f66)"
-					title="Remove node"
-					onClick={() => vscode.postMessage({ type: WebviewMessageType.RemoveNode, id: pin.id })}
+					title="Remove pin"
+					onClick={() => vscode.postMessage({ type: WebviewMessageType.RemovePin, id: pin.id })}
 				>
 					×
 				</button>

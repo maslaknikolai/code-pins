@@ -1,5 +1,5 @@
 import { PinsStore } from '../graph';
-import { moveNode, removeNode } from '../graph/actions';
+import { movePin, removePin } from '../graph/actions';
 import { WebviewMessageType, WebviewToExtensionMessage } from '../types';
 import { openLocation } from './openLocation';
 
@@ -18,8 +18,8 @@ const handlers: {
 	[K in WebviewToExtensionMessage['type']]: (message: MessageOf<K>, ctx: MessageContext) => void;
 } = {
 	[WebviewMessageType.Ready]: (_message, ctx) => ctx.postState(),
-	[WebviewMessageType.MoveNode]: (message, ctx) => moveNode(ctx.pinsStore, message.id, message.x, message.y),
-	[WebviewMessageType.RemoveNode]: (message, ctx) => removeNode(ctx.pinsStore, message.id),
+	[WebviewMessageType.MovePin]: (message, ctx) => movePin(ctx.pinsStore, message.id, message.x, message.y),
+	[WebviewMessageType.RemovePin]: (message, ctx) => removePin(ctx.pinsStore, message.id),
 	[WebviewMessageType.OpenLocation]: (message) => openLocation(message.file, message.line),
 };
 

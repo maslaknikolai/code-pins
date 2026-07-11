@@ -27,7 +27,7 @@ export function showGraphPanel(extensionUri: vscode.Uri, pinsStore: PinsStore): 
 	panel.webview.html = renderHtml(panel.webview, extensionUri);
 
 	const postState = () => {
-		const message: ExtensionToWebviewMessage = { type: ExtensionMessageType.SetState, nodes: pinsStore.getNodes() };
+		const message: ExtensionToWebviewMessage = { type: ExtensionMessageType.SetState, pins: pinsStore.getPins() };
 		panel.webview.postMessage(message);
 	};
 

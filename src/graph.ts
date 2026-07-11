@@ -3,17 +3,17 @@ import { Pin } from './types';
 
 
 export class PinsStore {
-	private nodes: Pin[] = [];
+	private pins: Pin[] = [];
 
 	private readonly _onDidChange = new vscode.EventEmitter<void>();
 	readonly onDidChange = this._onDidChange.event;
 
-	getNodes(): Pin[] {
-		return this.nodes;
+	getPins(): Pin[] {
+		return this.pins;
 	}
 
-	setNodes(nodes: Pin[], options?: { silent?: boolean }): void {
-		this.nodes = nodes;
+	setPins(pins: Pin[], options?: { silent?: boolean }): void {
+		this.pins = pins;
 		if (!options?.silent) {
 			this._onDidChange.fire();
 		}
