@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 import { GraphManager } from './graph';
-import { GraphPanel } from './panel';
+import { addNode, clearMap } from './graph/actions';
+import { openMap, saveMap } from './graph/persistence';
+import { showGraphPanel } from './panel';
 import { buildPinnedNode } from './pin';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -15,24 +17,24 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 			const node = await buildPinnedNode(editor);
 			if (node) {
-				graph.add(node);
-				GraphPanel.createOrShow(context.extensionUri, graph);
+				addNode(graph, node);
+				showGraphPanel(context.extensionUri, graph);
 			}
 		}),
 
 		vscode.commands.registerCommand('code-pins.showMap', () => {
-			GraphPanel.createOrShow(context.extensionUri, graph);
+			showGraphPanel(context.extensionUri, graph);
 		}),
 
-		vscode.commands.registerCommand('code-pins.saveMap', () => graph.save()),
+		vscode.commands.registerCommand('code-pins.saveMap', () => saveMap(graph)),
 
 		vscode.commands.registerCommand('code-pins.openMap', async () => {
-			if (await graph.open()) {
-				GraphPanel.createOrShow(context.extensionUri, graph);
+			if (await openMap(graph)) {
+				showGraphPanel(context.extensionUri, graph);
 			}
 		}),
 
-		vscode.commands.registerCommand('code-pins.newMap', () => graph.clear())
+		vscode.commands.registerCommand('code-pins.newMap', () => clearMap(graph))
 	);
 }
 
