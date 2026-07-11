@@ -1,5 +1,4 @@
 import { atom } from 'jotai';
-import type { Pin } from '../types';
+import type { PinFlowNode } from './types';
 
-/** Raw pins as sent by the extension — the single source of truth. */
-export const pinsAtom = atom<Pin[]>([]);
+export const flowNodesAtom = atom<PinFlowNode[]>([]);

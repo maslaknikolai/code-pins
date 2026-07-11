@@ -1,14 +1,13 @@
 import { Handle, Position, type NodeProps } from '@xyflow/react';
-import { Fragment } from 'react';
-import { WebviewMessageType, type Pin } from '../types';
-import { cn } from './cn';
-import type { PinFlowNode } from './flowNodes';
-import { vscode } from './vscodeApi';
+import { WebviewMessageType } from '../../types';
+import { cn } from '../utils/cn';
+import type { PinFlowNode } from '../types';
+import { vscode } from '../utils/vscodeApi';
+import { LineText } from './LineText';
 
 /** Edge anchors only — not user-connectable, so keep them invisible. */
 const handleClass = 'opacity-0! pointer-events-none!';
 
-/** Custom React Flow node rendering one pinned entity. */
 export function PinNode({ data }: NodeProps<PinFlowNode>) {
 	const pin = data.pin;
 	const dirPath = pin.filePath.slice(0, pin.filePath.length - pin.fileName.length);
@@ -46,27 +45,5 @@ export function PinNode({ data }: NodeProps<PinFlowNode>) {
 			))}
 			<Handle type="source" position={Position.Right} className={handleClass} />
 		</div>
-	);
-}
-
-/** Line text with the pinned entity highlighted in declaration nodes. */
-function LineText({ pin, text }: { pin: Pin; text: string }) {
-	if (pin.kind !== 'declaration' || !pin.highlightWord || !text.includes(pin.highlightWord)) {
-		return <>{text}</>;
-	}
-	const parts = text.split(pin.highlightWord);
-	return (
-		<>
-			{parts.map((part, i) => (
-				<Fragment key={i}>
-					{i > 0 && (
-						<span className="rounded-xs bg-(--vscode-editor-findMatchHighlightBackground,rgba(234,92,0,0.33))">
-							{pin.highlightWord}
-						</span>
-					)}
-					{part}
-				</Fragment>
-			))}
-		</>
 	);
 }

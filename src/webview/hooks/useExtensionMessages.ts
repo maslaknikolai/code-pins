@@ -1,18 +1,19 @@
 import { useSetAtom } from 'jotai';
 import { useEffect } from 'react';
-import { ExtensionMessageType, type ExtensionToWebviewMessage } from '../types';
-import { pinsAtom } from './atoms';
+import { ExtensionMessageType, type ExtensionToWebviewMessage } from '../../types';
+import { flowNodesAtom } from '../atoms';
+import { toFlowNode } from '../utils/flowNodes';
 
 export function useSubscribeForExtensionMessages(): void {
-	const setPins = useSetAtom(pinsAtom);
+	const setNodes = useSetAtom(flowNodesAtom);
 
 	useEffect(() => {
 		const onMessage = (event: MessageEvent<ExtensionToWebviewMessage>) => {
 			if (event.data.type === ExtensionMessageType.SetState) {
-				setPins(event.data.nodes);
+				setNodes(event.data.nodes.map(toFlowNode));
 			}
 		};
 		window.addEventListener('message', onMessage);
 		return () => window.removeEventListener('message', onMessage);
-	}, [setPins]);
+	}, [setNodes]);
 }

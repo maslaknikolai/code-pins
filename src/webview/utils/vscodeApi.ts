@@ -1,4 +1,4 @@
-import type { WebviewToExtensionMessage } from '../types';
+import type { WebviewToExtensionMessage } from '../../types';
 
 declare function acquireVsCodeApi(): {
 	postMessage(message: WebviewToExtensionMessage): void;
