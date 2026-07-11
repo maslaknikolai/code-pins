@@ -32,7 +32,7 @@ export async function buildPin(editor: vscode.TextEditor): Promise<Pin | undefin
 	return {
 		id: randomUUID(),
 		kind: isDeclaration ? PinKind.Declaration : PinKind.Reference,
-		filePath: document.uri.fsPath,
+		filePath: vscode.workspace.asRelativePath(document.uri, false),
 		definitionKey,
 		symbolName: word,
 		x: 0,
