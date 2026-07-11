@@ -1,33 +1,33 @@
 import * as vscode from 'vscode';
-import { GraphManager } from '../graph';
+import { PinsStore } from '../graph';
 import { GraphNode } from '../types';
 
-export function addNode(graph: GraphManager, node: GraphNode): void {
-	const nodes = graph.getNodes();
+export function addNode(pinsStore: PinsStore, node: GraphNode): void {
+	const nodes = pinsStore.getNodes();
 	if (nodes.some((existing) => pinsSameLine(existing, node))) {
 		vscode.window.setStatusBarMessage('Code Pins: already on the map', 2000);
 		return;
 	}
-	graph.setNodes([...nodes, { ...node, ...nextPosition(nodes.length) }]);
+	pinsStore.setNodes([...nodes, { ...node, ...nextPosition(nodes.length) }]);
 }
 
 /** Silent: positions come from the webview itself, so no state echo back. */
-export function moveNode(graph: GraphManager, id: string, x: number, y: number): void {
-	graph.setNodes(
-		graph.getNodes().map((node) => (node.id === id ? { ...node, x, y } : node)),
+export function moveNode(pinsStore: PinsStore, id: string, x: number, y: number): void {
+	pinsStore.setNodes(
+		pinsStore.getNodes().map((node) => (node.id === id ? { ...node, x, y } : node)),
 		{ silent: true }
 	);
 }
 
-export function removeNode(graph: GraphManager, id: string): void {
-	const remaining = graph.getNodes().filter((node) => node.id !== id);
-	if (remaining.length !== graph.getNodes().length) {
-		graph.setNodes(remaining);
+export function removeNode(pinsStore: PinsStore, id: string): void {
+	const remaining = pinsStore.getNodes().filter((node) => node.id !== id);
+	if (remaining.length !== pinsStore.getNodes().length) {
+		pinsStore.setNodes(remaining);
 	}
 }
 
-export function clearMap(graph: GraphManager): void {
-	graph.setNodes([]);
+export function clearMap(pinsStore: PinsStore): void {
+	pinsStore.setNodes([]);
 }
 
 /** Two pins are the same when they anchor the same kind on the same last line of a file. */

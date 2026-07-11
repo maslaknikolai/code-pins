@@ -1,7 +1,7 @@
 import { Handle, Position, type NodeProps } from '@xyflow/react';
 import { Fragment } from 'react';
-import type { GraphNode } from '../types';
-import type { PinFlowNode } from './atoms';
+import { WebviewMessageType, type GraphNode } from '../types';
+import type { PinFlowNode } from './flowNodes';
 import { vscode } from './vscodeApi';
 
 /** Custom React Flow node rendering one pinned entity. */
@@ -18,7 +18,7 @@ export function PinNode({ data }: NodeProps<PinFlowNode>) {
 				<button
 					className="remove nodrag"
 					title="Remove node"
-					onClick={() => vscode.postMessage({ type: 'removeNode', id: pin.id })}
+					onClick={() => vscode.postMessage({ type: WebviewMessageType.RemoveNode, id: pin.id })}
 				>
 					×
 				</button>
@@ -29,7 +29,7 @@ export function PinNode({ data }: NodeProps<PinFlowNode>) {
 					className="line"
 					style={{ paddingLeft: 8 + line.indent * 14 }}
 					title={`${pin.filePath}:${line.line + 1}`}
-					onClick={() => vscode.postMessage({ type: 'openLocation', file: pin.filePath, line: line.line })}
+					onClick={() => vscode.postMessage({ type: WebviewMessageType.OpenLocation, file: pin.filePath, line: line.line })}
 				>
 					<LineText pin={pin} text={line.text} />
 				</div>

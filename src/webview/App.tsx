@@ -1,5 +1,4 @@
 import {
-	applyNodeChanges,
 	Background,
 	Controls,
 	MarkerType,
@@ -10,63 +9,55 @@ import {
 import '@xyflow/react/dist/style.css';
 import { useAtom } from 'jotai';
 import { useEffect, useMemo } from 'react';
-import type { ExtensionToWebviewMessage } from '../types';
-import { flowNodesAtom, type PinFlowNode } from './atoms';
+import { WebviewMessageType } from '../types';
+import { pinsAtom } from './atoms';
+import { applyChangesToPins, toFlowNode, type PinFlowNode } from './flowNodes';
 import { PinNode } from './PinNode';
 import { useEvent } from './useEvent';
+import { useSubscribeForExtensionMessages } from './useExtensionMessages';
 import { vscode } from './vscodeApi';
 
 const nodeTypes = { pin: PinNode };
 
 export function App() {
-	const [nodes, setNodes] = useAtom(flowNodesAtom);
+	const [pins, setPins] = useAtom(pinsAtom);
 
 	useEffect(() => {
-		const onMessage = (event: MessageEvent<ExtensionToWebviewMessage>) => {
-			if (event.data.type === 'setState') {
-				setNodes(
-					event.data.nodes.map((pin) => ({
-						id: pin.id,
-						type: 'pin' as const,
-						position: { x: pin.x, y: pin.y },
-						data: { pin },
-					}))
-				);
-			}
-		};
-		window.addEventListener('message', onMessage);
-		vscode.postMessage({ type: 'ready' });
-		return () => window.removeEventListener('message', onMessage);
-	}, [setNodes]);
+		vscode.postMessage({ type: WebviewMessageType.Ready });
+	}, [])
+
+	useSubscribeForExtensionMessages();
+
+	const nodes = useMemo(() => pins.map(toFlowNode), [pins]);
 
 	/** Arrows are derived, never stored: reference → declaration with the same definitionKey. */
 	const edges = useMemo(() => {
 		const result: Edge[] = [];
-		for (const { data } of nodes) {
-			if (data.pin.kind !== 'reference') {
+		for (const pin of pins) {
+			if (pin.kind !== 'reference') {
 				continue;
 			}
-			const declaration = nodes.find(
-				(n) => n.data.pin.kind === 'declaration' && n.data.pin.definitionKey === data.pin.definitionKey
+			const declaration = pins.find(
+				(p) => p.kind === 'declaration' && p.definitionKey === pin.definitionKey
 			);
 			if (declaration) {
 				result.push({
-					id: data.pin.id,
-					source: data.pin.id,
+					id: pin.id,
+					source: pin.id,
 					target: declaration.id,
 					markerEnd: { type: MarkerType.ArrowClosed },
 				});
 			}
 		}
 		return result;
-	}, [nodes]);
+	}, [pins]);
 
 	const onNodesChange = useEvent((changes: NodeChange<PinFlowNode>[]) => {
-		setNodes((prev) => applyNodeChanges(changes, prev));
+		setPins((prev) => applyChangesToPins(changes, prev));
 	});
 
 	const onNodeDragStop = useEvent((_event: MouseEvent | TouchEvent, node: PinFlowNode) => {
-		vscode.postMessage({ type: 'moveNode', id: node.id, x: node.position.x, y: node.position.y });
+		vscode.postMessage({ type: WebviewMessageType.MoveNode, id: node.id, x: node.position.x, y: node.position.y });
 	});
 
 	const colorMode = document.body.classList.contains('vscode-light') ? 'light' : 'dark';

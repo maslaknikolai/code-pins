@@ -28,10 +28,21 @@ export interface MapFile {
 	nodes: GraphNode[];
 }
 
-export type WebviewToExtensionMessage =
-	| { type: 'ready' }
-	| { type: 'moveNode'; id: string; x: number; y: number }
-	| { type: 'removeNode'; id: string }
-	| { type: 'openLocation'; file: string; line: number };
+export enum WebviewMessageType {
+	Ready = 'ready',
+	MoveNode = 'moveNode',
+	RemoveNode = 'removeNode',
+	OpenLocation = 'openLocation',
+}
 
-export type ExtensionToWebviewMessage = { type: 'setState'; nodes: GraphNode[] };
+export enum ExtensionMessageType {
+	SetState = 'setState',
+}
+
+export type WebviewToExtensionMessage =
+	| { type: WebviewMessageType.Ready }
+	| { type: WebviewMessageType.MoveNode; id: string; x: number; y: number }
+	| { type: WebviewMessageType.RemoveNode; id: string }
+	| { type: WebviewMessageType.OpenLocation; file: string; line: number };
+
+export type ExtensionToWebviewMessage = { type: ExtensionMessageType.SetState; nodes: GraphNode[] };

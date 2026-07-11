@@ -1,21 +1,21 @@
 import * as vscode from 'vscode';
-import { GraphManager } from '../graph';
+import { PinsStore } from '../graph';
 import { MapFile } from '../types';
 
 const FILE_FILTERS = { 'Code Pins Map': ['json'] };
 
-export async function saveMap(graph: GraphManager): Promise<void> {
+export async function saveMap(pinsStore: PinsStore): Promise<void> {
 	const target = await vscode.window.showSaveDialog({ filters: FILE_FILTERS });
 	if (!target) {
 		return;
 	}
-	const data: MapFile = { version: 1, nodes: graph.getNodes() };
+	const data: MapFile = { version: 1, nodes: pinsStore.getNodes() };
 	await vscode.workspace.fs.writeFile(target, Buffer.from(JSON.stringify(data, null, '\t'), 'utf8'));
 	vscode.window.setStatusBarMessage(`Code Pins: map saved to ${target.fsPath}`, 3000);
 }
 
 /** Returns true when a map was picked and loaded into the graph. */
-export async function openMap(graph: GraphManager): Promise<boolean> {
+export async function openMap(pinsStore: PinsStore): Promise<boolean> {
 	const picked = await vscode.window.showOpenDialog({ filters: FILE_FILTERS, canSelectMany: false });
 	if (!picked || picked.length === 0) {
 		return false;
@@ -26,7 +26,7 @@ export async function openMap(graph: GraphManager): Promise<boolean> {
 		vscode.window.showErrorMessage('Code Pins: file is not a valid map.');
 		return false;
 	}
-	graph.setNodes(data.nodes);
+	pinsStore.setNodes(data.nodes);
 	return true;
 }
 

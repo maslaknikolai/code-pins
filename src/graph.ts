@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { GraphNode } from './types';
 
 
-export class GraphManager {
+export class PinsStore {
 	private nodes: GraphNode[] = [];
 
 	private readonly _onDidChange = new vscode.EventEmitter<void>();

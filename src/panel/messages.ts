@@ -1,10 +1,10 @@
-import { GraphManager } from '../graph';
+import { PinsStore } from '../graph';
 import { moveNode, removeNode } from '../graph/actions';
-import { WebviewToExtensionMessage } from '../types';
+import { WebviewMessageType, WebviewToExtensionMessage } from '../types';
 import { openLocation } from './openLocation';
 
 export interface MessageContext {
-	graph: GraphManager;
+	pinsStore: PinsStore;
 	/** Pushes the current graph state to the webview. */
 	postState: () => void;
 }
@@ -17,10 +17,10 @@ type MessageOf<K extends WebviewToExtensionMessage['type']> = Extract<
 const handlers: {
 	[K in WebviewToExtensionMessage['type']]: (message: MessageOf<K>, ctx: MessageContext) => void;
 } = {
-	ready: (_message, ctx) => ctx.postState(),
-	moveNode: (message, ctx) => moveNode(ctx.graph, message.id, message.x, message.y),
-	removeNode: (message, ctx) => removeNode(ctx.graph, message.id),
-	openLocation: (message) => openLocation(message.file, message.line),
+	[WebviewMessageType.Ready]: (_message, ctx) => ctx.postState(),
+	[WebviewMessageType.MoveNode]: (message, ctx) => moveNode(ctx.pinsStore, message.id, message.x, message.y),
+	[WebviewMessageType.RemoveNode]: (message, ctx) => removeNode(ctx.pinsStore, message.id),
+	[WebviewMessageType.OpenLocation]: (message) => openLocation(message.file, message.line),
 };
 
 export function handleWebviewMessage(message: WebviewToExtensionMessage, ctx: MessageContext): void {
