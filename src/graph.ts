@@ -1,18 +1,18 @@
 import * as vscode from 'vscode';
-import { GraphNode } from './types';
+import { Pin } from './types';
 
 
 export class PinsStore {
-	private nodes: GraphNode[] = [];
+	private nodes: Pin[] = [];
 
 	private readonly _onDidChange = new vscode.EventEmitter<void>();
 	readonly onDidChange = this._onDidChange.event;
 
-	getNodes(): GraphNode[] {
+	getNodes(): Pin[] {
 		return this.nodes;
 	}
 
-	setNodes(nodes: GraphNode[], options?: { silent?: boolean }): void {
+	setNodes(nodes: Pin[], options?: { silent?: boolean }): void {
 		this.nodes = nodes;
 		if (!options?.silent) {
 			this._onDidChange.fire();

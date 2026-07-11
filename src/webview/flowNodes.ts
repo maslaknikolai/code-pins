@@ -1,10 +1,10 @@
 import type { Node, NodeChange } from '@xyflow/react';
-import type { GraphNode } from '../types';
+import type { Pin } from '../types';
 
 /** React Flow node carrying the pinned entity in its data. */
-export type PinFlowNode = Node<{ pin: GraphNode }, 'pin'>;
+export type PinFlowNode = Node<{ pin: Pin }, 'pin'>;
 
-export function toFlowNode(pin: GraphNode): PinFlowNode {
+export function toFlowNode(pin: Pin): PinFlowNode {
 	return {
 		id: pin.id,
 		type: 'pin',
@@ -14,7 +14,7 @@ export function toFlowNode(pin: GraphNode): PinFlowNode {
 }
 
 /** Maps React Flow position changes back onto the raw pins; other change kinds are irrelevant here. */
-export function applyChangesToPins(changes: NodeChange<PinFlowNode>[], pins: GraphNode[]): GraphNode[] {
+export function applyChangesToPins(changes: NodeChange<PinFlowNode>[], pins: Pin[]): Pin[] {
 	let next = pins;
 	for (const change of changes) {
 		if (change.type === 'position' && change.position) {

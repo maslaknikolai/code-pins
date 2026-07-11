@@ -8,7 +8,7 @@ export interface NodeLine {
 	indent: number;
 }
 
-export interface GraphNode {
+export interface Pin {
 	id: string;
 	kind: NodeKind;
 	filePath: string;
@@ -25,7 +25,7 @@ export interface GraphNode {
 /** Saved map format. Arrows are not stored — they are computed from definitionKey. */
 export interface MapFile {
 	version: 1;
-	nodes: GraphNode[];
+	nodes: Pin[];
 }
 
 export enum WebviewMessageType {
@@ -45,4 +45,4 @@ export type WebviewToExtensionMessage =
 	| { type: WebviewMessageType.RemoveNode; id: string }
 	| { type: WebviewMessageType.OpenLocation; file: string; line: number };
 
-export type ExtensionToWebviewMessage = { type: ExtensionMessageType.SetState; nodes: GraphNode[] };
+export type ExtensionToWebviewMessage = { type: ExtensionMessageType.SetState; nodes: Pin[] };

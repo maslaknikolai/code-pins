@@ -1,6 +1,6 @@
 import { Handle, Position, type NodeProps } from '@xyflow/react';
 import { Fragment } from 'react';
-import { WebviewMessageType, type GraphNode } from '../types';
+import { WebviewMessageType, type Pin } from '../types';
 import type { PinFlowNode } from './flowNodes';
 import { vscode } from './vscodeApi';
 
@@ -40,7 +40,7 @@ export function PinNode({ data }: NodeProps<PinFlowNode>) {
 }
 
 /** Line text with the pinned entity highlighted in declaration nodes. */
-function LineText({ pin, text }: { pin: GraphNode; text: string }) {
+function LineText({ pin, text }: { pin: Pin; text: string }) {
 	if (pin.kind !== 'declaration' || !pin.highlightWord || !text.includes(pin.highlightWord)) {
 		return <>{text}</>;
 	}

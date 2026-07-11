@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import { PinsStore } from '../graph';
-import { GraphNode } from '../types';
+import { Pin } from '../types';
 
-export function addNode(pinsStore: PinsStore, node: GraphNode): void {
+export function addNode(pinsStore: PinsStore, node: Pin): void {
 	const nodes = pinsStore.getNodes();
 	if (nodes.some((existing) => pinsSameLine(existing, node))) {
 		vscode.window.setStatusBarMessage('Code Pins: already on the map', 2000);
@@ -31,7 +31,7 @@ export function clearMap(pinsStore: PinsStore): void {
 }
 
 /** Two pins are the same when they anchor the same kind on the same last line of a file. */
-function pinsSameLine(a: GraphNode, b: GraphNode): boolean {
+function pinsSameLine(a: Pin, b: Pin): boolean {
 	return (
 		a.kind === b.kind &&
 		a.filePath === b.filePath &&

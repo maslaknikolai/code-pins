@@ -1,13 +1,13 @@
 import * as path from 'path';
 import { randomUUID } from 'crypto';
 import * as vscode from 'vscode';
-import { GraphNode, NodeLine } from './types';
+import { Pin, NodeLine } from './types';
 
 /**
  * Builds a graph node for the entity under the cursor: resolves its definition
  * (same lookup as cmd+click) and collects the enclosing-scope breadcrumb lines.
  */
-export async function buildPinnedNode(editor: vscode.TextEditor): Promise<GraphNode | undefined> {
+export async function buildPinnedNode(editor: vscode.TextEditor): Promise<Pin | undefined> {
 	const document = editor.document;
 	const position = editor.selection.active;
 
