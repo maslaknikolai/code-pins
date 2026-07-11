@@ -1,7 +1,6 @@
-import * as path from 'path';
 import { randomUUID } from 'crypto';
 import * as vscode from 'vscode';
-import { Pin, PinLine } from './types';
+import { Pin, PinKind, PinLine } from './types';
 
 /**
  * Builds a pin for the entity under the cursor: resolves its definition
@@ -20,21 +19,22 @@ export async function buildPin(editor: vscode.TextEditor): Promise<Pin | undefin
 
 	const definition = await resolveDefinition(document, position);
 	// Fallback: entity with no resolvable definition keys to its own location.
-	const definitionKey =
-		definition?.key ?? `${document.uri.toString()}:${wordRange.start.line}:${wordRange.start.character}`;
-	const isDeclaration =
-		definition === undefined ||
-		(definition.uri.toString() === document.uri.toString() && definition.range.contains(position));
+	const definitionKey = definition?.key ??
+		`${document.uri.toString()}:${wordRange.start.line}:${wordRange.start.character}`;
+
+	const isDeclaration = definition === undefined || (
+		definition.uri.toString() === document.uri.toString() &&
+		definition.range.contains(position)
+	);
 
 	const lines = await buildBreadcrumbLines(document, position);
 
 	return {
 		id: randomUUID(),
-		kind: isDeclaration ? 'declaration' : 'reference',
+		kind: isDeclaration ? PinKind.Declaration : PinKind.Reference,
 		filePath: document.uri.fsPath,
-		fileName: path.basename(document.uri.fsPath),
 		definitionKey,
-		highlightWord: word,
+		symbolName: word,
 		x: 0,
 		y: 0,
 		lines,

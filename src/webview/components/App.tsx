@@ -10,7 +10,7 @@ import {
 import '@xyflow/react/dist/style.css';
 import { useAtom } from 'jotai';
 import { useEffect, useMemo } from 'react';
-import { WebviewMessageType } from '../../types';
+import { PinKind, WebviewMessageType } from '../../types';
 import { flowNodesAtom } from '../atoms';
 import { useEvent } from '../hooks/useEvent';
 import { useSubscribeForExtensionMessages } from '../hooks/useExtensionMessages';
@@ -33,11 +33,11 @@ export function App() {
 	const edges = useMemo(() => {
 		const result: Edge[] = [];
 		for (const { data } of nodes) {
-			if (data.pin.kind !== 'reference') {
+			if (data.pin.kind !== PinKind.Reference) {
 				continue;
 			}
 			const declaration = nodes.find(
-				(n) => n.data.pin.kind === 'declaration' && n.data.pin.definitionKey === data.pin.definitionKey
+				(n) => n.data.pin.kind === PinKind.Declaration && n.data.pin.definitionKey === data.pin.definitionKey
 			);
 			if (declaration) {
 				result.push({

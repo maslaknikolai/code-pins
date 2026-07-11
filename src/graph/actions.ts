@@ -4,7 +4,7 @@ import { Pin } from '../types';
 
 export function addPin(pinsStore: PinsStore, pin: Pin): void {
 	const pins = pinsStore.getPins();
-	if (pins.some((existing) => pinsSameLine(existing, pin))) {
+	if (pins.some((existing) => checkIsSameLine(existing, pin))) {
 		vscode.window.setStatusBarMessage('Code Pins: already on the map', 2000);
 		return;
 	}
@@ -31,7 +31,7 @@ export function clearMap(pinsStore: PinsStore): void {
 }
 
 /** Two pins are the same when they anchor the same kind on the same last line of a file. */
-function pinsSameLine(a: Pin, b: Pin): boolean {
+function checkIsSameLine(a: Pin, b: Pin): boolean {
 	return (
 		a.kind === b.kind &&
 		a.filePath === b.filePath &&

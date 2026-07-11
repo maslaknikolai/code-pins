@@ -1,4 +1,7 @@
-export type PinKind = 'reference' | 'declaration';
+export enum PinKind {
+	Reference = 'reference',
+	Declaration = 'declaration',
+}
 
 export interface PinLine {
 	/** Zero-based line number in the source file. */
@@ -10,13 +13,10 @@ export interface PinLine {
 
 export interface Pin {
 	id: string;
-	kind: PinKind;
-	filePath: string;
-	fileName: string;
-	/** Location of the entity's definition — pins sharing a key are linked by an arrow. */
 	definitionKey: string;
-	/** The pinned entity name, highlighted in declaration nodes. */
-	highlightWord: string;
+	kind: PinKind;
+	symbolName: string;
+	filePath: string;
 	x: number;
 	y: number;
 	lines: PinLine[];
