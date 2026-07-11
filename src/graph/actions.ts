@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { PinsStore } from '../graph';
+import { PinsStore } from '../pins-store';
 import { Pin } from '../types';
 
 export function addPin(pinsStore: PinsStore, pin: Pin): void {

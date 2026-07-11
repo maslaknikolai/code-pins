@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { PinsStore } from './graph';
+import { PinsStore } from './pins-store';
 import { addPin, clearMap } from './graph/actions';
 import { openMap, saveMap } from './graph/persistence';
 import { showGraphPanel } from './panel/showGraphPanel';

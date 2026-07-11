@@ -1,4 +1,4 @@
-import { PinsStore } from '../graph';
+import { PinsStore } from '../pins-store';
 import { movePin, removePin } from '../graph/actions';
 import { WebviewMessageType, WebviewToExtensionMessage } from '../types';
 import { openLocation } from './openLocation';
