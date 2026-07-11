@@ -1,1 +1,15 @@
 @import 'tailwindcss';
+
+@theme {
+	/* Back-and-forth marquee: slides left by the overflow amount (0 when content fits its container). */
+	--animate-marquee-x: marquee-x 0.6s ease-in-out infinite alternate;
+
+	@keyframes marquee-x {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(calc(100cqw - 100%));
+		}
+	}
+}
