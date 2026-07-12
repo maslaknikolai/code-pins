@@ -61,21 +61,9 @@ export function clearCodePinsFile(store: FileNodesStore): void {
 	store.setFileNodes([]);
 }
 
-/**
- * Two pins are the same when they point at the same definition with the same kind.
- * Unresolved pins (no definitionKey yet) fall back to comparing the pinned location,
- * so pinning the same word twice is still caught.
- */
+/** Two pins are the same when they pin the same symbol occurrence. */
 function checkIsSamePin(a: Pin, b: Pin): boolean {
-	if (a.kind !== b.kind) {
-		return false;
-	}
-	if (a.definitionKey || b.definitionKey) {
-		return a.definitionKey === b.definitionKey;
-	}
-	const lastA = a.lines[a.lines.length - 1];
-	const lastB = b.lines[b.lines.length - 1];
-	return lastA?.line === lastB?.line && lastA?.symbolRange?.start === lastB?.symbolRange?.start;
+	return a.locationKey === b.locationKey;
 }
 
 const CORNER_MARGIN = 40;

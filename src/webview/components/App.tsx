@@ -11,8 +11,9 @@ import {
 import '@xyflow/react/dist/style.css';
 import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useMemo } from 'react';
-import { MAP_FIELD, PinKind, WebviewMessageType } from '../../types';
-import { flowNodesAtom, selectedDefinitionKeyAtom } from '../atoms';
+import { MAP_FIELD, WebviewMessageType } from '../../types';
+import { flowNodesAtom, selectedSymbolAtom } from '../atoms';
+import { checkIsSameSymbol } from '../utils/checkIsSameSymbol';
 import { useEvent } from '../hooks/useEvent';
 import { useSubscribeForExtensionMessages } from '../hooks/useExtensionMessages';
 import type { FileFlowNode } from '../types';
@@ -39,7 +40,7 @@ const SELECTED_EDGE_COLOR = 'var(--vscode-focusBorder, #007fd4)';
 
 export function App() {
 	const [nodes, setNodes] = useAtom(flowNodesAtom);
-	const selectedDefinitionKey = useAtomValue(selectedDefinitionKeyAtom);
+	const selectedSymbol = useAtomValue(selectedSymbolAtom);
 
 	useEffect(() => {
 		sendToExtension(WebviewMessageType.Ready);
@@ -47,28 +48,27 @@ export function App() {
 
 	useSubscribeForExtensionMessages();
 
-	/** Arrows are derived, never stored: reference → declaration with the same definitionKey, across file nodes. */
+	/** Arrows are derived, never stored: a pin points at the node holding the pin its definition lives on. */
 	const edges = useMemo(() => {
 		const result: Edge[] = [];
 		for (const { data } of nodes) {
 			for (const pin of data.fileNode.pins) {
-				if (pin.kind !== PinKind.Reference || !pin.definitionKey) {
+				// Pins whose definition is themselves (plain declarations) draw no arrow.
+				if (!pin.definitionKey || pin.definitionKey === pin.locationKey) {
 					continue;
 				}
-				const declarationNode = nodes.find(
+				const definitionNode = nodes.find(
 					(n) =>
 						n.data.fileNode.filePath !== data.fileNode.filePath &&
-						n.data.fileNode.pins.some(
-							(p) => p.kind === PinKind.Declaration && p.definitionKey === pin.definitionKey
-						)
+						n.data.fileNode.pins.some((p) => p.locationKey === pin.definitionKey)
 				);
-				if (declarationNode) {
-					const isSelected = pin.definitionKey === selectedDefinitionKey;
+				if (definitionNode) {
+					const isSelected = Boolean(selectedSymbol && checkIsSameSymbol(selectedSymbol, pin));
 					result.push({
 						id: pin.id,
 						type: FLOATING_EDGE_TYPE,
 						source: data.fileNode.filePath,
-						target: declarationNode.id,
+						target: definitionNode.id,
 						style: isSelected ? { stroke: SELECTED_EDGE_COLOR, strokeWidth: 2 } : undefined,
 						markerEnd: isSelected
 							? { type: MarkerType.ArrowClosed, color: SELECTED_EDGE_COLOR }
@@ -78,7 +78,7 @@ export function App() {
 			}
 		}
 		return result;
-	}, [nodes, selectedDefinitionKey]);
+	}, [nodes, selectedSymbol]);
 
 	const onNodesChange = useEvent((changes: NodeChange<FileFlowNode>[]) => {
 		setNodes((prev) => applyNodeChanges(changes, prev));

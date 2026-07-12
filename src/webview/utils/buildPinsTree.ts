@@ -12,21 +12,23 @@ export interface PinNode extends PinBlock {
 	type: 'pin';
 }
 
-/** Pins that share their first breadcrumb line, hoisted above them. */
+/** Pins that share their leading breadcrumb lines, hoisted above them. */
 export interface GroupNode {
 	type: 'group';
-	/** The shared line's number — also the node's identity within its level. */
+	/** The first shared line's number — also the node's identity within its level. */
 	lineNumber: number;
-	/** Pins pinned directly ON the shared line — their blocks render it themselves. */
-	pinnedOnSharedLine: PinBlock[];
-	/** Set when no pin owns the shared line and it must render as plain text. */
-	sharedLine?: PinLine;
+	/**
+	 * Consecutive lines every pin below has in common, rendered once on top.
+	 * Empty when a pin was pinned ON the shared line: that pin then leads
+	 * `children` and its own block renders the line.
+	 */
+	sharedLines: PinLine[];
 	children: PinsTreeNode[];
 }
 
 /**
  * Pins in one file often share enclosing scopes (class, function). Hoists any
- * breadcrumb line shared by several pins above them, recursively, so each pin
+ * breadcrumb lines shared by several pins above them, recursively, so each pin
  * only keeps what's unique to it.
  */
 export function buildPinsTree(pins: Pin[]): PinsTreeNode[] {
@@ -39,17 +41,42 @@ function buildLevel(blocks: PinBlock[]): PinsTreeNode[] {
 			return { type: 'pin', ...group[0] };
 		}
 
-		const pinnedOnSharedLine = group.filter((block) => block.lines.length === 1);
-		const deeper = group.filter((block) => block.lines.length > 1);
+		const lineNumber = group[0].lines[0].line;
 
-		return {
-			type: 'group',
-			lineNumber: group[0].lines[0].line,
-			pinnedOnSharedLine,
-			sharedLine: pinnedOnSharedLine.length === 0 ? deeper[0]?.lines[0] : undefined,
-			children: buildLevel(deeper.map(({ pin, lines }) => ({ pin, lines: lines.slice(1) }))),
-		};
+		// Pins down to their last line were pinned ON the shared line: their blocks render
+		// it themselves (with highlight and remove button), leading the group's children.
+		const pinnedOnSharedLine = group.filter((block) => block.lines.length === 1);
+		if (pinnedOnSharedLine.length > 0) {
+			const deeper = dropFirstLine(group.filter((block) => block.lines.length > 1));
+			return {
+				type: 'group',
+				lineNumber,
+				sharedLines: [],
+				children: [
+					...pinnedOnSharedLine.map<PinNode>((block) => ({ type: 'pin', ...block })),
+					...buildLevel(deeper),
+				],
+			};
+		}
+
+		// Absorb consecutive lines shared by the whole group into one flat list,
+		// instead of one nested group per line.
+		const sharedLines: PinLine[] = [];
+		let rest = group;
+		while (
+			rest.every((block) => block.lines.length > 1) &&
+			rest.every((block) => block.lines[0].line === rest[0].lines[0].line)
+		) {
+			sharedLines.push(rest[0].lines[0]);
+			rest = dropFirstLine(rest);
+		}
+
+		return { type: 'group', lineNumber, sharedLines, children: buildLevel(rest) };
 	});
+}
+
+function dropFirstLine(blocks: PinBlock[]): PinBlock[] {
+	return blocks.map(({ pin, lines }) => ({ pin, lines: lines.slice(1) }));
 }
 
 /** Groups blocks by their first line's number — regardless of the order pins were added in. */

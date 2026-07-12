@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 import { FileNodesStore } from './file-nodes-store';
+import { parseLocationKey } from '../locationKey';
 import { Pin } from '../types';
-import { getPinKind, resolveDefinition } from './pin';
+import { resolveDefinition } from './pin';
 import { resolveUri } from './utils/resolveUri';
 
 /**
@@ -34,17 +35,11 @@ async function resolvePinDefinition(filePath: string, pin: Pin): Promise<Pin | u
 	if (pin.definitionKey) {
 		return undefined;
 	}
-	const pinnedLine = pin.lines[pin.lines.length - 1];
-	if (!pinnedLine?.symbolRange) {
-		return undefined;
-	}
 
 	try {
 		const document = await vscode.workspace.openTextDocument(resolveUri(filePath));
-		// The stored text is trimmed, so re-add the line's leading whitespace to the symbol offset.
-		const rawText = document.lineAt(pinnedLine.line).text;
-		const trimOffset = rawText.length - rawText.trimStart().length;
-		const position = new vscode.Position(pinnedLine.line, trimOffset + pinnedLine.symbolRange.start);
+		const location = parseLocationKey(pin.locationKey);
+		const position = new vscode.Position(location.line, location.character);
 
 		const definition = await resolveDefinition(document, position);
 
@@ -52,13 +47,7 @@ async function resolvePinDefinition(filePath: string, pin: Pin): Promise<Pin | u
 			return undefined;
 		}
 
-		return {
-			...pin,
-			definitionKey: definition.key,
-			// The kind stored at pin time was a provisional guess (no definition to compare
-			// against), so recompute it now.
-			kind: getPinKind(document, position, definition),
-		};
+		return { ...pin, definitionKey: definition.key };
 	} catch {
 		// File may be gone or unreadable — leave the pin as is.
 		return undefined;

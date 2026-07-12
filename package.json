@@ -64,7 +64,7 @@
     "check-types": "tsc --noEmit",
     "lint": "eslint src",
     "test": "vscode-test",
-    "test:unit": "pnpm run compile-tests && mocha --ui tdd 'out/test/**/*.unit.test.js'"
+    "test:unit": "pnpm run compile-tests && mocha --ui tdd 'out/**/*.unit.test.js'"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.3.2",

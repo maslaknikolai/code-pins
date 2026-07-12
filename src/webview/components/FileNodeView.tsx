@@ -26,7 +26,10 @@ export function FileNodeView({ data }: NodeProps<FileFlowNode>) {
 				<span className="group-hover:hidden">{fileName}</span>
 			</div>
 			<div className="flex flex-col gap-2">
-				<PinsTree nodes={pinsTree} filePath={fileNode.filePath} />
+				<PinsTree
+					nodes={pinsTree}
+					fileNode={fileNode}
+				/>
 			</div>
 
 			<Handle type="source" position={Position.Right} className={handleClass} />

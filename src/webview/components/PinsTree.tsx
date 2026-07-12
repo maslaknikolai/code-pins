@@ -1,32 +1,47 @@
+import { FileNode } from '../../types';
 import type { GroupNode, PinsTreeNode } from '../utils/buildPinsTree';
 import { LineView } from './LineView';
 import { PinView } from './PinView';
 
 /** Renders the shared-scope tree built by buildPinsTree. */
-export function PinsTree({ nodes, filePath }: { nodes: PinsTreeNode[]; filePath: string }) {
+export function PinsTree({ nodes, fileNode }: { nodes: PinsTreeNode[]; fileNode: FileNode }) {
 	return (
 		<>
 			{nodes.map((node) =>
 				node.type === 'pin' ? (
-					<PinView key={node.pin.id} pin={node.pin} lines={node.lines} filePath={filePath} />
+					<PinView
+						key={node.pin.id}
+						pin={node.pin}
+						lines={node.lines}
+						fileNode={fileNode}
+					/>
 				) : (
-					<GroupView key={node.lineNumber} group={node} filePath={filePath} />
+					<GroupView
+						key={node.lineNumber}
+						group={node}
+						fileNode={fileNode}
+					/>
 				)
 			)}
 		</>
 	);
 }
 
-function GroupView({ group, filePath }: { group: GroupNode; filePath: string }) {
+function GroupView({ group, fileNode }: { group: GroupNode; fileNode: FileNode }) {
 	return (
 		<div className="flex flex-col gap-2">
-			{group.pinnedOnSharedLine.map(({ pin, lines }) => (
-				<PinView key={pin.id} pin={pin} lines={lines} filePath={filePath} />
+			{group.sharedLines.map((line) => (
+				<LineView
+					key={line.line}
+					line={line}
+					fileNode={fileNode}
+				/>
 			))}
 
-			{group.sharedLine && <LineView line={group.sharedLine} filePath={filePath} />}
-
-			<PinsTree nodes={group.children} filePath={filePath} />
+			<PinsTree
+				nodes={group.children}
+				fileNode={fileNode}
+			/>
 		</div>
 	);
 }

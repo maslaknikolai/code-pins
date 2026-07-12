@@ -3,27 +3,27 @@ export const MAP_FIELD = {
 	height: 5000
 };
 
-export enum PinKind {
-	Reference = 'reference',
-	Declaration = 'declaration',
-}
-
 export interface PinLine {
 	/** Zero-based line number in the source file. */
 	line: number;
+	/** Raw source line, indentation included — so the pinned symbol's position inside it equals the locationKey column. */
 	text: string;
-	/** Breadcrumb depth, used for display indentation. */
-	indent: number;
-	/** Character range of the pinned symbol within `text` — only on the line it was pinned from. */
-	symbolRange?: { start: number; end: number };
 }
 
-/** One pinned entity; lives inside the FileNode of its file. */
+/**
+ * One pinned entity; lives inside the FileNode of its file.
+ * No stored "kind": a pin is a declaration exactly when definitionKey === locationKey.
+ */
 export interface Pin {
 	id: string;
-	kind: PinKind;
 	/**
-	 * Location of the entity's definition — pins sharing a key are linked by an arrow.
+	 * The pinned symbol's own location (`path:line:char`). A symbol can be a
+	 * declaration and a reference at once (`const {addTab} = useMethods()`), so
+	 * pins are linked when one's definitionKey equals another's locationKey.
+	 */
+	locationKey: string;
+	/**
+	 * Location of the entity's definition, same format as locationKey.
 	 * Undefined when the language server couldn't resolve the definition at pin time
 	 * (e.g. still indexing); such pins get no arrows until a retry resolves them.
 	 */

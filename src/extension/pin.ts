@@ -1,6 +1,7 @@
 import { randomUUID } from 'crypto';
 import * as vscode from 'vscode';
-import { Pin, PinKind, PinLine } from '../types';
+import { buildLocationKey } from '../locationKey';
+import { Pin, PinLine } from '../types';
 import { getRelativePath } from './utils/getRelativePath';
 
 /**
@@ -21,13 +22,13 @@ export async function buildPin(
 
 	const word = document.getText(wordRange);
 	const definition = await resolveDefinition(document, position);
-	const lines = await buildBreadcrumbLines(document, position, wordRange);
+	const lines = await buildBreadcrumbLines(document, position);
 
 	return {
 		filePath: getRelativePath(document.uri),
 		pin: {
 			id: randomUUID(),
-			kind: getPinKind(document, position, definition),
+			locationKey: buildLocationKey(getRelativePath(document.uri), wordRange.start.line, wordRange.start.character),
 			definitionKey: definition?.key,
 			symbolName: word,
 			lines,
@@ -39,23 +40,6 @@ export interface ResolvedDefinition {
 	uri: vscode.Uri;
 	range: vscode.Range;
 	key: string;
-}
-
-/**
- * A pin is a declaration when its definition points back at itself.
- * With no resolved definition this is only a provisional guess (declaration) —
- * retryUnresolvedDefinitions recomputes it once the definition resolves.
- */
-export function getPinKind(
-	document: vscode.TextDocument,
-	position: vscode.Position,
-	definition: ResolvedDefinition | undefined
-): PinKind {
-	const isDeclaration = definition === undefined || (
-		getRelativePath(definition.uri) === getRelativePath(document.uri) &&
-		definition.range.contains(position)
-	);
-	return isDeclaration ? PinKind.Declaration : PinKind.Reference;
 }
 
 export async function resolveDefinition(
@@ -74,7 +58,7 @@ export async function resolveDefinition(
 	const uri = 'targetUri' in first ? first.targetUri : first.uri;
 	const range = 'targetUri' in first ? (first.targetSelectionRange ?? first.targetRange) : first.range;
 
-	const key = `${getRelativePath(uri)}:${range.start.line}:${range.start.character}`;
+	const key = buildLocationKey(getRelativePath(uri), range.start.line, range.start.character);
 
 	return {
 		uri,
@@ -89,8 +73,7 @@ export async function resolveDefinition(
  */
 async function buildBreadcrumbLines(
 	document: vscode.TextDocument,
-	position: vscode.Position,
-	wordRange: vscode.Range
+	position: vscode.Position
 ): Promise<PinLine[]> {
 	const symbols = await vscode.commands.executeCommand<vscode.DocumentSymbol[] | undefined>(
 		'vscode.executeDocumentSymbolProvider',
@@ -112,21 +95,9 @@ async function buildBreadcrumbLines(
 		scopeLines.push(position.line);
 	}
 
-	return scopeLines.map((line, index) => {
-		const rawText = document.lineAt(line).text;
-		const text = rawText.trim();
-		const trimOffset = rawText.length - rawText.trimStart().length;
-		const isPinnedWordLine = line === wordRange.start.line;
-		return {
-			line,
-			text,
-			indent: index,
-			...(isPinnedWordLine && {
-				symbolRange: {
-					start: wordRange.start.character - trimOffset,
-					end: wordRange.end.character - trimOffset,
-				},
-			}),
-		};
-	});
+	// Raw text, indentation included — the locationKey column points straight into it.
+	return scopeLines.map((line) => ({
+		line,
+		text: document.lineAt(line).text,
+	}));
 }

@@ -1,4 +1,5 @@
-import { PinKind, WebviewMessageType, type Pin, type PinLine } from '../../types';
+import { FileNode, WebviewMessageType, type Pin, type PinLine } from '../../types';
+import { checkIsDeclaration } from '../utils/checkIsDeclaration';
 import { cn } from '../utils/cn';
 import { sendToExtension } from '../utils/vscodeApi';
 import { LineView } from './LineView';
@@ -7,12 +8,12 @@ import { LineView } from './LineView';
  * One pinned entity inside the file node: its breadcrumb lines plus its own remove
  * button.
  */
-export function PinView({ pin, lines, filePath }: { pin: Pin; lines: PinLine[]; filePath: string }) {
+export function PinView({ pin, lines, fileNode }: { pin: Pin; lines: PinLine[]; fileNode: FileNode }) {
 	return (
 		<div
 			className={cn(
 				'group/pin relative border-b border-(--vscode-editorWidget-border) last:border-b-0',
-				pin.kind === PinKind.Declaration && 'border-l-2 border-l-(--vscode-charts-blue,#4a90d9)'
+				checkIsDeclaration(pin) && 'border-l-2 border-l-(--vscode-charts-blue,#4a90d9)'
 			)}
 		>
 			<button
@@ -24,7 +25,7 @@ export function PinView({ pin, lines, filePath }: { pin: Pin; lines: PinLine[]; 
 			</button>
 
 			{lines.map((line) => (
-				<LineView key={line.line} line={line} filePath={filePath} definitionKey={pin.definitionKey} />
+				<LineView key={line.line} line={line} fileNode={fileNode} pin={pin} />
 			))}
 		</div>
 	);
