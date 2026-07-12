@@ -1,6 +1,6 @@
 import { PinKind, WebviewMessageType, type Pin, type PinLine } from '../../types';
 import { cn } from '../utils/cn';
-import { vscode } from '../utils/vscodeApi';
+import { sendToExtension } from '../utils/vscodeApi';
 import { LineView } from './LineView';
 
 /**
@@ -18,7 +18,7 @@ export function PinView({ pin, lines, filePath }: { pin: Pin; lines: PinLine[]; 
 			<button
 				className="nodrag absolute top-0 right-1 z-10 hidden cursor-pointer px-1 opacity-50 group-hover/pin:block hover:opacity-100 hover:text-(--vscode-errorForeground,#f66)"
 				title="Remove pin"
-				onClick={() => vscode.postMessage({ type: WebviewMessageType.RemovePin, id: pin.id })}
+				onClick={() => sendToExtension(WebviewMessageType.RemovePin, { id: pin.id })}
 			>
 				×
 			</button>

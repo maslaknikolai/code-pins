@@ -8,23 +8,16 @@ interface PinEntry {
 	lines: PinLine[];
 }
 
-interface Group {
-	/** The line the group's pins have in common; unset for a pin that stands alone. */
-	shared?: PinLine;
-	entries: PinEntry[];
-}
-
 /**
  * Pins in one file often share enclosing scopes (class, function). Renders any
  * breadcrumb line shared by several pins once, above them, and recurses with
  * the remaining lines so each pin only shows what's unique to it.
- * A pin's last line (the pinned one) is never shared away.
  */
 export function PinsTree({ pins, filePath }: { pins: Pin[]; filePath: string }) {
 	const rootEntries = pins.map<PinEntry>((pin) => ({
 		pin,
 		lines: pin.lines
-	}))
+	}));
 	return <Level entries={rootEntries} filePath={filePath} />;
 }
 
@@ -34,17 +27,26 @@ function Level({ entries, filePath }: { entries: PinEntry[]; filePath: string })
 	return (
 		<>
 			{groups.map((group) => {
-				if (group.entries.length === 1 || !group.shared) {
-					const { pin, lines } = group.entries[0];
+				if (group.length === 1) {
+					const { pin, lines } = group[0];
 					return <PinView key={pin.id} pin={pin} lines={lines} filePath={filePath} />;
 				}
+
+				// Pins whose pinned line IS the shared line own it: their block renders it
+				// (keeping the highlight and remove button); deeper pins recurse below.
+				const owners = group.filter((entry) => entry.lines.length === 1);
+				const deeper = group
+					.filter((entry) => entry.lines.length > 1)
+					.map(({ pin, lines }) => ({ pin, lines: lines.slice(1) }));
+				const sharedLine = group.find((entry) => entry.lines.length > 1)?.lines[0];
+
 				return (
-					<div key={`shared-${group.shared.line}`} className="flex flex-col gap-2">
-						<LineView line={group.shared} filePath={filePath} />
-						<Level
-							entries={group.entries.map(({ pin, lines }) => ({ pin, lines: lines.slice(1) }))}
-							filePath={filePath}
-						/>
+					<div key={`shared-${group[0].lines[0].line}`} className="flex flex-col gap-2">
+						{owners.map(({ pin, lines }) => (
+							<PinView key={pin.id} pin={pin} lines={lines} filePath={filePath} />
+						))}
+						{owners.length === 0 && sharedLine && <LineView line={sharedLine} filePath={filePath} />}
+						{deeper.length > 0 && <Level entries={deeper} filePath={filePath} />}
 					</div>
 				);
 			})}
@@ -52,24 +54,20 @@ function Level({ entries, filePath }: { entries: PinEntry[]; filePath: string })
 	);
 }
 
-function groupByFirstLine(entries: PinEntry[]): Group[] {
-	const groups: Group[] = [];
-	const byLine = new Map<number, Group>();
+/** Groups entries by their first line's number — regardless of the order pins were added in. */
+function groupByFirstLine(entries: PinEntry[]): PinEntry[][] {
+	const groups: PinEntry[][] = [];
+	const byLine = new Map<number, PinEntry[]>();
 
 	for (const entry of entries) {
-		// The last line is the pinned one — keep it inside the pin even when shared.
-		if (entry.lines.length < 2) {
-			groups.push({ entries: [entry] });
-			continue;
-		}
-		const first = entry.lines[0];
-		const existing = byLine.get(first.line);
+		const lineNumber = entry.lines[0].line;
+		const existing = byLine.get(lineNumber);
 		if (existing) {
-			existing.entries.push(entry);
+			existing.push(entry);
 			continue;
 		}
-		const group: Group = { shared: first, entries: [entry] };
-		byLine.set(first.line, group);
+		const group = [entry];
+		byLine.set(lineNumber, group);
 		groups.push(group);
 	}
 

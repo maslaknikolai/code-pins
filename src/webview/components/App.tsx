@@ -16,7 +16,7 @@ import { flowNodesAtom } from '../atoms';
 import { useEvent } from '../hooks/useEvent';
 import { useSubscribeForExtensionMessages } from '../hooks/useExtensionMessages';
 import type { FileFlowNode } from '../types';
-import { vscode } from '../utils/vscodeApi';
+import { sendToExtension } from '../utils/vscodeApi';
 import { FileNodeView } from './FileNodeView';
 import { FLOATING_EDGE_TYPE, FloatingEdge } from './FloatingEdge';
 
@@ -39,7 +39,7 @@ export function App() {
 	const [nodes, setNodes] = useAtom(flowNodesAtom);
 
 	useEffect(() => {
-		vscode.postMessage({ type: WebviewMessageType.Ready });
+		sendToExtension(WebviewMessageType.Ready);
 	}, [])
 
 	useSubscribeForExtensionMessages();
@@ -78,8 +78,7 @@ export function App() {
 	});
 
 	const onNodeDragStop = useEvent((_event: MouseEvent | TouchEvent, node: FileFlowNode) => {
-		vscode.postMessage({
-			type: WebviewMessageType.MoveFileNode,
+		sendToExtension(WebviewMessageType.MoveFileNode, {
 			filePath: node.id,
 			x: node.position.x,
 			y: node.position.y,
