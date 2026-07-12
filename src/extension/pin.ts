@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 import * as vscode from 'vscode';
-import { buildLocationKey } from '../locationKey';
-import { Pin, PinLine } from '../types';
+import { buildLocationKey } from '../shared/locationKey';
+import { Pin, PinLine } from '../shared/types';
 import { getRelativePath } from './utils/getRelativePath';
 
 /**

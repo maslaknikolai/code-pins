@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { FileNode, WebviewMessageType, type PinLine } from '../../types';
+import { FileNode, WebviewMessageType, type PinLine } from '../../shared/types';
 import { sendToExtension } from '../utils/vscodeApi';
 
 /**

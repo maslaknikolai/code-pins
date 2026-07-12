@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { FileNodesStore } from '../file-nodes-store';
-import { CodePinsFile } from '../../types';
+import { CodePinsFile } from '../../shared/types';
 
 const FILE_FILTERS = { 'Code Pins File': ['json'] };
 

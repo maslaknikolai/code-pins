@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
-import { parseLocationKey } from '../../locationKey';
-import { FileNode, WebviewMessageType, type Pin, type PinLine } from '../../types';
+import { parseLocationKey } from '../../shared/locationKey';
+import { FileNode, WebviewMessageType, type Pin, type PinLine } from '../../shared/types';
 import { selectedSymbolAtom } from '../atoms';
 import { cn } from '../utils/cn';
 import { checkIsSameSymbol } from '../utils/checkIsSameSymbol';

@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { type Pin } from '../../types';
+import { type Pin } from '../../shared/types';
 import { buildPinsTree, type PinsTreeNode } from './buildPinsTree';
 
 suite('buildPinsTree', () => {

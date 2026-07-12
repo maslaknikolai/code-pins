@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { FileNode } from '../types';
+import { FileNode } from '../shared/types';
 
 
 export class FileNodesStore {

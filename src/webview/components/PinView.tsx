@@ -1,5 +1,5 @@
-import { parseLocationKey } from '../../locationKey';
-import { FileNode, type Pin, type PinLine } from '../../types';
+import { parseLocationKey } from '../../shared/locationKey';
+import { FileNode, type Pin, type PinLine } from '../../shared/types';
 import { checkIsDeclaration } from '../utils/checkIsDeclaration';
 import { cn } from '../utils/cn';
 import { BreadcrumbLineView } from './BreadcrumbLineView';

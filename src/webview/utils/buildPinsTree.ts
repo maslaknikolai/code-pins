@@ -1,4 +1,4 @@
-import type { Pin, PinLine } from '../../types';
+import type { Pin, PinLine } from '../../shared/types';
 
 /** A pin block: the pin plus the lines it still has to render itself. */
 export interface PinBlock {

@@ -1,4 +1,4 @@
-import type { Pin } from '../../types';
+import type { Pin } from '../../shared/types';
 
 export type SymbolKeys = Pick<Pin, 'locationKey' | 'definitionKey'>;
 

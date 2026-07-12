@@ -1,4 +1,4 @@
-import { FileNode, type PinLine } from '../../types';
+import { FileNode, type PinLine } from '../../shared/types';
 import { LineShell } from './LineShell';
 
 /** A plain context line above a pin — no symbol, no controls. */

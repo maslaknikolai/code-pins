@@ -1,4 +1,4 @@
-import { FileNode } from '../../types';
+import { FileNode } from '../../shared/types';
 import type { GroupNode, PinsTreeNode } from '../utils/buildPinsTree';
 import { BreadcrumbLineView } from './BreadcrumbLineView';
 import { PinView } from './PinView';

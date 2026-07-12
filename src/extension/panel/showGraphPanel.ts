@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { FileNodesStore } from '../file-nodes-store';
-import { ExtensionMessageType, ExtensionToWebviewMessage, WebviewToExtensionMessage } from '../../types';
+import { ExtensionMessageType, ExtensionToWebviewMessage, WebviewToExtensionMessage } from '../../shared/types';
 import { renderHtml } from './html';
 import { handleWebviewMessage } from './messages';
 

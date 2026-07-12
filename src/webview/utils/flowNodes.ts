@@ -1,4 +1,4 @@
-import type { FileNode } from '../../types';
+import type { FileNode } from '../../shared/types';
 import type { FileFlowNode } from '../types';
 
 export function toFlowNode(fileNode: FileNode): FileFlowNode {

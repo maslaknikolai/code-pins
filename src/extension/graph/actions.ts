@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { FileNodesStore } from '../file-nodes-store';
-import { FileNode, Pin } from '../../types';
+import { FileNode, Pin } from '../../shared/types';
 
 export function addPin(store: FileNodesStore, filePath: string, pin: Pin): void {
 	const currentFileNodes = store.getFileNodes();

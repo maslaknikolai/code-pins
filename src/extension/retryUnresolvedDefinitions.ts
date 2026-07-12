@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { FileNodesStore } from './file-nodes-store';
-import { parseLocationKey } from '../locationKey';
-import { Pin } from '../types';
+import { parseLocationKey } from '../shared/locationKey';
+import { Pin } from '../shared/types';
 import { resolveDefinition } from './pin';
 import { resolveUri } from './utils/resolveUri';
 

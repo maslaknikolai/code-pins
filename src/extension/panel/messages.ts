@@ -1,6 +1,6 @@
 import { FileNodesStore } from '../file-nodes-store';
 import { moveFileNode, removePin } from '../graph/actions';
-import { WebviewMessageType, WebviewToExtensionMessage } from '../../types';
+import { WebviewMessageType, WebviewToExtensionMessage } from '../../shared/types';
 import { openLocation } from './openLocation';
 
 export interface MessageContext {

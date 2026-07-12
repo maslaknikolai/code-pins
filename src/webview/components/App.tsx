@@ -11,7 +11,7 @@ import {
 import '@xyflow/react/dist/style.css';
 import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useMemo } from 'react';
-import { MAP_FIELD, WebviewMessageType } from '../../types';
+import { MAP_FIELD, WebviewMessageType } from '../../shared/types';
 import { flowNodesAtom, selectedSymbolAtom } from '../atoms';
 import { checkIsSameSymbol } from '../utils/checkIsSameSymbol';
 import { useEvent } from '../hooks/useEvent';

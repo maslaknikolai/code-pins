@@ -1,6 +1,6 @@
 import { useSetAtom } from 'jotai';
 import { useEffect } from 'react';
-import { ExtensionMessageType, type ExtensionToWebviewMessage } from '../../types';
+import { ExtensionMessageType, type ExtensionToWebviewMessage } from '../../shared/types';
 import { flowNodesAtom } from '../atoms';
 import { toFlowNode } from '../utils/flowNodes';
 
