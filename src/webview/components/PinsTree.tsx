@@ -1,6 +1,6 @@
 import { FileNode } from '../../types';
 import type { GroupNode, PinsTreeNode } from '../utils/buildPinsTree';
-import { LineView } from './LineView';
+import { BreadcrumbLineView } from './BreadcrumbLineView';
 import { PinView } from './PinView';
 
 /** Renders the shared-scope tree built by buildPinsTree. */
@@ -31,7 +31,7 @@ function GroupView({ group, fileNode }: { group: GroupNode; fileNode: FileNode }
 	return (
 		<div className="flex flex-col gap-2">
 			{group.sharedLines.map((line) => (
-				<LineView
+				<BreadcrumbLineView
 					key={line.line}
 					line={line}
 					fileNode={fileNode}

@@ -87,7 +87,11 @@ async function buildBreadcrumbLines(
 		if (!enclosing) {
 			break;
 		}
-		scopeLines.push(enclosing.range.start.line);
+		// Nested symbols can start on the same line (`const x = useMemo(() => [`) — keep it once.
+		const line = enclosing.range.start.line;
+		if (scopeLines[scopeLines.length - 1] !== line) {
+			scopeLines.push(line);
+		}
 		level = enclosing.children ?? [];
 	}
 
