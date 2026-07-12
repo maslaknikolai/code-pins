@@ -40,6 +40,12 @@
         "key": "ctrl+y",
         "mac": "ctrl+y",
         "when": "editorTextFocus"
+      },
+      {
+        "command": "code-pins.saveCodePinsFile",
+        "key": "ctrl+s",
+        "mac": "cmd+s",
+        "when": "activeWebviewPanelId == 'codePins'"
       }
     ]
   },
