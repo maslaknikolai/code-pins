@@ -14,8 +14,8 @@ export interface PinLine {
 	text: string;
 	/** Breadcrumb depth, used for display indentation. */
 	indent: number;
-	/** Character range of the pinned entity within `text` — only on the line it was pinned from. */
-	highlight?: { start: number; end: number };
+	/** Character range of the pinned symbol within `text` — only on the line it was pinned from. */
+	symbolRange?: { start: number; end: number };
 }
 
 /** One pinned entity; lives inside the FileNode of its file. */

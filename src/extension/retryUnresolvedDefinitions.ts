@@ -35,16 +35,16 @@ async function resolvePinDefinition(filePath: string, pin: Pin): Promise<Pin | u
 		return undefined;
 	}
 	const pinnedLine = pin.lines[pin.lines.length - 1];
-	if (!pinnedLine?.highlight) {
+	if (!pinnedLine?.symbolRange) {
 		return undefined;
 	}
 
 	try {
 		const document = await vscode.workspace.openTextDocument(resolveUri(filePath));
-		// The stored text is trimmed, so re-add the line's leading whitespace to the highlight offset.
+		// The stored text is trimmed, so re-add the line's leading whitespace to the symbol offset.
 		const rawText = document.lineAt(pinnedLine.line).text;
 		const trimOffset = rawText.length - rawText.trimStart().length;
-		const position = new vscode.Position(pinnedLine.line, trimOffset + pinnedLine.highlight.start);
+		const position = new vscode.Position(pinnedLine.line, trimOffset + pinnedLine.symbolRange.start);
 
 		const definition = await resolveDefinition(document, position);
 

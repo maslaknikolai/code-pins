@@ -16,7 +16,7 @@ export function LineView({
 	definitionKey?: string;
 }) {
 	const [selectedKey, setSelectedKey] = useAtom(selectedDefinitionKeyAtom);
-	const isSelectable = Boolean(definitionKey && line.highlight);
+	const isSelectable = Boolean(definitionKey && line.symbolRange);
 	const isSelected = Boolean(definitionKey) && selectedKey === definitionKey;
 
 	const toggleSelection = (event: React.MouseEvent) => {
@@ -24,9 +24,9 @@ export function LineView({
 		setSelectedKey(isSelected ? undefined : definitionKey);
 	};
 
-	const beforeSymbol = line.highlight && line.text.slice(0, line.highlight.start);
-	const symbol = line.highlight && line.text.slice(line.highlight.start, line.highlight.end);
-	const afterSymbol = line.highlight && line.text.slice(line.highlight.end);
+	const beforeSymbol = line.symbolRange && line.text.slice(0, line.symbolRange.start);
+	const symbol = line.symbolRange && line.text.slice(line.symbolRange.start, line.symbolRange.end);
+	const afterSymbol = line.symbolRange && line.text.slice(line.symbolRange.end);
 
 	return (
 		<div
@@ -36,7 +36,7 @@ export function LineView({
 			onClick={() => sendToExtension(WebviewMessageType.OpenLocation, { file: filePath, line: line.line })}
 		>
 			<span className="inline-block min-w-full group-hover/line:animate-marquee-x group-active/line:[animation-play-state:paused]">
-				{line.highlight ? (
+				{line.symbolRange ? (
 					<>
 						{beforeSymbol}
 						<span

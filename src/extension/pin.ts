@@ -122,7 +122,7 @@ async function buildBreadcrumbLines(
 			text,
 			indent: index,
 			...(isPinnedWordLine && {
-				highlight: {
+				symbolRange: {
 					start: wordRange.start.character - trimOffset,
 					end: wordRange.end.character - trimOffset,
 				},

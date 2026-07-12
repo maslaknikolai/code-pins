@@ -72,7 +72,7 @@ function checkIsSamePin(a: Pin, b: Pin): boolean {
 	}
 	const lastA = a.lines[a.lines.length - 1];
 	const lastB = b.lines[b.lines.length - 1];
-	return lastA?.line === lastB?.line && lastA?.highlight?.start === lastB?.highlight?.start;
+	return lastA?.line === lastB?.line && lastA?.symbolRange?.start === lastB?.symbolRange?.start;
 }
 
 const CORNER_MARGIN = 40;
