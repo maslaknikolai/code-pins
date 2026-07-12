@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { PinsStore } from '../pins-store';
-import { MapFile } from '../types';
+import { MapFile } from '../../types';
 
 const FILE_FILTERS = { 'Code Pins Map': ['json'] };
 

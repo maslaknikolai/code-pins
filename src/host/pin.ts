@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import * as vscode from 'vscode';
-import { Pin, PinKind, PinLine } from './types';
+import { Pin, PinKind, PinLine } from '../types';
 
 /**
  * Builds a pin for the entity under the cursor: resolves its definition

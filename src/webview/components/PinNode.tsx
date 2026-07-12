@@ -24,7 +24,9 @@ export function PinNode({ data }: NodeProps<PinFlowNode>) {
 			<Handle type="target" position={Position.Left} className={handleClass} />
 			<div className="group flex items-center px-2 py-0.75 font-bold whitespace-nowrap bg-(--vscode-editorGroupHeader-tabsBackground) border-b border-(--vscode-editorWidget-border)">
 				<span className="@container mr-1 hidden min-w-0 flex-1 overflow-hidden font-normal opacity-70 group-hover:block">
-					<span className="inline-block min-w-full animate-marquee-x">{pin.filePath}</span>
+					<span className="inline-block min-w-full animate-marquee-x group-active:[animation-play-state:paused]">
+						{pin.filePath}
+					</span>
 				</span>
 				<span className="group-hover:hidden">{fileName}</span>
 				<button

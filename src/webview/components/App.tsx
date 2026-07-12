@@ -4,13 +4,15 @@ import {
 	Controls,
 	MarkerType,
 	ReactFlow,
+	ViewportPortal,
+	type CoordinateExtent,
 	type Edge,
 	type NodeChange,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useAtom } from 'jotai';
 import { useEffect, useMemo } from 'react';
-import { PinKind, WebviewMessageType } from '../../types';
+import { MAP_FIELD, PinKind, WebviewMessageType } from '../../types';
 import { flowNodesAtom } from '../atoms';
 import { useEvent } from '../hooks/useEvent';
 import { useSubscribeForExtensionMessages } from '../hooks/useExtensionMessages';
@@ -18,7 +20,16 @@ import type { PinFlowNode } from '../types';
 import { vscode } from '../utils/vscodeApi';
 import { PinNode } from './PinNode';
 
-const nodeTypes = { pin: PinNode };
+const nodeTypes = {
+	pin: PinNode
+};
+
+const fieldExtent: CoordinateExtent = [
+	[0, 0],
+	[MAP_FIELD.width, MAP_FIELD.height],
+];
+
+const GRID_SIZE = 20;
 
 export function App() {
 	const [nodes, setNodes] = useAtom(flowNodesAtom);
@@ -71,8 +82,13 @@ export function App() {
 			colorMode={colorMode}
 			nodesConnectable={false}
 			deleteKeyCode={null}
+			snapToGrid
+			snapGrid={[GRID_SIZE, GRID_SIZE]}
+			translateExtent={fieldExtent}
+			nodeExtent={fieldExtent}
 		>
-			<Background />
+
+			<Background gap={GRID_SIZE} />
 			<Controls />
 		</ReactFlow>
 	);

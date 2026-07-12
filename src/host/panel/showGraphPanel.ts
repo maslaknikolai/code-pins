@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { PinsStore } from '../pins-store';
-import { ExtensionMessageType, ExtensionToWebviewMessage, WebviewToExtensionMessage } from '../types';
+import { ExtensionMessageType, ExtensionToWebviewMessage, WebviewToExtensionMessage } from '../../types';
 import { renderHtml } from './html';
 import { handleWebviewMessage } from './messages';
 

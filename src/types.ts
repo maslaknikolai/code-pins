@@ -1,3 +1,8 @@
+export const MAP_FIELD = {
+	width: 5000,
+	height: 5000
+};
+
 export enum PinKind {
 	Reference = 'reference',
 	Declaration = 'declaration',

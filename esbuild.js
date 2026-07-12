@@ -40,7 +40,7 @@ async function main() {
 	const contexts = await Promise.all([
 		esbuild.context({
 			...common,
-			entryPoints: ['src/extension.ts'],
+			entryPoints: ['src/host/extension.ts'],
 			format: 'cjs',
 			platform: 'node',
 			outfile: 'dist/extension.js',

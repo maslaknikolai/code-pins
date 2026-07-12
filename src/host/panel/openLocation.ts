@@ -10,7 +10,7 @@ export async function openLocation(file: string, line: number): Promise<void> {
 	editor.revealRange(new vscode.Range(position, position), vscode.TextEditorRevealType.InCenter);
 }
 
-/** Pins store workspace-relative paths; absolute ones only for files outside the workspace. */
+/** Pins store workspace-relative paths */
 function resolveUri(file: string): vscode.Uri {
 	const root = vscode.workspace.workspaceFolders?.[0]?.uri;
 	if (path.isAbsolute(file) || !root) {

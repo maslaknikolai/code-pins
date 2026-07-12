@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Pin } from './types';
+import { Pin } from '../types';
 
 
 export class PinsStore {

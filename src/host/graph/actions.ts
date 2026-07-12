@@ -1,14 +1,22 @@
 import * as vscode from 'vscode';
 import { PinsStore } from '../pins-store';
-import { Pin } from '../types';
+import { Pin } from '../../types';
 
 export function addPin(pinsStore: PinsStore, pin: Pin): void {
 	const pins = pinsStore.getPins();
+
 	if (pins.some((existing) => checkIsSameLine(existing, pin))) {
 		vscode.window.setStatusBarMessage('Code Pins: already on the map', 2000);
 		return;
 	}
-	pinsStore.setPins([...pins, { ...pin, ...nextPosition(pins.length) }]);
+
+	pinsStore.setPins([
+		...pins,
+		{
+			...pin,
+			...nextPosition(pins.length)
+		}
+	]);
 }
 
 /** Silent: positions come from the webview itself, so no state echo back. */
@@ -39,10 +47,15 @@ function checkIsSameLine(a: Pin, b: Pin): boolean {
 	);
 }
 
-/** Lays new pins out in a 4-column grid until the user drags them elsewhere. */
+const CORNER_MARGIN = 40;
+const CASCADE_STEP = 30;
+const CASCADE_LENGTH = 8;
+
+/** New pins land in the top-left corner, cascading slightly so they don't fully overlap. */
 function nextPosition(count: number): { x: number; y: number } {
+	const offset = (count % CASCADE_LENGTH) * CASCADE_STEP;
 	return {
-		x: 40 + (count % 4) * 320,
-		y: 40 + Math.floor(count / 4) * 160,
+		x: CORNER_MARGIN + offset,
+		y: CORNER_MARGIN + offset,
 	};
 }
