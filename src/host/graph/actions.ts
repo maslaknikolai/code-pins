@@ -18,7 +18,7 @@ export function addPin(store: FileNodesStore, filePath: string, pin: Pin): void 
 		return;
 	}
 
-	if (existingNode.pins.some((existing) => checkIsSameLine(existing, pin))) {
+	if (existingNode.pins.some((existing) => checkIsSamePin(existing, pin))) {
 		vscode.window.setStatusBarMessage('Code Pins: already on the map', 2000);
 		return;
 	}
@@ -51,12 +51,9 @@ export function clearMap(store: FileNodesStore): void {
 	store.setFileNodes([]);
 }
 
-/** Two pins are the same when they anchor the same kind on the same last line. */
-function checkIsSameLine(a: Pin, b: Pin): boolean {
-	return (
-		a.kind === b.kind &&
-		a.lines[a.lines.length - 1]?.line === b.lines[b.lines.length - 1]?.line
-	);
+/** Two pins are the same when they point at the same definition with the same kind. */
+function checkIsSamePin(a: Pin, b: Pin): boolean {
+	return a.kind === b.kind && a.definitionKey === b.definitionKey;
 }
 
 const CORNER_MARGIN = 40;
