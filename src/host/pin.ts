@@ -1,6 +1,7 @@
 import { randomUUID } from 'crypto';
 import * as vscode from 'vscode';
 import { Pin, PinKind, PinLine } from '../types';
+import { getRelativePath } from './utils/getRelativePath';
 
 /**
  * Builds a pin for the entity under the cursor: resolves its definition
@@ -22,17 +23,17 @@ export async function buildPin(
 	const definition = await resolveDefinition(document, position);
 	// Fallback: entity with no resolvable definition keys to its own location.
 	const definitionKey = definition?.key ??
-		`${document.uri.toString()}:${wordRange.start.line}:${wordRange.start.character}`;
+		`${getRelativePath(document.uri)}:${wordRange.start.line}:${wordRange.start.character}`;
 
 	const isDeclaration = definition === undefined || (
-		definition.uri.toString() === document.uri.toString() &&
+		getRelativePath(definition.uri) === getRelativePath(document.uri) &&
 		definition.range.contains(position)
 	);
 
 	const lines = await buildBreadcrumbLines(document, position);
 
 	return {
-		filePath: vscode.workspace.asRelativePath(document.uri, false),
+		filePath: getRelativePath(document.uri),
 		pin: {
 			id: randomUUID(),
 			kind: isDeclaration ? PinKind.Declaration : PinKind.Reference,
@@ -64,7 +65,7 @@ async function resolveDefinition(
 	}
 	const uri = 'targetUri' in first ? first.targetUri : first.uri;
 	const range = 'targetUri' in first ? (first.targetSelectionRange ?? first.targetRange) : first.range;
-	return { uri, range, key: `${uri.toString()}:${range.start.line}:${range.start.character}` };
+	return { uri, range, key: `${getRelativePath(uri)}:${range.start.line}:${range.start.character}` };
 }
 
 /**
