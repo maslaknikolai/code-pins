@@ -12,7 +12,10 @@ export function addPin(store: FileNodesStore, filePath: string, pin: Pin): void 
 			...nextPosition(currentFileNodes.length),
 			pins: [pin]
 		};
-		store.setFileNodes([ ...currentFileNodes, newFileNode ]);
+
+		const newFileNodes = [ ...currentFileNodes, newFileNode ];
+		console.log('Code Pins: adding new node for pin', {newFileNodes});
+		store.setFileNodes(newFileNodes);
 		return;
 	}
 
