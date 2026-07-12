@@ -1,5 +1,7 @@
 import { Handle, Position, type NodeProps } from '@xyflow/react';
+import { useMemo } from 'react';
 import type { FileFlowNode } from '../types';
+import { buildPinsTree } from '../utils/buildPinsTree';
 import { PinsTree } from './PinsTree';
 
 /** Edge anchors only — not user-connectable, so keep them invisible. */
@@ -9,6 +11,7 @@ export function FileNodeView({ data }: NodeProps<FileFlowNode>) {
 	const fileNode = data.fileNode;
 	const lastSlash = Math.max(fileNode.filePath.lastIndexOf('/'), fileNode.filePath.lastIndexOf('\\')) + 1;
 	const fileName = fileNode.filePath.slice(lastSlash);
+	const pinsTree = useMemo(() => buildPinsTree(fileNode.pins), [fileNode.pins]);
 
 	return (
 		<div className="w-90 overflow-hidden rounded-sm select-none font-(family-name:--vscode-editor-font-family) text-(length:--vscode-editor-font-size) bg-(--vscode-editorWidget-background) border border-(--vscode-editorWidget-border)">
@@ -23,7 +26,7 @@ export function FileNodeView({ data }: NodeProps<FileFlowNode>) {
 				<span className="group-hover:hidden">{fileName}</span>
 			</div>
 			<div className="flex flex-col gap-2">
-				<PinsTree pins={fileNode.pins} filePath={fileNode.filePath} />
+				<PinsTree nodes={pinsTree} filePath={fileNode.filePath} />
 			</div>
 
 			<Handle type="source" position={Position.Right} className={handleClass} />

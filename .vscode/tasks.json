@@ -12,10 +12,7 @@
             "presentation": {
                 "reveal": "never"
             },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "group": "build"
         },
         {
             "type": "npm",
@@ -41,6 +38,29 @@
                 "reveal": "never"
             }
         },
+		{
+			"type": "npm",
+			"script": "test:unit",
+			"label": "npm: test:unit",
+			"problemMatcher": "$tsc",
+			"presentation": {
+				"reveal": "always",
+				"group": "test"
+			}
+		},
+		{
+			"label": "unit tests, then watch",
+			"dependsOn": [
+				"npm: test:unit",
+				"watch"
+			],
+			"dependsOrder": "sequence",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": []
+		},
 		{
 			"type": "npm",
 			"script": "watch-tests",
