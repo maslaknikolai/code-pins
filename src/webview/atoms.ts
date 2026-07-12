@@ -1,4 +1,6 @@
 import { atom } from 'jotai';
-import type { PinFlowNode } from './types';
+import type { FileFlowNode } from './types';
 
-export const flowNodesAtom = atom<PinFlowNode[]>([]);
+
+// Stored as nodes to make them not rerender on every postiion change
+export const flowNodesAtom = atom<FileFlowNode[]>([]);

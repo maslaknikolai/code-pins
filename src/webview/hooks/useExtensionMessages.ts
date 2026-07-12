@@ -10,7 +10,7 @@ export function useSubscribeForExtensionMessages(): void {
 	useEffect(() => {
 		const onMessage = (event: MessageEvent<ExtensionToWebviewMessage>) => {
 			if (event.data.type === ExtensionMessageType.SetState) {
-				setNodes(event.data.pins.map(toFlowNode));
+				setNodes(event.data.fileNodes.map(toFlowNode));
 			}
 		};
 		window.addEventListener('message', onMessage);

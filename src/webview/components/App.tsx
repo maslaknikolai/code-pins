@@ -4,7 +4,6 @@ import {
 	Controls,
 	MarkerType,
 	ReactFlow,
-	ViewportPortal,
 	type CoordinateExtent,
 	type Edge,
 	type NodeChange,
@@ -16,12 +15,12 @@ import { MAP_FIELD, PinKind, WebviewMessageType } from '../../types';
 import { flowNodesAtom } from '../atoms';
 import { useEvent } from '../hooks/useEvent';
 import { useSubscribeForExtensionMessages } from '../hooks/useExtensionMessages';
-import type { PinFlowNode } from '../types';
+import type { FileFlowNode } from '../types';
 import { vscode } from '../utils/vscodeApi';
-import { PinNode } from './PinNode';
+import { FileNodeView } from './FileNodeView';
 
 const nodeTypes = {
-	pin: PinNode
+	file: FileNodeView
 };
 
 const fieldExtent: CoordinateExtent = [
@@ -40,34 +39,45 @@ export function App() {
 
 	useSubscribeForExtensionMessages();
 
-	/** Arrows are derived, never stored: reference → declaration with the same definitionKey. */
+	/** Arrows are derived, never stored: reference → declaration with the same definitionKey, across file nodes. */
 	const edges = useMemo(() => {
 		const result: Edge[] = [];
 		for (const { data } of nodes) {
-			if (data.pin.kind !== PinKind.Reference) {
-				continue;
-			}
-			const declaration = nodes.find(
-				(n) => n.data.pin.kind === PinKind.Declaration && n.data.pin.definitionKey === data.pin.definitionKey
-			);
-			if (declaration) {
-				result.push({
-					id: data.pin.id,
-					source: data.pin.id,
-					target: declaration.id,
-					markerEnd: { type: MarkerType.ArrowClosed },
-				});
+			for (const pin of data.fileNode.pins) {
+				if (pin.kind !== PinKind.Reference) {
+					continue;
+				}
+				const declarationNode = nodes.find(
+					(n) =>
+						n.data.fileNode.filePath !== data.fileNode.filePath &&
+						n.data.fileNode.pins.some(
+							(p) => p.kind === PinKind.Declaration && p.definitionKey === pin.definitionKey
+						)
+				);
+				if (declarationNode) {
+					result.push({
+						id: pin.id,
+						source: data.fileNode.filePath,
+						target: declarationNode.id,
+						markerEnd: { type: MarkerType.ArrowClosed },
+					});
+				}
 			}
 		}
 		return result;
 	}, [nodes]);
 
-	const onNodesChange = useEvent((changes: NodeChange<PinFlowNode>[]) => {
+	const onNodesChange = useEvent((changes: NodeChange<FileFlowNode>[]) => {
 		setNodes((prev) => applyNodeChanges(changes, prev));
 	});
 
-	const onNodeDragStop = useEvent((_event: MouseEvent | TouchEvent, node: PinFlowNode) => {
-		vscode.postMessage({ type: WebviewMessageType.MovePin, id: node.id, x: node.position.x, y: node.position.y });
+	const onNodeDragStop = useEvent((_event: MouseEvent | TouchEvent, node: FileFlowNode) => {
+		vscode.postMessage({
+			type: WebviewMessageType.MoveFileNode,
+			filePath: node.id,
+			x: node.position.x,
+			y: node.position.y,
+		});
 	});
 
 	const colorMode = document.body.classList.contains('vscode-light') ? 'light' : 'dark';

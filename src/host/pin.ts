@@ -6,7 +6,9 @@ import { Pin, PinKind, PinLine } from '../types';
  * Builds a pin for the entity under the cursor: resolves its definition
  * (same lookup as cmd+click) and collects the enclosing-scope breadcrumb lines.
  */
-export async function buildPin(editor: vscode.TextEditor): Promise<Pin | undefined> {
+export async function buildPin(
+	editor: vscode.TextEditor
+): Promise<{ filePath: string; pin: Pin } | undefined> {
 	const document = editor.document;
 	const position = editor.selection.active;
 
@@ -30,14 +32,14 @@ export async function buildPin(editor: vscode.TextEditor): Promise<Pin | undefin
 	const lines = await buildBreadcrumbLines(document, position);
 
 	return {
-		id: randomUUID(),
-		kind: isDeclaration ? PinKind.Declaration : PinKind.Reference,
 		filePath: vscode.workspace.asRelativePath(document.uri, false),
-		definitionKey,
-		symbolName: word,
-		x: 0,
-		y: 0,
-		lines,
+		pin: {
+			id: randomUUID(),
+			kind: isDeclaration ? PinKind.Declaration : PinKind.Reference,
+			definitionKey,
+			symbolName: word,
+			lines,
+		},
 	};
 }
 

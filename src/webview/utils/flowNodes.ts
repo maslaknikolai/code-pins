@@ -1,11 +1,11 @@
-import type { Pin } from '../../types';
-import type { PinFlowNode } from '../types';
+import type { FileNode } from '../../types';
+import type { FileFlowNode } from '../types';
 
-export function toFlowNode(pin: Pin): PinFlowNode {
+export function toFlowNode(fileNode: FileNode): FileFlowNode {
 	return {
-		id: pin.id,
-		type: 'pin',
-		position: { x: pin.x, y: pin.y },
-		data: { pin },
+		id: fileNode.filePath,
+		type: 'file',
+		position: { x: fileNode.x, y: fileNode.y },
+		data: { fileNode },
 	};
 }

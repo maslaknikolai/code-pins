@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { PinsStore } from '../pins-store';
+import { FileNodesStore } from '../file-nodes-store';
 import { ExtensionMessageType, ExtensionToWebviewMessage, WebviewToExtensionMessage } from '../../types';
 import { renderHtml } from './html';
 import { handleWebviewMessage } from './messages';
@@ -7,7 +7,7 @@ import { handleWebviewMessage } from './messages';
 
 let currentPanel: vscode.WebviewPanel | undefined;
 
-export function showGraphPanel(extensionUri: vscode.Uri, pinsStore: PinsStore): void {
+export function showGraphPanel(extensionUri: vscode.Uri, store: FileNodesStore): void {
 	if (currentPanel) {
 		currentPanel.reveal(undefined, true);
 		return;
@@ -26,16 +26,16 @@ export function showGraphPanel(extensionUri: vscode.Uri, pinsStore: PinsStore): 
 
 	panel.webview.html = renderHtml(panel.webview, extensionUri);
 
-	const postState = () => {
-		const message: ExtensionToWebviewMessage = { type: ExtensionMessageType.SetState, pins: pinsStore.getPins() };
+	const sendStateToWebview = () => {
+		const message: ExtensionToWebviewMessage = { type: ExtensionMessageType.SetState, fileNodes: store.getFileNodes() };
 		panel.webview.postMessage(message);
 	};
 
 	const disposables: vscode.Disposable[] = [
 		panel.webview.onDidReceiveMessage((message: WebviewToExtensionMessage) =>
-			handleWebviewMessage(message, { pinsStore, postState })
+			handleWebviewMessage(message, { store, sendStateToWebview })
 		),
-		pinsStore.onDidChange(postState),
+		store.onDidChange(sendStateToWebview),
 	];
 
 	panel.onDidDispose(() => {

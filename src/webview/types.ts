@@ -1,5 +1,5 @@
 import type { Node } from '@xyflow/react';
-import type { Pin } from '../types';
+import type { FileNode } from '../types';
 
-/** React Flow node carrying the pinned entity in its data. */
-export type PinFlowNode = Node<{ pin: Pin }, 'pin'>;
+/** React Flow node carrying one file node in its data. */
+export type FileFlowNode = Node<{ fileNode: FileNode }, 'file'>;
