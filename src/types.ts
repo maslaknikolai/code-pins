@@ -14,14 +14,20 @@ export interface PinLine {
 	text: string;
 	/** Breadcrumb depth, used for display indentation. */
 	indent: number;
+	/** Character range of the pinned entity within `text` — only on the line it was pinned from. */
+	highlight?: { start: number; end: number };
 }
 
 /** One pinned entity; lives inside the FileNode of its file. */
 export interface Pin {
 	id: string;
 	kind: PinKind;
-	/** Location of the entity's definition — pins sharing a key are linked by an arrow. */
-	definitionKey: string;
+	/**
+	 * Location of the entity's definition — pins sharing a key are linked by an arrow.
+	 * Undefined when the language server couldn't resolve the definition at pin time
+	 * (e.g. still indexing); such pins get no arrows until a retry resolves them.
+	 */
+	definitionKey?: string;
 	/** The pinned entity name */
 	symbolName: string;
 	lines: PinLine[];

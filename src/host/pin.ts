@@ -12,45 +12,53 @@ export async function buildPin(
 ): Promise<{ filePath: string; pin: Pin } | undefined> {
 	const document = editor.document;
 	const position = editor.selection.active;
-
 	const wordRange = document.getWordRangeAtPosition(position);
+
 	if (!wordRange) {
 		vscode.window.showWarningMessage('Code Pins: place the cursor on a symbol to pin it.');
 		return undefined;
 	}
+
 	const word = document.getText(wordRange);
-
 	const definition = await resolveDefinition(document, position);
-	// Fallback: entity with no resolvable definition keys to its own location.
-	const definitionKey = definition?.key ??
-		`${getRelativePath(document.uri)}:${wordRange.start.line}:${wordRange.start.character}`;
-
-	const isDeclaration = definition === undefined || (
-		getRelativePath(definition.uri) === getRelativePath(document.uri) &&
-		definition.range.contains(position)
-	);
-
-	const lines = await buildBreadcrumbLines(document, position);
+	const lines = await buildBreadcrumbLines(document, position, wordRange);
 
 	return {
 		filePath: getRelativePath(document.uri),
 		pin: {
 			id: randomUUID(),
-			kind: isDeclaration ? PinKind.Declaration : PinKind.Reference,
-			definitionKey,
+			kind: getPinKind(document, position, definition),
+			definitionKey: definition?.key,
 			symbolName: word,
 			lines,
 		},
 	};
 }
 
-interface ResolvedDefinition {
+export interface ResolvedDefinition {
 	uri: vscode.Uri;
 	range: vscode.Range;
 	key: string;
 }
 
-async function resolveDefinition(
+/**
+ * A pin is a declaration when its definition points back at itself.
+ * With no resolved definition this is only a provisional guess (declaration) —
+ * retryUnresolvedDefinitions recomputes it once the definition resolves.
+ */
+export function getPinKind(
+	document: vscode.TextDocument,
+	position: vscode.Position,
+	definition: ResolvedDefinition | undefined
+): PinKind {
+	const isDeclaration = definition === undefined || (
+		getRelativePath(definition.uri) === getRelativePath(document.uri) &&
+		definition.range.contains(position)
+	);
+	return isDeclaration ? PinKind.Declaration : PinKind.Reference;
+}
+
+export async function resolveDefinition(
 	document: vscode.TextDocument,
 	position: vscode.Position
 ): Promise<ResolvedDefinition | undefined> {
@@ -65,7 +73,14 @@ async function resolveDefinition(
 	}
 	const uri = 'targetUri' in first ? first.targetUri : first.uri;
 	const range = 'targetUri' in first ? (first.targetSelectionRange ?? first.targetRange) : first.range;
-	return { uri, range, key: `${getRelativePath(uri)}:${range.start.line}:${range.start.character}` };
+
+	const key = `${getRelativePath(uri)}:${range.start.line}:${range.start.character}`;
+
+	return {
+		uri,
+		range,
+		key,
+	};
 }
 
 /**
@@ -74,7 +89,8 @@ async function resolveDefinition(
  */
 async function buildBreadcrumbLines(
 	document: vscode.TextDocument,
-	position: vscode.Position
+	position: vscode.Position,
+	wordRange: vscode.Range
 ): Promise<PinLine[]> {
 	const symbols = await vscode.commands.executeCommand<vscode.DocumentSymbol[] | undefined>(
 		'vscode.executeDocumentSymbolProvider',
@@ -96,9 +112,21 @@ async function buildBreadcrumbLines(
 		scopeLines.push(position.line);
 	}
 
-	return scopeLines.map((line, index) => ({
-		line,
-		text: document.lineAt(line).text.trim(),
-		indent: index,
-	}));
+	return scopeLines.map((line, index) => {
+		const rawText = document.lineAt(line).text;
+		const text = rawText.trim();
+		const trimOffset = rawText.length - rawText.trimStart().length;
+		const isPinnedWordLine = line === wordRange.start.line;
+		return {
+			line,
+			text,
+			indent: index,
+			...(isPinnedWordLine && {
+				highlight: {
+					start: wordRange.start.character - trimOffset,
+					end: wordRange.end.character - trimOffset,
+				},
+			}),
+		};
+	});
 }

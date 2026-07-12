@@ -18,9 +18,14 @@ import { useSubscribeForExtensionMessages } from '../hooks/useExtensionMessages'
 import type { FileFlowNode } from '../types';
 import { vscode } from '../utils/vscodeApi';
 import { FileNodeView } from './FileNodeView';
+import { FLOATING_EDGE_TYPE, FloatingEdge } from './FloatingEdge';
 
 const nodeTypes = {
 	file: FileNodeView
+};
+
+const edgeTypes = {
+	[FLOATING_EDGE_TYPE]: FloatingEdge
 };
 
 const fieldExtent: CoordinateExtent = [
@@ -44,7 +49,7 @@ export function App() {
 		const result: Edge[] = [];
 		for (const { data } of nodes) {
 			for (const pin of data.fileNode.pins) {
-				if (pin.kind !== PinKind.Reference) {
+				if (pin.kind !== PinKind.Reference || !pin.definitionKey) {
 					continue;
 				}
 				const declarationNode = nodes.find(
@@ -57,6 +62,7 @@ export function App() {
 				if (declarationNode) {
 					result.push({
 						id: pin.id,
+						type: FLOATING_EDGE_TYPE,
 						source: data.fileNode.filePath,
 						target: declarationNode.id,
 						markerEnd: { type: MarkerType.ArrowClosed },
@@ -87,6 +93,7 @@ export function App() {
 			nodes={nodes}
 			edges={edges}
 			nodeTypes={nodeTypes}
+			edgeTypes={edgeTypes}
 			onNodesChange={onNodesChange}
 			onNodeDragStop={onNodeDragStop}
 			colorMode={colorMode}

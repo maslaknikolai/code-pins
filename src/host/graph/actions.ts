@@ -7,14 +7,12 @@ export function addPin(store: FileNodesStore, filePath: string, pin: Pin): void 
 	const existingNode = currentFileNodes.find((node) => node.filePath === filePath);
 
 	if (!existingNode) {
-		store.setFileNodes([
-			...currentFileNodes,
-			{
-				filePath,
-				...nextPosition(currentFileNodes.length),
-				pins: [pin]
-			}
-		]);
+		const newFileNode: FileNode = {
+			filePath,
+			...nextPosition(currentFileNodes.length),
+			pins: [pin]
+		};
+		store.setFileNodes([ ...currentFileNodes, newFileNode ]);
 		return;
 	}
 
@@ -23,10 +21,19 @@ export function addPin(store: FileNodesStore, filePath: string, pin: Pin): void 
 		return;
 	}
 
-	const newFileNodes = currentFileNodes.map((node) => node === existingNode ? {
-		...node,
-		pins: [...node.pins, pin]
-	} : node);
+	const newFileNodes = currentFileNodes.map((node) => {
+		if (node !== existingNode) {
+			return node;
+		}
+		const newNode: FileNode = {
+			...node,
+			pins: [...node.pins, pin]
+		};
+
+		return newNode;
+	});
+
+	console.log('Code Pins: adding pin', {existingNode, newFileNodes});
 
 	store.setFileNodes(newFileNodes);
 }
@@ -51,9 +58,21 @@ export function clearMap(store: FileNodesStore): void {
 	store.setFileNodes([]);
 }
 
-/** Two pins are the same when they point at the same definition with the same kind. */
+/**
+ * Two pins are the same when they point at the same definition with the same kind.
+ * Unresolved pins (no definitionKey yet) fall back to comparing the pinned location,
+ * so pinning the same word twice is still caught.
+ */
 function checkIsSamePin(a: Pin, b: Pin): boolean {
-	return a.kind === b.kind && a.definitionKey === b.definitionKey;
+	if (a.kind !== b.kind) {
+		return false;
+	}
+	if (a.definitionKey || b.definitionKey) {
+		return a.definitionKey === b.definitionKey;
+	}
+	const lastA = a.lines[a.lines.length - 1];
+	const lastB = b.lines[b.lines.length - 1];
+	return lastA?.line === lastB?.line && lastA?.highlight?.start === lastB?.highlight?.start;
 }
 
 const CORNER_MARGIN = 40;
