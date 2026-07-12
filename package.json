@@ -22,16 +22,16 @@
         "title": "Code Pins: Show Map"
       },
       {
-        "command": "code-pins.saveMap",
-        "title": "Code Pins: Save Map"
+        "command": "code-pins.saveCodePinsFile",
+        "title": "Code Pins: Save File"
       },
       {
-        "command": "code-pins.openMap",
-        "title": "Code Pins: Open Map"
+        "command": "code-pins.openCodePinsFile",
+        "title": "Code Pins: Open File"
       },
       {
-        "command": "code-pins.newMap",
-        "title": "Code Pins: New Map"
+        "command": "code-pins.newCodePinsFile",
+        "title": "Code Pins: New File"
       }
     ],
     "keybindings": [

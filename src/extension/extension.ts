@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { FileNodesStore } from './file-nodes-store';
-import { addPin, clearMap } from './graph/actions';
-import { openMap, saveMap } from './graph/persistence';
+import { addPin, clearCodePinsFile } from './graph/actions';
+import { openCodePinsFile, saveCodePinsFile } from './graph/persistence';
 import { showGraphPanel } from './panel/showGraphPanel';
 import { buildPin } from './pin';
 import { retryUnresolvedDefinitions } from './retryUnresolvedDefinitions';
@@ -35,15 +35,15 @@ export function activate(context: vscode.ExtensionContext) {
 			retryUnresolvedDefinitions(store);
 		}),
 
-		vscode.commands.registerCommand('code-pins.saveMap', () => saveMap(store)),
+		vscode.commands.registerCommand('code-pins.saveCodePinsFile', () => saveCodePinsFile(store)),
 
-		vscode.commands.registerCommand('code-pins.openMap', async () => {
-			if (await openMap(store)) {
+		vscode.commands.registerCommand('code-pins.openCodePinsFile', async () => {
+			if (await openCodePinsFile(store)) {
 				showGraphPanel(context.extensionUri, store);
 			}
 		}),
 
-		vscode.commands.registerCommand('code-pins.newMap', () => clearMap(store))
+		vscode.commands.registerCommand('code-pins.newCodePinsFile', () => clearCodePinsFile(store))
 	);
 }
 

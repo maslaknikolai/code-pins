@@ -54,7 +54,7 @@ export function removePin(store: FileNodesStore, id: string): void {
 	store.setFileNodes(fileNodes);
 }
 
-export function clearMap(store: FileNodesStore): void {
+export function clearCodePinsFile(store: FileNodesStore): void {
 	store.setFileNodes([]);
 }
 

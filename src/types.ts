@@ -41,8 +41,8 @@ export interface FileNode {
 	pins: Pin[];
 }
 
-/** Saved map format. Arrows are not stored — they are computed from definitionKey. */
-export interface MapFile {
+/** Saved file format */
+export interface CodePinsFile {
 	version: 2;
 	fileNodes: FileNode[];
 }
