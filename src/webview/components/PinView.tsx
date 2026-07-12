@@ -24,7 +24,7 @@ export function PinView({ pin, lines, filePath }: { pin: Pin; lines: PinLine[]; 
 			</button>
 
 			{lines.map((line) => (
-				<LineView key={line.line} line={line} filePath={filePath} />
+				<LineView key={line.line} line={line} filePath={filePath} definitionKey={pin.definitionKey} />
 			))}
 		</div>
 	);

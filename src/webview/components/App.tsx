@@ -9,10 +9,10 @@ import {
 	type NodeChange,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useMemo } from 'react';
 import { MAP_FIELD, PinKind, WebviewMessageType } from '../../types';
-import { flowNodesAtom } from '../atoms';
+import { flowNodesAtom, selectedDefinitionKeyAtom } from '../atoms';
 import { useEvent } from '../hooks/useEvent';
 import { useSubscribeForExtensionMessages } from '../hooks/useExtensionMessages';
 import type { FileFlowNode } from '../types';
@@ -35,8 +35,11 @@ const fieldExtent: CoordinateExtent = [
 
 const GRID_SIZE = 20;
 
+const SELECTED_EDGE_COLOR = 'var(--vscode-focusBorder, #007fd4)';
+
 export function App() {
 	const [nodes, setNodes] = useAtom(flowNodesAtom);
+	const selectedDefinitionKey = useAtomValue(selectedDefinitionKeyAtom);
 
 	useEffect(() => {
 		sendToExtension(WebviewMessageType.Ready);
@@ -60,18 +63,22 @@ export function App() {
 						)
 				);
 				if (declarationNode) {
+					const isSelected = pin.definitionKey === selectedDefinitionKey;
 					result.push({
 						id: pin.id,
 						type: FLOATING_EDGE_TYPE,
 						source: data.fileNode.filePath,
 						target: declarationNode.id,
-						markerEnd: { type: MarkerType.ArrowClosed },
+						style: isSelected ? { stroke: SELECTED_EDGE_COLOR, strokeWidth: 2 } : undefined,
+						markerEnd: isSelected
+							? { type: MarkerType.ArrowClosed, color: SELECTED_EDGE_COLOR }
+							: { type: MarkerType.ArrowClosed },
 					});
 				}
 			}
 		}
 		return result;
-	}, [nodes]);
+	}, [nodes, selectedDefinitionKey]);
 
 	const onNodesChange = useEvent((changes: NodeChange<FileFlowNode>[]) => {
 		setNodes((prev) => applyNodeChanges(changes, prev));
