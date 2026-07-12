@@ -2,12 +2,17 @@ import * as vscode from 'vscode';
 import { FileNodesStore } from './file-nodes-store';
 import { addPin, clearCodePinsFile } from './graph/actions';
 import { openCodePinsFile, saveCodePinsFile } from './graph/persistence';
+import { saveDevSnapshot } from './graph/saveDevSnapshot';
 import { showGraphPanel } from './panel/showGraphPanel';
 import { buildPin } from './pin';
 import { retryUnresolvedDefinitions } from './retryUnresolvedDefinitions';
 
 export function activate(context: vscode.ExtensionContext) {
 	const store = new FileNodesStore();
+
+	if (context.extensionMode === vscode.ExtensionMode.Development) {
+		context.subscriptions.push(store.onDidChange(() => saveDevSnapshot(store)));
+	}
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('code-pins.pin', async () => {
