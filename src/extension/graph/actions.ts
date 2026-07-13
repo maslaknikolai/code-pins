@@ -25,7 +25,7 @@ export function addPin(
 	}
 
 	if (existingNode.pins.some((existing) => checkIsSamePin(existing, pin))) {
-		vscode.window.setStatusBarMessage('Code Pins: already on the map', 2000);
+		vscode.window.setStatusBarMessage('Code Pins: already on the graph', 2000);
 		return;
 	}
 
@@ -56,7 +56,6 @@ export function removeFileNode(store: FileNodesStore, filePath: string): void {
 	store.setFileNodes(store.getFileNodes().filter((node) => node.filePath !== filePath));
 }
 
-/** Removes the pin; a file node with no pins left disappears from the map. */
 export function removePin(store: FileNodesStore, id: string): void {
 	const fileNodes = store.getFileNodes()
 		.map((node) => ({ ...node, pins: node.pins.filter((pin) => pin.id !== id) }))
@@ -64,7 +63,7 @@ export function removePin(store: FileNodesStore, id: string): void {
 	store.setFileNodes(fileNodes);
 }
 
-export function clearCodePinsFile(store: FileNodesStore): void {
+export function clearPinsGraph(store: FileNodesStore): void {
 	store.setFileNodes([]);
 }
 

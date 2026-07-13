@@ -23,7 +23,7 @@ export interface FileNode {
 	pins: Pin[];
 }
 
-export interface CodePinsFile {
+export interface PinsGraph {
 	version: 1;
 	fileNodes: FileNode[];
 }

@@ -1,20 +1,30 @@
 import * as vscode from 'vscode';
 import { FileNodesStore } from './file-nodes-store';
-import { addPin, clearCodePinsFile } from './graph/actions';
-import { openCodePinsFile, saveCodePinsFile } from './graph/persistence';
+import { addPin, clearPinsGraph } from './graph/actions';
+import { getActivePinsGraphName, loadActivePinsGraph, saveActivePinsGraph } from './graph/activePinsGraphStorage';
+import { openPinsGraph, savePinsGraph } from './graph/persistence';
 import { saveDevSnapshot } from './graph/saveDevSnapshot';
-import { showGraphPanel } from './panel/showGraphPanel';
-import { ViewportCenterStore } from './viewport-center-store';
+import { switchPinsGraph } from './graph/switchPinsGraph';
+import { setGraphPanelTitle, showGraphPanel } from './panel/showGraphPanel';
 import { buildPin } from './pin';
 import { retryUnresolvedDefinitions } from './retryUnresolvedDefinitions';
+import { ViewportCenterStore } from './viewport-center-store';
 
 export function activate(context: vscode.ExtensionContext) {
 	const store = new FileNodesStore();
 	const viewportCenterStore = new ViewportCenterStore();
 
+	loadActivePinsGraph(context, store);
+	context.subscriptions.push(store.onDidChange(() => saveActivePinsGraph(context, store)));
+
 	if (context.extensionMode === vscode.ExtensionMode.Development) {
 		context.subscriptions.push(store.onDidChange(() => saveDevSnapshot(store)));
 	}
+
+	const showPanel = () => {
+		showGraphPanel(context.extensionUri, store, viewportCenterStore);
+		setGraphPanelTitle(getActivePinsGraphName(context));
+	};
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('code-pins.pin', async () => {
@@ -33,24 +43,33 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 
 			addPin(store, built.filePath, built.pin, viewportCenterStore.getCenter());
-			showGraphPanel(context.extensionUri, store, viewportCenterStore);
+			showPanel();
 			retryUnresolvedDefinitions(store);
 		}),
 
-		vscode.commands.registerCommand('code-pins.showMap', () => {
-			showGraphPanel(context.extensionUri, store, viewportCenterStore);
+		vscode.commands.registerCommand('code-pins.showPinsGraph', () => {
+			showPanel();
 			retryUnresolvedDefinitions(store);
 		}),
 
-		vscode.commands.registerCommand('code-pins.saveCodePinsFile', () => saveCodePinsFile(store)),
-
-		vscode.commands.registerCommand('code-pins.openCodePinsFile', async () => {
-			if (await openCodePinsFile(store)) {
-				showGraphPanel(context.extensionUri, store, viewportCenterStore);
+		vscode.commands.registerCommand('code-pins.switchPinsGraph', async () => {
+			const picked = await switchPinsGraph(context, store);
+			// Rename/delete can change the active graph even when the pick was cancelled.
+			setGraphPanelTitle(getActivePinsGraphName(context));
+			if (picked) {
+				showPanel();
 			}
 		}),
 
-		vscode.commands.registerCommand('code-pins.clearCodePinsFile', () => clearCodePinsFile(store))
+		vscode.commands.registerCommand('code-pins.savePinsGraph', () => savePinsGraph(store)),
+
+		vscode.commands.registerCommand('code-pins.openPinsGraph', async () => {
+			if (await openPinsGraph(store)) {
+				showPanel();
+			}
+		}),
+
+		vscode.commands.registerCommand('code-pins.clearPinsGraph', () => clearPinsGraph(store))
 	);
 }
 

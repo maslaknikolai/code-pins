@@ -10,6 +10,13 @@ import { sendStateToWebview } from './sendStateToWebview';
 
 let currentPanel: vscode.WebviewPanel | undefined;
 
+/** Shows the active graph's name in the panel tab; no-op while the panel is closed. */
+export function setGraphPanelTitle(graphName: string): void {
+	if (currentPanel) {
+		currentPanel.title = `Code Pins — ${graphName}`;
+	}
+}
+
 /** One panel at a time: reveals the existing one, otherwise creates and remembers it. */
 export function showGraphPanel(extensionUri: vscode.Uri, store: FileNodesStore, viewportCenterStore: ViewportCenterStore): void {
 	if (currentPanel) {
