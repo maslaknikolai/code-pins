@@ -1,7 +1,9 @@
 @import 'tailwindcss';
 
 @theme {
-	/* Back-and-forth marquee: slides left by the overflow amount (0 when content fits its container). */
+	/* Back-and-forth marquee: slides left by the overflow amount (0 when content fits its container).
+	   The 0.6s here is a fallback — Marquee.tsx overrides animation-duration from the measured
+	   overflow so the speed stays constant regardless of line length. */
 	--animate-marquee-x: marquee-x 0.6s ease-in-out infinite alternate;
 
 	@keyframes marquee-x {

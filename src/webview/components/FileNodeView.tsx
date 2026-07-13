@@ -2,6 +2,7 @@ import { Handle, Position, type NodeProps } from '@xyflow/react';
 import { useMemo } from 'react';
 import type { FileFlowNode } from '../types';
 import { buildPinsTree } from '../utils/buildPinsTree';
+import { Marquee } from './Marquee';
 import { PinsTree } from './PinsTree';
 
 /** Edge anchors only — not user-connectable, so keep them invisible. */
@@ -19,9 +20,9 @@ export function FileNodeView({ data }: NodeProps<FileFlowNode>) {
 
 			<div className="group flex items-center px-2 py-0.75 font-bold whitespace-nowrap bg-(--vscode-editorGroupHeader-tabsBackground) border-b border-(--vscode-editorWidget-border)">
 				<span className="@container mr-1 hidden min-w-0 flex-1 overflow-hidden font-normal opacity-70 group-hover:block">
-					<span className="inline-block min-w-full animate-marquee-x group-active:[animation-play-state:paused]">
+					<Marquee className="animate-marquee-x group-active:[animation-play-state:paused]">
 						{fileNode.filePath}
-					</span>
+					</Marquee>
 				</span>
 				<span className="group-hover:hidden">{fileName}</span>
 			</div>

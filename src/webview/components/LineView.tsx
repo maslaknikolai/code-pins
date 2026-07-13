@@ -7,6 +7,7 @@ import type { LineElement } from '../utils/buildPinsTree';
 import { checkIsSameSymbol } from '../utils/checkIsSameSymbol';
 import { cn } from '../utils/cn';
 import { sendToExtension } from '../utils/vscodeApi';
+import { Marquee } from './Marquee';
 
 
 export function LineView({ element, fileNode }: { element: LineElement; fileNode: FileNode }) {
@@ -67,9 +68,9 @@ export function LineView({ element, fileNode }: { element: LineElement; fileNode
 			title={`${fileNode.filePath}:${line.line + 1}`}
 			onClick={() => sendToExtension(WebviewMessageType.OpenLocation, { file: fileNode.filePath, line: line.line })}
 		>
-			<span className="inline-block min-w-full group-hover/line:animate-marquee-x group-active/line:[animation-play-state:paused]">
+			<Marquee className="group-hover/line:animate-marquee-x group-active/line:[animation-play-state:paused]">
 				{segments}
-			</span>
+			</Marquee>
 		</div>
 	);
 }
