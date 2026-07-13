@@ -4,7 +4,7 @@ import { WebviewMessageType } from '../../shared/types';
 import type { FileFlowNode } from '../types';
 import { buildPinsTree } from '../utils/buildPinsTree';
 import { sendToExtension } from '../utils/vscodeApi';
-import { Marquee } from './Marquee';
+import { HoverScrollText } from './HoverScrollText';
 import { PinsTree } from './PinsTree';
 
 /** Edge anchors only — not user-connectable, so keep them invisible. */
@@ -21,10 +21,8 @@ export function FileNodeView({ data }: NodeProps<FileFlowNode>) {
 			<Handle type="target" position={Position.Left} className={handleClass} />
 
 			<div className="group flex items-center px-2 py-0.75 font-bold whitespace-nowrap bg-(--vscode-editorGroupHeader-tabsBackground) border-b border-(--vscode-editorWidget-border)">
-				<span className="@container mr-1 hidden min-w-0 flex-1 overflow-hidden font-normal opacity-70 group-hover:block">
-					<Marquee className="animate-marquee-x group-active:[animation-play-state:paused]">
-						{fileNode.filePath}
-					</Marquee>
+				<span className="mr-1 hidden min-w-0 flex-1 overflow-hidden font-normal opacity-70 group-hover:block">
+					<HoverScrollText>{fileNode.filePath}</HoverScrollText>
 				</span>
 				<span className="min-w-0 flex-1 overflow-hidden text-ellipsis group-hover:hidden">{fileName}</span>
 				<button
