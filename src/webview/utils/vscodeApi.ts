@@ -1,4 +1,4 @@
-import type { WebviewMessageType, WebviewToExtensionMessage } from '../../shared/types';
+import type { WebviewToExtensionMessage } from '../../shared/messages';
 
 declare function acquireVsCodeApi(): {
 	postMessage(message: WebviewToExtensionMessage): void;
@@ -8,14 +8,6 @@ declare function acquireVsCodeApi(): {
 
 export const vscode = acquireVsCodeApi();
 
-type PayloadOf<K extends WebviewMessageType> = Omit<
-	Extract<WebviewToExtensionMessage, { type: K }>,
-	'type'
->;
-
-export function sendToExtension<K extends WebviewMessageType>(
-	type: K,
-	...payload: keyof PayloadOf<K> extends never ? [] : [PayloadOf<K>]
-): void {
-	vscode.postMessage({ type, ...payload[0] } as WebviewToExtensionMessage);
+export function sendToExtension(message: WebviewToExtensionMessage): void {
+	vscode.postMessage(message);
 }

@@ -1,6 +1,6 @@
 import { useOnViewportChange, useReactFlow } from '@xyflow/react';
 import { useEffect } from 'react';
-import { WebviewMessageType } from '../../shared/types';
+import { WebviewMessageType } from '../../shared/messages';
 import { sendToExtension } from '../utils/vscodeApi';
 
 /**
@@ -12,7 +12,7 @@ export function ViewportCenterReporter() {
 
 	const reportCenter = () => {
 		const center = screenToFlowPosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
-		sendToExtension(WebviewMessageType.ViewportChanged, { x: center.x, y: center.y });
+		sendToExtension({ type: WebviewMessageType.ViewportChanged, x: center.x, y: center.y });
 	};
 
 	useEffect(reportCenter, []);

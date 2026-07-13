@@ -8,3 +8,6 @@ export const flowNodesAtom = atom<FileFlowNode[]>([]);
 
 /** The selected pin — the same symbol lights up across all nodes, Delete removes the pin. */
 export const selectedPinAtom = atom<Pin | undefined>(undefined);
+
+/** Workspace-relative path of the last active editor file — its node highlights on the map. */
+export const activeFilePathAtom = atom<string | undefined>(undefined);

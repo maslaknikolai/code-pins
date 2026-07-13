@@ -1,7 +1,8 @@
 import { useMemo, type ReactNode } from 'react';
 import { useAtom } from 'jotai';
 import { parsePinPath } from '../../shared/pinPath';
-import { FileNode, WebviewMessageType, type Pin } from '../../shared/types';
+import { WebviewMessageType } from '../../shared/messages';
+import { FileNode, type Pin } from '../../shared/types';
 import { selectedPinAtom } from '../atoms';
 import type { LineElement } from '../utils/buildPinLinesTree';
 import { checkIsSameSymbol } from '../utils/checkIsSameSymbol';
@@ -71,7 +72,7 @@ export function LineView({ element, fileNode }: { element: LineElement; fileNode
 				hasHighlightedPin && 'bg-(--vscode-focusBorder)/15'
 			)}
 			title={`${fileNode.filePath}:${line.line + 1}`}
-			onClick={() => sendToExtension(WebviewMessageType.OpenLocation, { file: fileNode.filePath, line: line.line })}
+			onClick={() => sendToExtension({ type: WebviewMessageType.OpenLocation, file: fileNode.filePath, line: line.line })}
 		>
 			<HoverScrollText>{segments}</HoverScrollText>
 		</div>

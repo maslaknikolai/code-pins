@@ -1,12 +1,13 @@
 import { FileNodesStore } from '../file-nodes-store';
 import { ViewportCenterStore } from '../viewport-center-store';
 import { moveFileNode, removeFileNode, removePin } from '../graph/actions';
-import { WebviewMessageType, WebviewToExtensionMessage } from '../../shared/types';
+import { WebviewMessageType, WebviewToExtensionMessage } from '../../shared/messages';
 import { openLocation } from './openLocation';
 
 export interface MessageContext {
 	store: FileNodesStore;
 	sendStateToWebview: () => void;
+	sendActiveFileToWebview: () => void;
 	viewportCenterStore: ViewportCenterStore;
 }
 
@@ -18,7 +19,10 @@ type MessageOf<K extends WebviewToExtensionMessage['type']> = Extract<
 const handlers: {
 	[K in WebviewToExtensionMessage['type']]: (message: MessageOf<K>, ctx: MessageContext) => void;
 } = {
-	[WebviewMessageType.Ready]: (_message, ctx) => ctx.sendStateToWebview(),
+	[WebviewMessageType.Ready]: (_message, ctx) => {
+		ctx.sendStateToWebview();
+		ctx.sendActiveFileToWebview();
+	},
 	[WebviewMessageType.MoveFileNode]: (message, ctx) => moveFileNode(ctx.store, message.filePath, message.x, message.y),
 	[WebviewMessageType.RemovePin]: (message, ctx) => removePin(ctx.store, message.id),
 	[WebviewMessageType.RemoveFileNode]: (message, ctx) => removeFileNode(ctx.store, message.filePath),

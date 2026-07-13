@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { useEffect } from 'react';
-import { WebviewMessageType } from '../../shared/types';
+import { WebviewMessageType } from '../../shared/messages';
 import { selectedPinAtom } from '../atoms';
 import { sendToExtension } from '../utils/vscodeApi';
 
@@ -20,7 +20,7 @@ export function useSelectedPinHotkeys() {
 			if (event.key !== 'Delete' && event.key !== 'Backspace') {
 				return;
 			}
-			sendToExtension(WebviewMessageType.RemovePin, { id: selectedPin.id });
+			sendToExtension({ type: WebviewMessageType.RemovePin, id: selectedPin.id });
 			setSelectedPin(undefined);
 		};
 		window.addEventListener('keydown', onKeyDown);

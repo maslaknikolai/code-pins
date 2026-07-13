@@ -9,7 +9,8 @@ import {
 import '@xyflow/react/dist/style.css';
 import { useAtom } from 'jotai';
 import { useEffect } from 'react';
-import { MAP_FIELD, WebviewMessageType } from '../../shared/types';
+import { WebviewMessageType } from '../../shared/messages';
+import { MAP_FIELD } from '../../shared/types';
 import { flowNodesAtom } from '../atoms';
 import { useSelectedPinHotkeys } from '../hooks/useSelectedPinHotkeys';
 import { useEdges } from '../hooks/useEdges';
@@ -41,7 +42,7 @@ export function App() {
 	const [nodes, setNodes] = useAtom(flowNodesAtom);
 
 	useEffect(() => {
-		sendToExtension(WebviewMessageType.Ready);
+		sendToExtension({ type: WebviewMessageType.Ready });
 	}, [])
 
 	useSelectedPinHotkeys();
@@ -54,7 +55,8 @@ export function App() {
 	});
 
 	const onNodeDragStop = useEvent((_event: MouseEvent | TouchEvent, node: FileFlowNode) => {
-		sendToExtension(WebviewMessageType.MoveFileNode, {
+		sendToExtension({
+			type: WebviewMessageType.MoveFileNode,
 			filePath: node.id,
 			x: node.position.x,
 			y: node.position.y,
