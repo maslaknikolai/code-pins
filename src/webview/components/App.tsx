@@ -19,6 +19,7 @@ import type { FileFlowNode } from '../types';
 import { sendToExtension } from '../utils/vscodeApi';
 import { FileNodeView } from './FileNodeView';
 import { FLOATING_EDGE_TYPE, FloatingEdge } from './FloatingEdge';
+import { GroupOutlines } from './GroupOutlines';
 
 const nodeTypes = {
 	file: FileNodeView
@@ -80,6 +81,7 @@ export function App() {
 
 			<Background gap={GRID_SIZE} />
 			<Controls />
+			<GroupOutlines />
 		</ReactFlow>
 	);
 }
