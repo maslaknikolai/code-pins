@@ -264,12 +264,11 @@ extension → webview: setState { fileNodes }
 
 Типизированы юнионом в `types.ts`; отправка через `sendToExtension(type, payload)` — payload проверяется TS по типу сообщения. На стороне extension — мапа обработчиков по типу (`panel/messages.ts`).
 
-`moveFileNode` — silent: стор обновляется без события, чтобы не эхо-нить позицию обратно в webview во время drag.
+`setFileNodes` сравнивает новое состояние со старым через `JSON.stringify` — не изменилось → ни записи, ни `onDidChange`.
 
 ## Сохранение
 
 - Команды: Save/Open/New File (`.json`, формат `CodePinsFile`). `cmd+s` работает при фокусе на панели.
-- Dev mode: каждый `onDidChange` пишет снапшот в `<корень проекта>/dev.code-pins.json` (`saveDevSnapshot`).
 - Пути и ключи относительные от корня workspace — файл переносим между машинами.
 
 ## Сборка

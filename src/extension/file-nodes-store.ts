@@ -12,10 +12,11 @@ export class FileNodesStore {
 		return this.fileNodes;
 	}
 
-	setFileNodes(fileNodes: FileNode[], options?: { silent?: boolean }): void {
-		this.fileNodes = fileNodes;
-		if (!options?.silent) {
-			this._onDidChange.fire();
+	setFileNodes(fileNodes: FileNode[]): void {
+		if (JSON.stringify(fileNodes) === JSON.stringify(this.fileNodes)) {
+			return;
 		}
+		this.fileNodes = fileNodes;
+		this._onDidChange.fire();
 	}
 }

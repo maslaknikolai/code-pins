@@ -41,11 +41,9 @@ export function addPin(store: FileNodesStore, filePath: string, pin: Pin): void 
 	store.setFileNodes(newFileNodes);
 }
 
-/** Silent: positions come from the webview itself, so no state echo back. */
 export function moveFileNode(store: FileNodesStore, filePath: string, x: number, y: number): void {
 	store.setFileNodes(
-		store.getFileNodes().map((node) => (node.filePath === filePath ? { ...node, x, y } : node)),
-		{ silent: true }
+		store.getFileNodes().map((node) => (node.filePath === filePath ? { ...node, x, y } : node))
 	);
 }
 
