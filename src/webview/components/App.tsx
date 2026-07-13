@@ -74,6 +74,7 @@ export function App() {
 			onNodesChange={onNodesChange}
 			onNodeDragStop={onNodeDragStop}
 			colorMode={colorMode}
+			minZoom={0.1}
 			nodesConnectable={false}
 			deleteKeyCode={null}
 			snapToGrid
