@@ -1,9 +1,9 @@
 import { FileNode } from '../../shared/types';
-import type { LineElement } from '../utils/buildPinsTree';
+import type { LineElement } from '../utils/buildPinLinesTree';
 import { LineView } from './LineView';
 
 
-export function PinsTree({ elements, fileNode }: { elements: LineElement[]; fileNode: FileNode }) {
+export function PinsLinesTree({ elements, fileNode }: { elements: LineElement[]; fileNode: FileNode }) {
 	return (
 		<>
 			{elements.map((element) => (
@@ -19,13 +19,13 @@ export function PinsTree({ elements, fileNode }: { elements: LineElement[]; file
 
 function LineElementView({ element, fileNode }: { element: LineElement; fileNode: FileNode }) {
 	return (
-		<div className="flex flex-col gap-2">
+		<div className="flex flex-col">
 			<LineView
 				element={element}
 				fileNode={fileNode}
 			/>
 
-			<PinsTree
+			<PinsLinesTree
 				elements={element.children}
 				fileNode={fileNode}
 			/>

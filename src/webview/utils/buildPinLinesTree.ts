@@ -1,18 +1,12 @@
 import type { Pin, PinLine } from '../../shared/types';
 
-/**
- * One source line of the file node's tree. Pins in one file often share
- * enclosing scopes (class, function), so every pin's breadcrumb lines merge
- * into one tree keyed by line number and each line renders once.
- */
 export interface LineElement {
 	line: PinLine;
-	/** Pins made exactly on this line — several pinned symbols on one line all land here. */
 	pins: Pin[];
 	children: LineElement[];
 }
 
-export function buildPinsTree(pins: Pin[]): LineElement[] {
+export function buildPinLinesTree(pins: Pin[]): LineElement[] {
 	const roots: LineElement[] = [];
 
 	for (const pin of pins) {

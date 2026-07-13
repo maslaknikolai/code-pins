@@ -7,12 +7,37 @@
             "label": "watch",
             "dependsOn": [
                 "npm: watch:tsc",
-                "npm: watch:esbuild"
+                "npm: watch:esbuild",
+                "npm: watch:tailwind"
             ],
             "presentation": {
                 "reveal": "never"
             },
             "group": "build"
+        },
+        {
+            "type": "npm",
+            "script": "watch:tailwind",
+            "group": "build",
+            "isBackground": true,
+            "label": "npm: watch:tailwind",
+            "problemMatcher": {
+                "owner": "tailwind",
+                "pattern": {
+                    "regexp": "^Error: (.*)$",
+                    "file": 1,
+                    "message": 1
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".",
+                    "endsPattern": "Done in"
+                }
+            },
+            "presentation": {
+                "group": "watch",
+                "reveal": "never"
+            }
         },
         {
             "type": "npm",

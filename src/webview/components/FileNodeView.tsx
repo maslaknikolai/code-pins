@@ -2,10 +2,10 @@ import { Handle, Position, type NodeProps } from '@xyflow/react';
 import { useMemo } from 'react';
 import { WebviewMessageType } from '../../shared/types';
 import type { FileFlowNode } from '../types';
-import { buildPinsTree } from '../utils/buildPinsTree';
+import { buildPinLinesTree } from '../utils/buildPinLinesTree';
 import { sendToExtension } from '../utils/vscodeApi';
 import { HoverScrollText } from './HoverScrollText';
-import { PinsTree } from './PinsTree';
+import { PinsLinesTree } from './PinsTree';
 
 /** Edge anchors only — not user-connectable, so keep them invisible. */
 const handleClass = 'opacity-0! pointer-events-none!';
@@ -14,7 +14,7 @@ export function FileNodeView({ data }: NodeProps<FileFlowNode>) {
 	const fileNode = data.fileNode;
 	const lastSlash = Math.max(fileNode.filePath.lastIndexOf('/'), fileNode.filePath.lastIndexOf('\\')) + 1;
 	const fileName = fileNode.filePath.slice(lastSlash);
-	const pinsTree = useMemo(() => buildPinsTree(fileNode.pins), [fileNode.pins]);
+	const pinsTree = useMemo(() => buildPinLinesTree(fileNode.pins), [fileNode.pins]);
 
 	return (
 		<div className="w-90 overflow-hidden rounded-sm select-none font-(family-name:--vscode-editor-font-family) text-(length:--vscode-editor-font-size) bg-(--vscode-editorWidget-background) border border-(--vscode-editorWidget-border)">
@@ -34,7 +34,7 @@ export function FileNodeView({ data }: NodeProps<FileFlowNode>) {
 				</button>
 			</div>
 			<div className="flex flex-col gap-2">
-				<PinsTree
+				<PinsLinesTree
 					elements={pinsTree}
 					fileNode={fileNode}
 				/>

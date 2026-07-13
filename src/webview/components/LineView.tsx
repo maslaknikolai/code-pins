@@ -3,7 +3,7 @@ import { useAtom } from 'jotai';
 import { parsePinPath } from '../../shared/pinPath';
 import { FileNode, WebviewMessageType, type Pin } from '../../shared/types';
 import { selectedPinAtom } from '../atoms';
-import type { LineElement } from '../utils/buildPinsTree';
+import type { LineElement } from '../utils/buildPinLinesTree';
 import { checkIsSameSymbol } from '../utils/checkIsSameSymbol';
 import { cn } from '../utils/cn';
 import { sendToExtension } from '../utils/vscodeApi';
@@ -61,7 +61,7 @@ export function LineView({ element, fileNode }: { element: LineElement; fileNode
 	return (
 		<div
 			className={cn(
-				'group/line relative cursor-pointer overflow-hidden py-px pr-2 pl-2 whitespace-pre hover:bg-(--vscode-list-hoverBackground)',
+				'group/line relative cursor-pointer overflow-hidden py-1 pr-2 pl-2 whitespace-pre hover:bg-(--vscode-list-hoverBackground)',
 				pins.length > 0 && 'border-b border-(--vscode-editorWidget-border) last:border-b-0',
 				hasDeclarationPin && 'border-l-2 border-l-(--vscode-charts-blue,#4a90d9)'
 			)}

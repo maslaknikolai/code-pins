@@ -1,8 +1,8 @@
 import * as assert from 'assert';
 import { type Pin } from '../../shared/types';
-import { buildPinsTree, type LineElement } from './buildPinsTree';
+import { buildPinLinesTree, type LineElement } from './buildPinLinesTree';
 
-suite('buildPinsTree', () => {
+suite('buildPinLinesTree', () => {
 	test('single pin becomes a chain of its lines, pin on the last one', () => {
 		const pin: Pin = {
 			id: 'a',
@@ -24,7 +24,7 @@ suite('buildPinsTree', () => {
 			},
 		];
 
-		assert.deepStrictEqual(buildPinsTree([pin]), expected);
+		assert.deepStrictEqual(buildPinLinesTree([pin]), expected);
 	});
 
 	test('pins in unrelated scopes stay separate', () => {
@@ -60,7 +60,7 @@ suite('buildPinsTree', () => {
 			},
 		];
 
-		assert.deepStrictEqual(buildPinsTree([a, b]), expected);
+		assert.deepStrictEqual(buildPinLinesTree([a, b]), expected);
 	});
 
 	test('shared scope line appears once, both pins hang below it', () => {
@@ -94,7 +94,7 @@ suite('buildPinsTree', () => {
 			},
 		];
 
-		assert.deepStrictEqual(buildPinsTree([a, b]), expected);
+		assert.deepStrictEqual(buildPinLinesTree([a, b]), expected);
 	});
 
 	test('consecutive shared scope lines nest, each appearing once', () => {
@@ -136,7 +136,7 @@ suite('buildPinsTree', () => {
 			},
 		];
 
-		assert.deepStrictEqual(buildPinsTree([a, b]), expected);
+		assert.deepStrictEqual(buildPinLinesTree([a, b]), expected);
 	});
 
 	test('pin pinned ON the shared line sits on that element, deeper pin below', () => {
@@ -174,8 +174,8 @@ suite('buildPinsTree', () => {
 			},
 		];
 
-		assert.deepStrictEqual(buildPinsTree([method, deeper]), expected);
-		assert.deepStrictEqual(buildPinsTree([deeper, method]), expected);
+		assert.deepStrictEqual(buildPinLinesTree([method, deeper]), expected);
+		assert.deepStrictEqual(buildPinLinesTree([deeper, method]), expected);
 	});
 
 	test('children render in source order, not the order pins were added in', () => {
@@ -214,7 +214,7 @@ suite('buildPinsTree', () => {
 			},
 		];
 
-		assert.deepStrictEqual(buildPinsTree([later, earlier]), expected);
+		assert.deepStrictEqual(buildPinLinesTree([later, earlier]), expected);
 	});
 
 	test('two pins on the same line share one element', () => {
@@ -239,6 +239,6 @@ suite('buildPinsTree', () => {
 			},
 		];
 
-		assert.deepStrictEqual(buildPinsTree([a, b]), expected);
+		assert.deepStrictEqual(buildPinLinesTree([a, b]), expected);
 	});
 });
