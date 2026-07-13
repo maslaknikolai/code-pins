@@ -6,7 +6,7 @@ suite('buildPinsTree', () => {
 	test('single pin stays a plain pin node with all its lines', () => {
 		const pin: Pin = {
 			id: 'a',
-			symbolLocationPath: 'src/a.ts:3:4',
+			pinLocationPath: 'src/a.ts:3:4',
 			symbolName: 'method',
 			lines: [
 				{ line: 0, text: 'class A {' },
@@ -24,7 +24,7 @@ suite('buildPinsTree', () => {
 	test('pins in unrelated scopes stay separate', () => {
 		const a: Pin = {
 			id: 'a',
-			symbolLocationPath: 'src/a.ts:3:4',
+			pinLocationPath: 'src/a.ts:3:4',
 			symbolName: 'x',
 			lines: [
 				{ line: 0, text: 'class A {' },
@@ -33,7 +33,7 @@ suite('buildPinsTree', () => {
 		};
 		const b: Pin = {
 			id: 'b',
-			symbolLocationPath: 'src/a.ts:13:4',
+			pinLocationPath: 'src/a.ts:13:4',
 			symbolName: 'y',
 			lines: [
 				{ line: 10, text: 'class B {' },
@@ -52,7 +52,7 @@ suite('buildPinsTree', () => {
 	test('shared scope line is hoisted above both pins and removed from each', () => {
 		const a: Pin = {
 			id: 'a',
-			symbolLocationPath: 'src/a.ts:3:4',
+			pinLocationPath: 'src/a.ts:3:4',
 			symbolName: 'first',
 			lines: [
 				{ line: 0, text: 'class A {' },
@@ -61,7 +61,7 @@ suite('buildPinsTree', () => {
 		};
 		const b: Pin = {
 			id: 'b',
-			symbolLocationPath: 'src/a.ts:7:4',
+			pinLocationPath: 'src/a.ts:7:4',
 			symbolName: 'second',
 			lines: [
 				{ line: 0, text: 'class A {' },
@@ -87,7 +87,7 @@ suite('buildPinsTree', () => {
 	test('consecutive shared scope lines collapse into one flat group', () => {
 		const a: Pin = {
 			id: 'a',
-			symbolLocationPath: 'src/a.ts:5:8',
+			pinLocationPath: 'src/a.ts:5:8',
 			symbolName: 'x',
 			lines: [
 				{ line: 0, text: 'class A {' },
@@ -97,7 +97,7 @@ suite('buildPinsTree', () => {
 		};
 		const b: Pin = {
 			id: 'b',
-			symbolLocationPath: 'src/a.ts:8:8',
+			pinLocationPath: 'src/a.ts:8:8',
 			symbolName: 'y',
 			lines: [
 				{ line: 0, text: 'class A {' },
@@ -127,7 +127,7 @@ suite('buildPinsTree', () => {
 	test('pin pinned ON the shared line owns it instead of a plain shared line', () => {
 		const method: Pin = {
 			id: 'method',
-			symbolLocationPath: 'src/a.ts:3:4',
+			pinLocationPath: 'src/a.ts:3:4',
 			symbolName: 'method',
 			lines: [
 				{ line: 0, text: 'class A {' },
@@ -136,7 +136,7 @@ suite('buildPinsTree', () => {
 		};
 		const deeper: Pin = {
 			id: 'deeper',
-			symbolLocationPath: 'src/a.ts:5:8',
+			pinLocationPath: 'src/a.ts:5:8',
 			symbolName: 'x',
 			lines: [
 				{ line: 0, text: 'class A {' },
@@ -171,7 +171,7 @@ suite('buildPinsTree', () => {
 	test('groups render in source order, not the order pins were added in', () => {
 		const later: Pin = {
 			id: 'later',
-			symbolLocationPath: 'src/menu.tsx:9:12',
+			pinLocationPath: 'src/menu.tsx:9:12',
 			symbolName: 'addTab',
 			lines: [
 				{ line: 0, text: 'component {' },
@@ -181,7 +181,7 @@ suite('buildPinsTree', () => {
 		};
 		const earlier: Pin = {
 			id: 'earlier',
-			symbolLocationPath: 'src/menu.tsx:4:11',
+			pinLocationPath: 'src/menu.tsx:4:11',
 			symbolName: 'addTab',
 			lines: [
 				{ line: 0, text: 'component {' },
@@ -214,13 +214,13 @@ suite('buildPinsTree', () => {
 	test('two pins on the same line with nothing deeper both keep their line', () => {
 		const a: Pin = {
 			id: 'a',
-			symbolLocationPath: 'src/a.ts:3:10',
+			pinLocationPath: 'src/a.ts:3:10',
 			symbolName: 'f',
 			lines: [{ line: 3, text: 'const x = f(g)' }],
 		};
 		const b: Pin = {
 			id: 'b',
-			symbolLocationPath: 'src/a.ts:3:12',
+			pinLocationPath: 'src/a.ts:3:12',
 			symbolName: 'g',
 			lines: [{ line: 3, text: 'const x = f(g)' }],
 		};

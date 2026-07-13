@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { FileNodesStore } from './file-nodes-store';
-import { parseSymbolLocationPath } from '../shared/symbolLocationPath';
+import { parsePinLocationPath } from '../shared/pinLocationPath';
 import { Pin } from '../shared/types';
 import { resolveSymbolDefinitionPath } from './pin';
 import { resolveUri } from './utils/resolveUri';
@@ -39,7 +39,7 @@ async function resolveSymbolDefinitionPathAtPinLocation(filePath: string, pin: P
 
 	try {
 		const document = await vscode.workspace.openTextDocument(resolveUri(filePath));
-		const location = parseSymbolLocationPath(pin.symbolLocationPath);
+		const location = parsePinLocationPath(pin.pinLocationPath);
 		const position = new vscode.Position(location.line, location.character);
 
 		return await resolveSymbolDefinitionPath(document, position);

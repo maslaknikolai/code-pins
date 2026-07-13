@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import { parseSymbolLocationPath } from '../../shared/symbolLocationPath';
+import { parsePinLocationPath } from '../../shared/pinLocationPath';
 import { FileNode, WebviewMessageType, type Pin, type PinLine } from '../../shared/types';
 import { selectedSymbolAtom } from '../atoms';
 import { cn } from '../utils/cn';
@@ -12,8 +12,8 @@ export function PinLineView({ line, pin, fileNode }: { line: PinLine; pin: Pin; 
 	const [selectedSymbol, setSelectedSymbol] = useAtom(selectedSymbolAtom);
 	const isSelected = Boolean(selectedSymbol && checkIsSameSymbol(selectedSymbol, pin));
 
-	// The pinned symbol's place inside the raw line comes straight from the symbolLocationPath column.
-	const start = parseSymbolLocationPath(pin.symbolLocationPath).character;
+	// The pinned symbol's place inside the raw line comes straight from the pinLocationPath column.
+	const start = parsePinLocationPath(pin.pinLocationPath).character;
 	const end = start + pin.symbolName.length;
 
 	const toggleSelection = (event: React.MouseEvent) => {

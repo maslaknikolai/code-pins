@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import * as vscode from 'vscode';
-import { buildSymbolLocationPath } from '../shared/symbolLocationPath';
+import { buildPinLocationPath } from '../shared/pinLocationPath';
 import { Pin, PinLine } from '../shared/types';
 import { getRelativePath } from './utils/getRelativePath';
 
@@ -28,7 +28,7 @@ export async function buildPin(
 		filePath: getRelativePath(document.uri),
 		pin: {
 			id: randomUUID(),
-			symbolLocationPath: buildSymbolLocationPath(getRelativePath(document.uri), wordRange.start.line, wordRange.start.character),
+			pinLocationPath: buildPinLocationPath(getRelativePath(document.uri), wordRange.start.line, wordRange.start.character),
 			symbolDefinitionPath,
 			symbolName: word,
 			lines,
@@ -53,7 +53,7 @@ export async function resolveSymbolDefinitionPath(
 	const uri = 'targetUri' in first ? first.targetUri : first.uri;
 	const range = 'targetUri' in first ? (first.targetSelectionRange ?? first.targetRange) : first.range;
 
-	return buildSymbolLocationPath(getRelativePath(uri), range.start.line, range.start.character);
+	return buildPinLocationPath(getRelativePath(uri), range.start.line, range.start.character);
 }
 
 /**
@@ -88,7 +88,7 @@ async function buildBreadcrumbLines(
 		scopeLines.push(position.line);
 	}
 
-	// Raw text, indentation included — the symbolLocationPath column points straight into it.
+	// Raw text, indentation included — the pinLocationPath column points straight into it.
 	return scopeLines.map((line) => ({
 		line,
 		text: document.lineAt(line).text,

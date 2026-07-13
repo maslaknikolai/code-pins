@@ -1,4 +1,4 @@
-import { parseSymbolLocationPath } from '../../shared/symbolLocationPath';
+import { parsePinLocationPath } from '../../shared/pinLocationPath';
 import { FileNode, type Pin, type PinLine } from '../../shared/types';
 import { checkIsDeclaration } from '../utils/checkIsDeclaration';
 import { cn } from '../utils/cn';
@@ -7,7 +7,7 @@ import { PinLineView } from './PinLineView';
 
 /** One pinned entity inside the file node: breadcrumb lines plus the pinned line itself. */
 export function PinView({ pin, lines, fileNode }: { pin: Pin; lines: PinLine[]; fileNode: FileNode }) {
-	const pinnedLineNumber = parseSymbolLocationPath(pin.symbolLocationPath).line;
+	const pinnedLineNumber = parsePinLocationPath(pin.pinLocationPath).line;
 
 	return (
 		<div
