@@ -7,13 +7,16 @@ import type { FileFlowNode } from '../types';
 
 const PADDING = 16;
 
+/** Room reserved inside the box top for the prefix label, so it never overlaps nodes or inner boxes. */
+const LABEL_SPACE = 20;
+
 /** Until React Flow measures a node, assume the fixed w-90 width and a rough height. */
 const FALLBACK_WIDTH = 360;
 const FALLBACK_HEIGHT = 60;
 
 /**
  * Grey outline around every group of nodes sharing a path prefix, with the
- * prefix written above the top-left corner. Positions come from the nodes
+ * prefix written in the top-left corner. Positions come from the nodes
  * atom, so the bounds follow drags live.
  */
 export function GroupOutlines() {
@@ -34,7 +37,7 @@ export function GroupOutlines() {
 							height: maxY - minY,
 						}}
 					>
-						<span className="absolute -top-6 left-0 whitespace-nowrap font-(family-name:--vscode-editor-font-family) text-(length:--vscode-editor-font-size) opacity-60">
+						<span className="absolute top-0.5 left-1.5 whitespace-nowrap font-(family-name:--vscode-editor-font-family) text-(length:--vscode-editor-font-size) opacity-60">
 							{group.prefix}
 						</span>
 					</div>
@@ -47,7 +50,7 @@ export function GroupOutlines() {
 function bounds(nodes: FileFlowNode[], padding: number) {
 	return {
 		minX: Math.min(...nodes.map((n) => n.position.x)) - padding,
-		minY: Math.min(...nodes.map((n) => n.position.y)) - padding,
+		minY: Math.min(...nodes.map((n) => n.position.y)) - padding - LABEL_SPACE,
 		maxX: Math.max(...nodes.map((n) => n.position.x + (n.measured?.width ?? FALLBACK_WIDTH))) + padding,
 		maxY: Math.max(...nodes.map((n) => n.position.y + (n.measured?.height ?? FALLBACK_HEIGHT))) + padding,
 	};

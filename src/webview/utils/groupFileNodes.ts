@@ -15,8 +15,8 @@ interface TrieNode {
 }
 
 /**
- * Builds nested groups from directory paths: every directory whose subtree
- * holds two or more nodes becomes a group, deepest first, so
+ * Builds nested groups from directory paths: every directory with nodes in its
+ * subtree becomes a group (a single node gets one too), deepest first, so
  * `packages/x/src` gets its own outline inside the wider `packages` one.
  * Single-child directory chains collapse into one prefix.
  */
@@ -63,7 +63,7 @@ function collectGroups(
 	const nodes = [...current.nodes, ...childResults.flatMap((result) => result.nodes)];
 	const nesting = Math.max(0, ...childResults.map((result) => result.nesting));
 
-	if (currentPrefix !== '' && nodes.length >= 2) {
+	if (currentPrefix !== '' && nodes.length >= 1) {
 		out.push({ prefix: currentPrefix, nodes, nesting });
 		return { nodes, nesting: nesting + 1 };
 	}
