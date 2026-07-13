@@ -21,7 +21,7 @@ export async function buildPin(
 	}
 
 	const word = document.getText(wordRange);
-	const definition = await resolveDefinition(document, position);
+	const definitionKey = await resolveDefinitionKey(document, position);
 	const lines = await buildBreadcrumbLines(document, position);
 
 	return {
@@ -29,23 +29,18 @@ export async function buildPin(
 		pin: {
 			id: randomUUID(),
 			locationKey: buildLocationKey(getRelativePath(document.uri), wordRange.start.line, wordRange.start.character),
-			definitionKey: definition?.key,
+			definitionKey,
 			symbolName: word,
 			lines,
 		},
 	};
 }
 
-export interface ResolvedDefinition {
-	uri: vscode.Uri;
-	range: vscode.Range;
-	key: string;
-}
-
-export async function resolveDefinition(
+/** Resolves the symbol's definition and returns its location key, or undefined when the provider gives nothing. */
+export async function resolveDefinitionKey(
 	document: vscode.TextDocument,
 	position: vscode.Position
-): Promise<ResolvedDefinition | undefined> {
+): Promise<string | undefined> {
 	const results = await vscode.commands.executeCommand<(vscode.Location | vscode.LocationLink)[]>(
 		'vscode.executeDefinitionProvider',
 		document.uri,
@@ -58,13 +53,7 @@ export async function resolveDefinition(
 	const uri = 'targetUri' in first ? first.targetUri : first.uri;
 	const range = 'targetUri' in first ? (first.targetSelectionRange ?? first.targetRange) : first.range;
 
-	const key = buildLocationKey(getRelativePath(uri), range.start.line, range.start.character);
-
-	return {
-		uri,
-		range,
-		key,
-	};
+	return buildLocationKey(getRelativePath(uri), range.start.line, range.start.character);
 }
 
 /**

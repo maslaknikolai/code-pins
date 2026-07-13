@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { FileNodesStore } from './file-nodes-store';
 import { parseLocationKey } from '../shared/locationKey';
 import { Pin } from '../shared/types';
-import { resolveDefinition } from './pin';
+import { resolveDefinitionKey } from './pin';
 import { resolveUri } from './utils/resolveUri';
 
 /**
@@ -15,13 +15,14 @@ export async function retryUnresolvedDefinitions(store: FileNodesStore): Promise
 
 	const updated = await Promise.all(store.getFileNodes().map(async (node) => {
 		const pins = await Promise.all(node.pins.map(async (pin) => {
-				const resolved = await resolvePinDefinition(node.filePath, pin);
-				if (resolved) {
-					changed = true;
-				}
-				return resolved || pin;
-			})
-		);
+			const definitionKey = await resolveDefinitionKeyAtPinLocation(node.filePath, pin);
+			if (!definitionKey) {
+				return pin;
+			}
+			changed = true;
+			const updatedPin: Pin = { ...pin, definitionKey };
+			return updatedPin;
+		}));
 		return { ...node, pins };
 	}));
 
@@ -30,8 +31,8 @@ export async function retryUnresolvedDefinitions(store: FileNodesStore): Promise
 	}
 }
 
-/** Returns the pin with a resolved definitionKey, or undefined when nothing changed. */
-async function resolvePinDefinition(filePath: string, pin: Pin): Promise<Pin | undefined> {
+/** Re-runs the definition request at the pin's stored location; undefined when already resolved or still unresolvable. */
+async function resolveDefinitionKeyAtPinLocation(filePath: string, pin: Pin): Promise<string | undefined> {
 	if (pin.definitionKey) {
 		return undefined;
 	}
@@ -41,13 +42,7 @@ async function resolvePinDefinition(filePath: string, pin: Pin): Promise<Pin | u
 		const location = parseLocationKey(pin.locationKey);
 		const position = new vscode.Position(location.line, location.character);
 
-		const definition = await resolveDefinition(document, position);
-
-		if (!definition) {
-			return undefined;
-		}
-
-		return { ...pin, definitionKey: definition.key };
+		return await resolveDefinitionKey(document, position);
 	} catch {
 		// File may be gone or unreadable — leave the pin as is.
 		return undefined;
