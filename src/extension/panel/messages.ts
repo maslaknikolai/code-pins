@@ -1,4 +1,5 @@
 import { FileNodesStore } from '../file-nodes-store';
+import { ViewportCenterStore } from '../viewport-center-store';
 import { moveFileNode, removeFileNode, removePin } from '../graph/actions';
 import { WebviewMessageType, WebviewToExtensionMessage } from '../../shared/types';
 import { openLocation } from './openLocation';
@@ -6,6 +7,7 @@ import { openLocation } from './openLocation';
 export interface MessageContext {
 	store: FileNodesStore;
 	sendStateToWebview: () => void;
+	viewportCenterStore: ViewportCenterStore;
 }
 
 type MessageOf<K extends WebviewToExtensionMessage['type']> = Extract<
@@ -21,6 +23,7 @@ const handlers: {
 	[WebviewMessageType.RemovePin]: (message, ctx) => removePin(ctx.store, message.id),
 	[WebviewMessageType.RemoveFileNode]: (message, ctx) => removeFileNode(ctx.store, message.filePath),
 	[WebviewMessageType.OpenLocation]: (message) => openLocation(message.file, message.line),
+	[WebviewMessageType.ViewportChanged]: (message, ctx) => ctx.viewportCenterStore.setCenter({ x: message.x, y: message.y }),
 };
 
 export function handleWebviewMessage(message: WebviewToExtensionMessage, ctx: MessageContext): void {

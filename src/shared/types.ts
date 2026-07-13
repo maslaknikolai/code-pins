@@ -34,6 +34,7 @@ export enum WebviewMessageType {
 	RemovePin = 'removePin',
 	RemoveFileNode = 'removeFileNode',
 	OpenLocation = 'openLocation',
+	ViewportChanged = 'viewportChanged',
 }
 
 export enum ExtensionMessageType {
@@ -45,6 +46,12 @@ export type WebviewToExtensionMessage =
 	| { type: WebviewMessageType.MoveFileNode; filePath: string; x: number; y: number }
 	| { type: WebviewMessageType.RemovePin; id: string }
 	| { type: WebviewMessageType.RemoveFileNode; filePath: string }
-	| { type: WebviewMessageType.OpenLocation; file: string; line: number };
+	| { type: WebviewMessageType.OpenLocation; file: string; line: number }
+	| { type: WebviewMessageType.ViewportChanged; x: number; y: number };
 
 export type ExtensionToWebviewMessage = { type: ExtensionMessageType.SetState; fileNodes: FileNode[] };
+
+export interface Coords {
+	x: number;
+	y: number;
+}

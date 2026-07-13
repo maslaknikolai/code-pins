@@ -1,13 +1,14 @@
 import * as vscode from 'vscode';
 import { FileNodesStore } from '../file-nodes-store';
 import { ExtensionMessageType, ExtensionToWebviewMessage, WebviewToExtensionMessage } from '../../shared/types';
+import { ViewportCenterStore } from '../viewport-center-store';
 import { renderHtml } from './html';
 import { handleWebviewMessage } from './messages';
 
 
 let currentPanel: vscode.WebviewPanel | undefined;
 
-export function showGraphPanel(extensionUri: vscode.Uri, store: FileNodesStore): void {
+export function showGraphPanel(extensionUri: vscode.Uri, store: FileNodesStore, viewportCenterStore: ViewportCenterStore): void {
 	if (currentPanel) {
 		currentPanel.reveal(undefined, true);
 		return;
@@ -33,7 +34,7 @@ export function showGraphPanel(extensionUri: vscode.Uri, store: FileNodesStore):
 
 	const disposables: vscode.Disposable[] = [
 		panel.webview.onDidReceiveMessage((message: WebviewToExtensionMessage) =>
-			handleWebviewMessage(message, { store, sendStateToWebview })
+			handleWebviewMessage(message, { store, sendStateToWebview, viewportCenterStore })
 		),
 		store.onDidChange(sendStateToWebview),
 	];

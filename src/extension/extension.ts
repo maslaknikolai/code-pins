@@ -4,11 +4,13 @@ import { addPin, clearCodePinsFile } from './graph/actions';
 import { openCodePinsFile, saveCodePinsFile } from './graph/persistence';
 import { saveDevSnapshot } from './graph/saveDevSnapshot';
 import { showGraphPanel } from './panel/showGraphPanel';
+import { ViewportCenterStore } from './viewport-center-store';
 import { buildPin } from './pin';
 import { retryUnresolvedDefinitions } from './retryUnresolvedDefinitions';
 
 export function activate(context: vscode.ExtensionContext) {
 	const store = new FileNodesStore();
+	const viewportCenterStore = new ViewportCenterStore();
 
 	if (context.extensionMode === vscode.ExtensionMode.Development) {
 		context.subscriptions.push(store.onDidChange(() => saveDevSnapshot(store)));
@@ -30,13 +32,13 @@ export function activate(context: vscode.ExtensionContext) {
 				return;
 			}
 
-			addPin(store, built.filePath, built.pin);
-			showGraphPanel(context.extensionUri, store);
+			addPin(store, built.filePath, built.pin, viewportCenterStore.getCenter());
+			showGraphPanel(context.extensionUri, store, viewportCenterStore);
 			retryUnresolvedDefinitions(store);
 		}),
 
 		vscode.commands.registerCommand('code-pins.showMap', () => {
-			showGraphPanel(context.extensionUri, store);
+			showGraphPanel(context.extensionUri, store, viewportCenterStore);
 			retryUnresolvedDefinitions(store);
 		}),
 
@@ -44,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 		vscode.commands.registerCommand('code-pins.openCodePinsFile', async () => {
 			if (await openCodePinsFile(store)) {
-				showGraphPanel(context.extensionUri, store);
+				showGraphPanel(context.extensionUri, store, viewportCenterStore);
 			}
 		}),
 

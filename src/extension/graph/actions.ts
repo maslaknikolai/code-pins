@@ -1,15 +1,20 @@
 import * as vscode from 'vscode';
 import { FileNodesStore } from '../file-nodes-store';
-import { FileNode, Pin } from '../../shared/types';
+import { Coords, FileNode, Pin } from '../../shared/types';
 
-export function addPin(store: FileNodesStore, filePath: string, pin: Pin): void {
+export function addPin(
+	store: FileNodesStore,
+	filePath: string,
+	pin: Pin,
+	viewportCenter?: Coords
+): void {
 	const currentFileNodes = store.getFileNodes();
 	const existingNode = currentFileNodes.find((node) => node.filePath === filePath);
 
 	if (!existingNode) {
 		const newFileNode: FileNode = {
 			filePath,
-			...nextPosition(currentFileNodes.length),
+			...nextPosition(currentFileNodes.length, viewportCenter),
 			pins: [pin]
 		};
 
@@ -71,12 +76,19 @@ function checkIsSamePin(a: Pin, b: Pin): boolean {
 const CORNER_MARGIN = 40;
 const CASCADE_STEP = 30;
 const CASCADE_LENGTH = 8;
+const NODE_WIDTH = 360;
 
-/** New file nodes land in the top-left corner, cascading slightly so they don't fully overlap. */
-function nextPosition(count: number): Pick<FileNode, 'x' | 'y'> {
+/**
+ * New file nodes land at the viewport center (top-left corner before the
+ * webview has reported one), cascading slightly so they don't fully overlap.
+ */
+function nextPosition(count: number, viewportCenter?: Coords): Pick<FileNode, 'x' | 'y'> {
 	const offset = (count % CASCADE_LENGTH) * CASCADE_STEP;
+	if (!viewportCenter) {
+		return { x: CORNER_MARGIN + offset, y: CORNER_MARGIN + offset };
+	}
 	return {
-		x: CORNER_MARGIN + offset,
-		y: CORNER_MARGIN + offset,
+		x: Math.max(0, viewportCenter.x - NODE_WIDTH / 2 + offset),
+		y: Math.max(0, viewportCenter.y - 40 + offset),
 	};
 }
