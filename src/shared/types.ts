@@ -32,6 +32,7 @@ export enum WebviewMessageType {
 	Ready = 'ready',
 	MoveFileNode = 'moveFileNode',
 	RemovePin = 'removePin',
+	RemoveFileNode = 'removeFileNode',
 	OpenLocation = 'openLocation',
 }
 
@@ -43,6 +44,7 @@ export type WebviewToExtensionMessage =
 	| { type: WebviewMessageType.Ready }
 	| { type: WebviewMessageType.MoveFileNode; filePath: string; x: number; y: number }
 	| { type: WebviewMessageType.RemovePin; id: string }
+	| { type: WebviewMessageType.RemoveFileNode; filePath: string }
 	| { type: WebviewMessageType.OpenLocation; file: string; line: number };
 
 export type ExtensionToWebviewMessage = { type: ExtensionMessageType.SetState; fileNodes: FileNode[] };

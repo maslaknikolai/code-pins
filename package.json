@@ -30,8 +30,8 @@
         "title": "Code Pins: Open File"
       },
       {
-        "command": "code-pins.newCodePinsFile",
-        "title": "Code Pins: New File"
+        "command": "code-pins.clearCodePinsFile",
+        "title": "Code Pins: Clear"
       }
     ],
     "keybindings": [

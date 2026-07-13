@@ -1,5 +1,5 @@
 import { FileNodesStore } from '../file-nodes-store';
-import { moveFileNode, removePin } from '../graph/actions';
+import { moveFileNode, removeFileNode, removePin } from '../graph/actions';
 import { WebviewMessageType, WebviewToExtensionMessage } from '../../shared/types';
 import { openLocation } from './openLocation';
 
@@ -19,6 +19,7 @@ const handlers: {
 	[WebviewMessageType.Ready]: (_message, ctx) => ctx.sendStateToWebview(),
 	[WebviewMessageType.MoveFileNode]: (message, ctx) => moveFileNode(ctx.store, message.filePath, message.x, message.y),
 	[WebviewMessageType.RemovePin]: (message, ctx) => removePin(ctx.store, message.id),
+	[WebviewMessageType.RemoveFileNode]: (message, ctx) => removeFileNode(ctx.store, message.filePath),
 	[WebviewMessageType.OpenLocation]: (message) => openLocation(message.file, message.line),
 };
 

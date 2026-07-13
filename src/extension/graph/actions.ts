@@ -47,6 +47,10 @@ export function moveFileNode(store: FileNodesStore, filePath: string, x: number,
 	);
 }
 
+export function removeFileNode(store: FileNodesStore, filePath: string): void {
+	store.setFileNodes(store.getFileNodes().filter((node) => node.filePath !== filePath));
+}
+
 /** Removes the pin; a file node with no pins left disappears from the map. */
 export function removePin(store: FileNodesStore, id: string): void {
 	const fileNodes = store.getFileNodes()

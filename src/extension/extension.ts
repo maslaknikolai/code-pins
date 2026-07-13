@@ -48,7 +48,7 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 		}),
 
-		vscode.commands.registerCommand('code-pins.newCodePinsFile', () => clearCodePinsFile(store))
+		vscode.commands.registerCommand('code-pins.clearCodePinsFile', () => clearCodePinsFile(store))
 	);
 }
 

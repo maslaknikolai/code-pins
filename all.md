@@ -255,17 +255,6 @@ interface LineElement {
 
 Клик по подсвеченному `symbol`'у → в атом `selectedPinAtom` кладётся сам `Pin`. Каждый `LineView` сравнивает свои пины с выбранным через `checkIsSameSymbol` — совпал → стиль выделения; сам выбранный пин (по `id`) выделен отдельным цветом (оранжевый outline). `App` тем же сравнением красит `edge`'и (линия и наконечник цветом focusBorder). Повторный клик — сброс. Delete (на mac — Backspace) удаляет выбранный пин (`RemovePin`).
 
-## Сообщения webview ↔ extension
-
-```
-webview → extension: ready | moveFileNode | removePin | openLocation
-extension → webview: setState { fileNodes }
-```
-
-Типизированы юнионом в `types.ts`; отправка через `sendToExtension(type, payload)` — payload проверяется TS по типу сообщения. На стороне extension — мапа обработчиков по типу (`panel/messages.ts`).
-
-`setFileNodes` сравнивает новое состояние со старым через `JSON.stringify` — не изменилось → ни записи, ни `onDidChange`.
-
 ## Сохранение
 
 - Команды: Save/Open/New File (`.json`, формат `CodePinsFile`). `cmd+s` работает при фокусе на панели.

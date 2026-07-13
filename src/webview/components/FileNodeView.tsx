@@ -1,7 +1,9 @@
 import { Handle, Position, type NodeProps } from '@xyflow/react';
 import { useMemo } from 'react';
+import { WebviewMessageType } from '../../shared/types';
 import type { FileFlowNode } from '../types';
 import { buildPinsTree } from '../utils/buildPinsTree';
+import { sendToExtension } from '../utils/vscodeApi';
 import { Marquee } from './Marquee';
 import { PinsTree } from './PinsTree';
 
@@ -24,7 +26,14 @@ export function FileNodeView({ data }: NodeProps<FileFlowNode>) {
 						{fileNode.filePath}
 					</Marquee>
 				</span>
-				<span className="group-hover:hidden">{fileName}</span>
+				<span className="min-w-0 flex-1 overflow-hidden text-ellipsis group-hover:hidden">{fileName}</span>
+				<button
+					className="nodrag ml-1 shrink-0 cursor-pointer px-1 font-normal opacity-50 hover:opacity-100 hover:text-(--vscode-errorForeground,#f66)"
+					title="Remove file node"
+					onClick={() => sendToExtension(WebviewMessageType.RemoveFileNode, { filePath: fileNode.filePath })}
+				>
+					×
+				</button>
 			</div>
 			<div className="flex flex-col gap-2">
 				<PinsTree
