@@ -27,7 +27,7 @@ export function FileNodeView({ data }: NodeProps<FileFlowNode>) {
 			</div>
 			<div className="flex flex-col gap-2">
 				<PinsTree
-					nodes={pinsTree}
+					elements={pinsTree}
 					fileNode={fileNode}
 				/>
 			</div>

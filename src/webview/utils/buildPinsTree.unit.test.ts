@@ -1,9 +1,9 @@
 import * as assert from 'assert';
 import { type Pin } from '../../shared/types';
-import { buildPinsTree, type PinsTreeNode } from './buildPinsTree';
+import { buildPinsTree, type LineElement } from './buildPinsTree';
 
 suite('buildPinsTree', () => {
-	test('single pin stays a plain pin node with all its lines', () => {
+	test('single pin becomes a chain of its lines, pin on the last one', () => {
 		const pin: Pin = {
 			id: 'a',
 			pinPath: 'src/a.ts:3:4',
@@ -14,8 +14,14 @@ suite('buildPinsTree', () => {
 			],
 		};
 
-		const expected: PinsTreeNode[] = [
-			{ type: 'pin', pin, lines: pin.lines },
+		const expected: LineElement[] = [
+			{
+				line: { line: 0, text: 'class A {' },
+				pins: [],
+				children: [
+					{ line: { line: 3, text: 'method() {' }, pins: [pin], children: [] },
+				],
+			},
 		];
 
 		assert.deepStrictEqual(buildPinsTree([pin]), expected);
@@ -41,15 +47,23 @@ suite('buildPinsTree', () => {
 			],
 		};
 
-		const expected: PinsTreeNode[] = [
-			{ type: 'pin', pin: a, lines: a.lines },
-			{ type: 'pin', pin: b, lines: b.lines },
+		const expected: LineElement[] = [
+			{
+				line: { line: 0, text: 'class A {' },
+				pins: [],
+				children: [{ line: { line: 3, text: 'x' }, pins: [a], children: [] }],
+			},
+			{
+				line: { line: 10, text: 'class B {' },
+				pins: [],
+				children: [{ line: { line: 13, text: 'y' }, pins: [b], children: [] }],
+			},
 		];
 
 		assert.deepStrictEqual(buildPinsTree([a, b]), expected);
 	});
 
-	test('shared scope line is hoisted above both pins and removed from each', () => {
+	test('shared scope line appears once, both pins hang below it', () => {
 		const a: Pin = {
 			id: 'a',
 			pinPath: 'src/a.ts:3:4',
@@ -69,14 +83,13 @@ suite('buildPinsTree', () => {
 			],
 		};
 
-		const expected: PinsTreeNode[] = [
+		const expected: LineElement[] = [
 			{
-				type: 'group',
-				lineNumber: 0,
-				sharedLines: [{ line: 0, text: 'class A {' }],
+				line: { line: 0, text: 'class A {' },
+				pins: [],
 				children: [
-					{ type: 'pin', pin: a, lines: [{ line: 3, text: 'first() {' }] },
-					{ type: 'pin', pin: b, lines: [{ line: 7, text: 'second() {' }] },
+					{ line: { line: 3, text: 'first() {' }, pins: [a], children: [] },
+					{ line: { line: 7, text: 'second() {' }, pins: [b], children: [] },
 				],
 			},
 		];
@@ -84,7 +97,7 @@ suite('buildPinsTree', () => {
 		assert.deepStrictEqual(buildPinsTree([a, b]), expected);
 	});
 
-	test('consecutive shared scope lines collapse into one flat group', () => {
+	test('consecutive shared scope lines nest, each appearing once', () => {
 		const a: Pin = {
 			id: 'a',
 			pinPath: 'src/a.ts:5:8',
@@ -106,17 +119,19 @@ suite('buildPinsTree', () => {
 			],
 		};
 
-		const expected: PinsTreeNode[] = [
+		const expected: LineElement[] = [
 			{
-				type: 'group',
-				lineNumber: 0,
-				sharedLines: [
-					{ line: 0, text: 'class A {' },
-					{ line: 3, text: 'method() {' },
-				],
+				line: { line: 0, text: 'class A {' },
+				pins: [],
 				children: [
-					{ type: 'pin', pin: a, lines: [{ line: 5, text: 'x' }] },
-					{ type: 'pin', pin: b, lines: [{ line: 8, text: 'y' }] },
+					{
+						line: { line: 3, text: 'method() {' },
+						pins: [],
+						children: [
+							{ line: { line: 5, text: 'x' }, pins: [a], children: [] },
+							{ line: { line: 8, text: 'y' }, pins: [b], children: [] },
+						],
+					},
 				],
 			},
 		];
@@ -124,7 +139,7 @@ suite('buildPinsTree', () => {
 		assert.deepStrictEqual(buildPinsTree([a, b]), expected);
 	});
 
-	test('pin pinned ON the shared line owns it instead of a plain shared line', () => {
+	test('pin pinned ON the shared line sits on that element, deeper pin below', () => {
 		const method: Pin = {
 			id: 'method',
 			pinPath: 'src/a.ts:3:4',
@@ -145,20 +160,15 @@ suite('buildPinsTree', () => {
 			],
 		};
 
-		const expected: PinsTreeNode[] = [
+		const expected: LineElement[] = [
 			{
-				type: 'group',
-				lineNumber: 0,
-				sharedLines: [{ line: 0, text: 'class A {' }],
+				line: { line: 0, text: 'class A {' },
+				pins: [],
 				children: [
 					{
-						type: 'group',
-						lineNumber: 3,
-						sharedLines: [],
-						children: [
-							{ type: 'pin', pin: method, lines: [{ line: 3, text: 'method() {' }] },
-							{ type: 'pin', pin: deeper, lines: [{ line: 5, text: 'x' }] },
-						],
+						line: { line: 3, text: 'method() {' },
+						pins: [method],
+						children: [{ line: { line: 5, text: 'x' }, pins: [deeper], children: [] }],
 					},
 				],
 			},
@@ -168,7 +178,7 @@ suite('buildPinsTree', () => {
 		assert.deepStrictEqual(buildPinsTree([deeper, method]), expected);
 	});
 
-	test('groups render in source order, not the order pins were added in', () => {
+	test('children render in source order, not the order pins were added in', () => {
 		const later: Pin = {
 			id: 'later',
 			pinPath: 'src/menu.tsx:9:12',
@@ -189,20 +199,16 @@ suite('buildPinsTree', () => {
 			],
 		};
 
-		const expected: PinsTreeNode[] = [
+		const expected: LineElement[] = [
 			{
-				type: 'group',
-				lineNumber: 0,
-				sharedLines: [{ line: 0, text: 'component {' }],
+				line: { line: 0, text: 'component {' },
+				pins: [],
 				children: [
-					{ type: 'pin', pin: earlier, lines: [{ line: 4, text: 'const {addTab} = methods()' }] },
+					{ line: { line: 4, text: 'const {addTab} = methods()' }, pins: [earlier], children: [] },
 					{
-						type: 'pin',
-						pin: later,
-						lines: [
-							{ line: 7, text: 'useMemo(() => [' },
-							{ line: 9, text: 'addTab({' },
-						],
+						line: { line: 7, text: 'useMemo(() => [' },
+						pins: [],
+						children: [{ line: { line: 9, text: 'addTab({' }, pins: [later], children: [] }],
 					},
 				],
 			},
@@ -211,7 +217,7 @@ suite('buildPinsTree', () => {
 		assert.deepStrictEqual(buildPinsTree([later, earlier]), expected);
 	});
 
-	test('two pins on the same line with nothing deeper both keep their line', () => {
+	test('two pins on the same line share one element', () => {
 		const a: Pin = {
 			id: 'a',
 			pinPath: 'src/a.ts:3:10',
@@ -225,15 +231,11 @@ suite('buildPinsTree', () => {
 			lines: [{ line: 3, text: 'const x = f(g)' }],
 		};
 
-		const expected: PinsTreeNode[] = [
+		const expected: LineElement[] = [
 			{
-				type: 'group',
-				lineNumber: 3,
-				sharedLines: [],
-				children: [
-					{ type: 'pin', pin: a, lines: a.lines },
-					{ type: 'pin', pin: b, lines: b.lines },
-				],
+				line: { line: 3, text: 'const x = f(g)' },
+				pins: [a, b],
+				children: []
 			},
 		];
 
