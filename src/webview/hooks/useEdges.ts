@@ -7,7 +7,7 @@ import { checkIsSameSymbol } from '../utils/checkIsSameSymbol';
 
 const SELECTED_EDGE_COLOR = 'var(--vscode-focusBorder, #007fd4)';
 
-/** a pin points at the node holding the pin its definition lives on. */
+
 export function useEdges(): Edge[] {
 	const nodes = useAtomValue(flowNodesAtom);
 	const selectedPin = useAtomValue(selectedPinAtom);

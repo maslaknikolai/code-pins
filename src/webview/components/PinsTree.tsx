@@ -2,7 +2,7 @@ import { FileNode } from '../../shared/types';
 import type { LineElement } from '../utils/buildPinsTree';
 import { LineView } from './LineView';
 
-/** Renders the shared-scope line tree built by buildPinsTree. */
+
 export function PinsTree({ elements, fileNode }: { elements: LineElement[]; fileNode: FileNode }) {
 	return (
 		<>

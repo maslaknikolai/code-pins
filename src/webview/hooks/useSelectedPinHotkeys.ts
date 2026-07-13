@@ -4,8 +4,8 @@ import { WebviewMessageType } from '../../shared/types';
 import { selectedPinAtom } from '../atoms';
 import { sendToExtension } from '../utils/vscodeApi';
 
-/** Delete removes the selected pin; Backspace too, since that's the physical Delete on mac keyboards. */
-export function useDeleteSelectedPin() {
+
+export function useSelectedPinHotkeys() {
 	const [selectedPin, setSelectedPin] = useAtom(selectedPinAtom);
 
 	useEffect(() => {
@@ -13,6 +13,10 @@ export function useDeleteSelectedPin() {
 			return;
 		}
 		const onKeyDown = (event: KeyboardEvent) => {
+			if (event.key === 'Escape') {
+				setSelectedPin(undefined);
+				return;
+			}
 			if (event.key !== 'Delete' && event.key !== 'Backspace') {
 				return;
 			}

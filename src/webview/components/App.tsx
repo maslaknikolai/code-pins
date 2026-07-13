@@ -11,7 +11,7 @@ import { useAtom } from 'jotai';
 import { useEffect } from 'react';
 import { MAP_FIELD, WebviewMessageType } from '../../shared/types';
 import { flowNodesAtom } from '../atoms';
-import { useDeleteSelectedPin } from '../hooks/useDeleteSelectedPin';
+import { useSelectedPinHotkeys } from '../hooks/useSelectedPinHotkeys';
 import { useEdges } from '../hooks/useEdges';
 import { useEvent } from '../hooks/useEvent';
 import { useSubscribeForExtensionMessages } from '../hooks/useExtensionMessages';
@@ -42,7 +42,7 @@ export function App() {
 		sendToExtension(WebviewMessageType.Ready);
 	}, [])
 
-	useDeleteSelectedPin();
+	useSelectedPinHotkeys();
 	useSubscribeForExtensionMessages();
 
 	const edges = useEdges();

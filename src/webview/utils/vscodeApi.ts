@@ -6,7 +6,6 @@ declare function acquireVsCodeApi(): {
 	setState(state: unknown): void;
 };
 
-/** May only be called once per webview session, so acquired here and shared. */
 export const vscode = acquireVsCodeApi();
 
 type PayloadOf<K extends WebviewMessageType> = Omit<
@@ -14,7 +13,6 @@ type PayloadOf<K extends WebviewMessageType> = Omit<
 	'type'
 >;
 
-/** Typed postMessage: the payload shape is checked against the message type. */
 export function sendToExtension<K extends WebviewMessageType>(
 	type: K,
 	...payload: keyof PayloadOf<K> extends never ? [] : [PayloadOf<K>]
