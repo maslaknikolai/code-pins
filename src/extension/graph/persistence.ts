@@ -9,7 +9,7 @@ export async function saveCodePinsFile(store: FileNodesStore): Promise<void> {
 	if (!target) {
 		return;
 	}
-	const data: CodePinsFile = { version: 2, fileNodes: store.getFileNodes() };
+	const data: CodePinsFile = { version: 1, fileNodes: store.getFileNodes() };
 	await vscode.workspace.fs.writeFile(target, Buffer.from(JSON.stringify(data, null, '\t'), 'utf8'));
 	vscode.window.setStatusBarMessage(`Code Pins: saved to ${target.fsPath}`, 3000);
 }

@@ -1,6 +1,6 @@
 import type { Pin } from '../../shared/types';
 
-export type SymbolPaths = Pick<Pin, 'pinLocationPath' | 'symbolDefinitionPath'>;
+export type SymbolPaths = Pick<Pin, 'pinPath' | 'symbolDefinitionPath'>;
 
 /**
  * A symbol occurrence can be a declaration and a reference at once
@@ -9,9 +9,9 @@ export type SymbolPaths = Pick<Pin, 'pinLocationPath' | 'symbolDefinitionPath'>;
  */
 export function checkIsSameSymbol(a: SymbolPaths, b: SymbolPaths): boolean {
 	return (
-		a.pinLocationPath === b.pinLocationPath ||
-		a.pinLocationPath === b.symbolDefinitionPath ||
+		a.pinPath === b.pinPath ||
+		a.pinPath === b.symbolDefinitionPath ||
 		(a.symbolDefinitionPath !== undefined &&
-			(a.symbolDefinitionPath === b.pinLocationPath || a.symbolDefinitionPath === b.symbolDefinitionPath))
+			(a.symbolDefinitionPath === b.pinPath || a.symbolDefinitionPath === b.symbolDefinitionPath))
 	);
 }

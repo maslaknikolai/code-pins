@@ -8,7 +8,7 @@ export async function saveDevSnapshot(store: FileNodesStore): Promise<void> {
 	if (!root) {
 		return;
 	}
-	const data: CodePinsFile = { version: 2, fileNodes: store.getFileNodes() };
+	const data: CodePinsFile = { version: 1, fileNodes: store.getFileNodes() };
 	await vscode.workspace.fs.writeFile(
 		vscode.Uri.joinPath(root, 'dev.code-pins.json'),
 		Buffer.from(JSON.stringify(data, null, '\t'), 'utf8')

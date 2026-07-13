@@ -46,7 +46,7 @@ When the user spots an important entity in the code — a function, class, metho
 
 Every pin stores two addresses (format `path:line:char`):
 
-- `pinLocationPath` — where the pinned word itself sits. "I live here."
+- `pinPath` — where the pinned word itself sits. "I live here."
 - `symbolDefinitionPath` — where go-to-definition jumps from that word. "My source is there." Undefined until the language server resolves it.
 
 Example, three pins:
@@ -57,16 +57,16 @@ menu.tsx:5       const {addTab} = useMethods()     pin B
 menu.tsx:20      addTab({...})                     pin C
 ```
 
-- A: pinLocationPath `state.ts:10`, symbolDefinitionPath `state.ts:10` — points at itself, so it's a declaration.
-- B: pinLocationPath `menu.tsx:5`, symbolDefinitionPath `state.ts:10` — cmd+click jumps to state.ts. A declaration and a reference at once.
-- C: pinLocationPath `menu.tsx:20`, symbolDefinitionPath `menu.tsx:5` — cmd+click jumps to the destructure line, not state.ts.
+- A: pinPath `state.ts:10`, symbolDefinitionPath `state.ts:10` — points at itself, so it's a declaration.
+- B: pinPath `menu.tsx:5`, symbolDefinitionPath `state.ts:10` — cmd+click jumps to state.ts. A declaration and a reference at once.
+- C: pinPath `menu.tsx:20`, symbolDefinitionPath `menu.tsx:5` — cmd+click jumps to the destructure line, not state.ts.
 
 Everything derives from these two keys, nothing else is stored:
 
-- **Declaration**: `symbolDefinitionPath === pinLocationPath` (blue accent in the node).
-- **Arrow**: my `symbolDefinitionPath` equals a pin's `pinLocationPath` in another node. Chain above renders C → B → A.
+- **Declaration**: `symbolDefinitionPath === pinPath` (blue accent in the node).
+- **Arrow**: my `symbolDefinitionPath` equals a pin's `pinPath` in another node. Chain above renders C → B → A.
 - **Same symbol** (selection highlight): any of the two pins' keys intersect.
-- **Duplicate pin**: same `pinLocationPath` — same word occurrence pinned twice.
+- **Duplicate pin**: same `pinPath` — same word occurrence pinned twice.
 
 ## Requirements
 

@@ -54,13 +54,13 @@ export function App() {
 		for (const { data } of nodes) {
 			for (const pin of data.fileNode.pins) {
 				// Pins whose definition is themselves (plain declarations) draw no arrow.
-				if (!pin.symbolDefinitionPath || pin.symbolDefinitionPath === pin.pinLocationPath) {
+				if (!pin.symbolDefinitionPath || pin.symbolDefinitionPath === pin.pinPath) {
 					continue;
 				}
 				const definitionNode = nodes.find(
 					(n) =>
 						n.data.fileNode.filePath !== data.fileNode.filePath &&
-						n.data.fileNode.pins.some((p) => p.pinLocationPath === pin.symbolDefinitionPath)
+						n.data.fileNode.pins.some((p) => p.pinPath === pin.symbolDefinitionPath)
 				);
 				if (definitionNode) {
 					const isSelected = Boolean(selectedSymbol && checkIsSameSymbol(selectedSymbol, pin));

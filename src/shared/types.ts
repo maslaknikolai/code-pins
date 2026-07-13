@@ -11,7 +11,7 @@ export interface PinLine {
 export interface Pin {
 	id: string;
 	symbolName: string;
-	pinLocationPath: string;
+	pinPath: string;
 	symbolDefinitionPath?: string;
 	lines: PinLine[];
 }
@@ -24,7 +24,7 @@ export interface FileNode {
 }
 
 export interface CodePinsFile {
-	version: 2;
+	version: 1;
 	fileNodes: FileNode[];
 }
 
