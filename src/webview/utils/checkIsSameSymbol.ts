@@ -1,17 +1,17 @@
 import type { Pin } from '../../shared/types';
 
-export type SymbolKeys = Pick<Pin, 'locationKey' | 'definitionKey'>;
+export type SymbolPaths = Pick<Pin, 'symbolLocationPath' | 'symbolDefinitionPath'>;
 
 /**
  * A symbol occurrence can be a declaration and a reference at once
  * (`const {addTab} = useMethods()`), so two pins mean the same symbol when any
  * of their location/definition keys intersect.
  */
-export function checkIsSameSymbol(a: SymbolKeys, b: SymbolKeys): boolean {
+export function checkIsSameSymbol(a: SymbolPaths, b: SymbolPaths): boolean {
 	return (
-		a.locationKey === b.locationKey ||
-		a.locationKey === b.definitionKey ||
-		(a.definitionKey !== undefined &&
-			(a.definitionKey === b.locationKey || a.definitionKey === b.definitionKey))
+		a.symbolLocationPath === b.symbolLocationPath ||
+		a.symbolLocationPath === b.symbolDefinitionPath ||
+		(a.symbolDefinitionPath !== undefined &&
+			(a.symbolDefinitionPath === b.symbolLocationPath || a.symbolDefinitionPath === b.symbolDefinitionPath))
 	);
 }

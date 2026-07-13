@@ -63,7 +63,7 @@ export function clearCodePinsFile(store: FileNodesStore): void {
 
 /** Two pins are the same when they pin the same symbol occurrence. */
 function checkIsSamePin(a: Pin, b: Pin): boolean {
-	return a.locationKey === b.locationKey;
+	return a.symbolLocationPath === b.symbolLocationPath;
 }
 
 const CORNER_MARGIN = 40;

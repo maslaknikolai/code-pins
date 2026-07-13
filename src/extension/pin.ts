@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import * as vscode from 'vscode';
-import { buildLocationKey } from '../shared/locationKey';
+import { buildSymbolLocationPath } from '../shared/symbolLocationPath';
 import { Pin, PinLine } from '../shared/types';
 import { getRelativePath } from './utils/getRelativePath';
 
@@ -21,15 +21,15 @@ export async function buildPin(
 	}
 
 	const word = document.getText(wordRange);
-	const definitionKey = await resolveDefinitionKey(document, position);
+	const symbolDefinitionPath = await resolveSymbolDefinitionPath(document, position);
 	const lines = await buildBreadcrumbLines(document, position);
 
 	return {
 		filePath: getRelativePath(document.uri),
 		pin: {
 			id: randomUUID(),
-			locationKey: buildLocationKey(getRelativePath(document.uri), wordRange.start.line, wordRange.start.character),
-			definitionKey,
+			symbolLocationPath: buildSymbolLocationPath(getRelativePath(document.uri), wordRange.start.line, wordRange.start.character),
+			symbolDefinitionPath,
 			symbolName: word,
 			lines,
 		},
@@ -37,7 +37,7 @@ export async function buildPin(
 }
 
 /** Resolves the symbol's definition and returns its location key, or undefined when the provider gives nothing. */
-export async function resolveDefinitionKey(
+export async function resolveSymbolDefinitionPath(
 	document: vscode.TextDocument,
 	position: vscode.Position
 ): Promise<string | undefined> {
@@ -53,7 +53,7 @@ export async function resolveDefinitionKey(
 	const uri = 'targetUri' in first ? first.targetUri : first.uri;
 	const range = 'targetUri' in first ? (first.targetSelectionRange ?? first.targetRange) : first.range;
 
-	return buildLocationKey(getRelativePath(uri), range.start.line, range.start.character);
+	return buildSymbolLocationPath(getRelativePath(uri), range.start.line, range.start.character);
 }
 
 /**
@@ -88,7 +88,7 @@ async function buildBreadcrumbLines(
 		scopeLines.push(position.line);
 	}
 
-	// Raw text, indentation included — the locationKey column points straight into it.
+	// Raw text, indentation included — the symbolLocationPath column points straight into it.
 	return scopeLines.map((line) => ({
 		line,
 		text: document.lineAt(line).text,
