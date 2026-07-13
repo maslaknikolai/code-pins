@@ -58,12 +58,17 @@ export function LineView({ element, fileNode }: { element: LineElement; fileNode
 		return pins.some(pin => pin.symbolDefinitionPath === pin.pinPath)
 	}, [pins])
 
+	const hasHighlightedPin = useMemo(() => {
+		return !!selectedPin && pins.some((pin) => checkIsSameSymbol(selectedPin, pin))
+	}, [selectedPin, pins])
+
 	return (
 		<div
 			className={cn(
 				'group/line relative cursor-pointer overflow-hidden py-1 pr-2 pl-2 whitespace-pre hover:bg-(--vscode-list-hoverBackground)',
 				pins.length > 0 && 'border-b border-(--vscode-editorWidget-border) last:border-b-0',
-				hasDeclarationPin && 'border-l-2 border-l-(--vscode-charts-blue,#4a90d9)'
+				hasDeclarationPin && 'border-l-2 border-l-(--vscode-charts-blue,#4a90d9)',
+				hasHighlightedPin && 'bg-(--vscode-focusBorder)/15'
 			)}
 			title={`${fileNode.filePath}:${line.line + 1}`}
 			onClick={() => sendToExtension(WebviewMessageType.OpenLocation, { file: fileNode.filePath, line: line.line })}
