@@ -12,5 +12,4 @@ export function cloneGraph(appCtx: AppCtx, id: string): void {
 	const name = appCtx.pinsGraphsStore.getNextName(source.label);
 
 	appCtx.activePinsGraphState.setPinsGraph(createPinsGraph(name, structuredClone(source.fileNodes)));
-
 }

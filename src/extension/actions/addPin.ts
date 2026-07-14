@@ -8,7 +8,7 @@ export function addPin(
 	pin: Pin
 ): void {
 	const viewportCenter = viewportCenterState.getCenter();
-	const currentFileNodes = activePinsGraphState.getFileNodes();
+	const currentFileNodes = activePinsGraphState.getPinsGraph().fileNodes;
 	const existingNode = currentFileNodes.find((node) => node.filePath === filePath);
 
 	if (!existingNode) {

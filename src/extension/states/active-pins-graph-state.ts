@@ -24,24 +24,25 @@ export class ActivePinsGraphState {
 		private readonly pinsGraphsStore: PinsGraphsStore,
 		private readonly activePinsGraphIdStore: ActivePinsGraphIdStore
 	) {
-		this.pinsGraphsStore.onDidChange(() => {
-			const stored = this.pinsGraphsStore.getGraphById(this.pinsGraph.id);
-			if (stored) {
-				this.setPinsGraph(stored);
-			}
-		});
+		this.deriveActivePinsGraph();
+		this.pinsGraphsStore.onDidChange(this.deriveActivePinsGraph);
+	}
+
+	private deriveActivePinsGraph() {
+		const activePinsGraphId = this.activePinsGraphIdStore.getId();
+
+		if (!activePinsGraphId) {
+			return;
+		}
+
+		const stored = this.pinsGraphsStore.getGraphById(activePinsGraphId);
+		if (stored) {
+			this.setPinsGraph(stored);
+		}
 	}
 
 	getPinsGraph(): PinsGraph {
 		return this.pinsGraph;
-	}
-
-	getGraphName(): string {
-		return this.pinsGraph.label;
-	}
-
-	getFileNodes(): FileNode[] {
-		return this.pinsGraph.fileNodes;
 	}
 
 	setPinsGraph(pinsGraph: PinsGraph): void {
@@ -49,14 +50,14 @@ export class ActivePinsGraphState {
 			return;
 		}
 		this.pinsGraph = pinsGraph;
-		this.saveToPinsGraphStoreStore();
+		this.saveToPinsGraphStore();
 	}
 
 	setFileNodes(fileNodes: FileNode[]): void {
 		this.setPinsGraph({ ...this.pinsGraph, fileNodes });
 	}
 
-	private saveToPinsGraphStoreStore(): void {
+	private saveToPinsGraphStore(): void {
 		this.pinsGraphsStore.saveGraph(this.pinsGraph);
 		this.activePinsGraphIdStore.setId(this.pinsGraph.id);
 		this._onDidChange.fire();

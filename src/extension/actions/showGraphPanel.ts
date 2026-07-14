@@ -17,14 +17,13 @@ import { renameGraph } from './renameGraph';
 import { removePin } from './removePin';
 
 export function showGraphPanel(appCtx: AppCtx): void {
-	const { vsCodePanelState } = appCtx;
-	const existingPanel = vsCodePanelState.getPanel();
+	const existingPanel = appCtx.vsCodePanelState.getPanel();
 
 	if (!existingPanel) {
 		const panel = createPanel(appCtx);
-		vsCodePanelState.setPanel(panel);
+		appCtx.vsCodePanelState.setPanel(panel);
 		panel.onDidDispose(() => {
-			vsCodePanelState.setPanel(undefined);
+			appCtx.vsCodePanelState.setPanel(undefined);
 		});
 	} else {
 		existingPanel.reveal(undefined, true);

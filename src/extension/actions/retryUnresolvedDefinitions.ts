@@ -8,7 +8,7 @@ import { resolveUri } from '../utils/resolveUri';
 export async function retryUnresolvedDefinitions(activePinsGraphState: ActivePinsGraphState): Promise<void> {
 	let changed = false;
 
-	const updated = await Promise.all(activePinsGraphState.getFileNodes().map(async (node) => {
+	const updated = await Promise.all(activePinsGraphState.getPinsGraph().fileNodes.map(async (node) => {
 		const pins = await Promise.all(node.pins.map(async (pin) => {
 			const symbolDefinitionPath = await resolveSymbolDefinitionPathAtPinLocation(node.filePath, pin);
 			if (!symbolDefinitionPath || symbolDefinitionPath === pin.symbolDefinitionPath) {
