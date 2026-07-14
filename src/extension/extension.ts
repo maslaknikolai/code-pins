@@ -35,9 +35,9 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand('code-pins.addPin', () => addPinCommand({ activePinsGraphStore, viewportCenterStore, graphPanel })),
 		vscode.commands.registerCommand('code-pins.showPinsPanel', () => showPinsPanelCommand({ activePinsGraphStore, graphPanel })),
 		vscode.commands.registerCommand('code-pins.switchPinsGraph', () => switchPinsGraphCommand({ pinsGraphsStore, activePinsGraphStore, graphPanel })),
-		vscode.commands.registerCommand('code-pins.exportActiveGraph', () => exportActiveGraphCommand({ activePinsGraphStore })),
+		vscode.commands.registerCommand('code-pins.exportActiveGraph', () => exportActiveGraphCommand(activePinsGraphStore)),
 		vscode.commands.registerCommand('code-pins.importToActiveGraph', () => importToActiveGraphCommand({ activePinsGraphStore, graphPanel })),
-		vscode.commands.registerCommand('code-pins.clearActiveGraph', () => clearActiveGraphCommand({ activePinsGraphStore }))
+		vscode.commands.registerCommand('code-pins.clearActiveGraph', () => clearActiveGraphCommand(activePinsGraphStore))
 	);
 }
 

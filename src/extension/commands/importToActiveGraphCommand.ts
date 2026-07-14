@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { PinsGraph } from '../../shared/types';
+import { PinsGraphFile, SUPPORTED_PINS_GRAPH_FILE_VERSION } from '../../shared/types';
 import { ActivePinsGraphStore } from '../stores/active-pins-graph-store';
 import { FILE_FILTERS } from './exportActiveGraphCommand';
 import { GraphPanel } from '../panel/graph-panel';
@@ -21,21 +21,26 @@ export async function importToActiveGraphCommand({
 	}
 
 	const raw = await vscode.workspace.fs.readFile(pickedFile[0]);
-	const importedPinsGraph = parsePinsGraph(raw);
+	const pinsGraphFile = parsePinsGraphFile(raw);
 
-	if (!importedPinsGraph) {
+	if (!pinsGraphFile) {
 		vscode.window.showErrorMessage('Code Pins: not a valid Code Pins file.');
 		return;
 	}
 
-	activePinsGraphStore.setFileNodes(importedPinsGraph.fileNodes);
+	if (pinsGraphFile.version > SUPPORTED_PINS_GRAPH_FILE_VERSION) {
+		vscode.window.showErrorMessage(`Code Pins: file version ${pinsGraphFile.version} is newer than supported version ${SUPPORTED_PINS_GRAPH_FILE_VERSION}.`);
+		return;
+	}
+
+	activePinsGraphStore.setFileNodes(pinsGraphFile.pinsGraph.fileNodes);
 	graphPanel.show();
 }
 
-function parsePinsGraph(raw: Uint8Array): PinsGraph | undefined {
+function parsePinsGraphFile(raw: Uint8Array): PinsGraphFile | undefined {
 	try {
-		const data = JSON.parse(Buffer.from(raw).toString('utf8')) as PinsGraph;
-		return Array.isArray(data.fileNodes) ? data : undefined;
+		const data = JSON.parse(Buffer.from(raw).toString('utf8')) as PinsGraphFile;
+		return Array.isArray(data.pinsGraph?.fileNodes) ? data : undefined;
 	} catch {
 		return undefined;
 	}

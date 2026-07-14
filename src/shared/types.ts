@@ -24,8 +24,17 @@ export interface FileNode {
 }
 
 export interface PinsGraph {
-	version: 1;
+	id: string
+	isDefault: boolean
+	label: string
 	fileNodes: FileNode[];
+}
+
+export const SUPPORTED_PINS_GRAPH_FILE_VERSION = 1;
+
+export interface PinsGraphFile {
+	version: typeof SUPPORTED_PINS_GRAPH_FILE_VERSION;
+	pinsGraph: PinsGraph
 }
 
 export interface Coords {
