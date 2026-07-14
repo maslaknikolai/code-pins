@@ -2,7 +2,7 @@ import { WebviewMessageType } from '../../../shared/messages';
 import type { PinsGraph } from '../../../shared/types';
 import { cn } from '../../utils/cn';
 import { sendToExtension } from '../../utils/vscodeApi';
-import { CloneIcon, EditIcon, TrashIcon } from './icons';
+import { CloneIcon, EditIcon, ExportIcon, TrashIcon } from './icons';
 
 export function GraphListItem({ graph, isActive }: { graph: PinsGraph; isActive: boolean }) {
 	const switchGraph = () => {
@@ -19,6 +19,11 @@ export function GraphListItem({ graph, isActive }: { graph: PinsGraph; isActive:
 	const cloneGraph = (event: React.MouseEvent) => {
 		event.stopPropagation();
 		sendToExtension({ type: WebviewMessageType.CloneGraph, id: graph.id });
+	};
+
+	const exportGraph = (event: React.MouseEvent) => {
+		event.stopPropagation();
+		sendToExtension({ type: WebviewMessageType.ExportGraph, id: graph.id });
 	};
 
 	const deleteGraph = (event: React.MouseEvent) => {
@@ -50,6 +55,14 @@ export function GraphListItem({ graph, isActive }: { graph: PinsGraph; isActive:
 				onClick={cloneGraph}
 			>
 				<CloneIcon />
+			</button>
+
+			<button
+				className="shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100!"
+				title={`Export graph "${graph.label}"`}
+				onClick={exportGraph}
+			>
+				<ExportIcon />
 			</button>
 
 			<button

@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import { addPinCommand } from './commands/addPinCommand';
-import { exportActiveGraphCommand } from './commands/exportActiveGraphCommand';
 import { loadActivePinsGraph } from './actions/loadActivePinsGraph';
 import { setupDevSnapshot } from './setupDevSnapshot';
 import { createAppCtx } from './createAppCtx';
@@ -12,7 +11,6 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('code-pins.addPin', () => addPinCommand(appCtx)),
-		vscode.commands.registerCommand('code-pins.exportActiveGraph', () => exportActiveGraphCommand(appCtx)),
 		vscode.commands.registerCommand('code-pins.clearActiveGraph', () => appCtx.activePinsGraphState.setFileNodes([]))
 	);
 }

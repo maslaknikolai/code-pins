@@ -33,6 +33,14 @@ export function PlusIcon() {
 	);
 }
 
+export function ExportIcon() {
+	return (
+		<svg {...iconProps}>
+			<path d="M8 10V2M5 5l3-3 3 3M3 13h10" />
+		</svg>
+	);
+}
+
 export function ImportIcon() {
 	return (
 		<svg {...iconProps}>

@@ -14,6 +14,7 @@ export enum WebviewMessageType {
 	NewGraph = 'newGraph',
 	CloneGraph = 'cloneGraph',
 	RenameGraph = 'renameGraph',
+	ExportGraph = 'exportGraph',
 }
 
 export type WebviewToExtensionMessage =
@@ -28,7 +29,8 @@ export type WebviewToExtensionMessage =
 	| { type: WebviewMessageType.ImportGraph }
 	| { type: WebviewMessageType.NewGraph }
 	| { type: WebviewMessageType.CloneGraph; id: string }
-	| { type: WebviewMessageType.RenameGraph; id: string };
+	| { type: WebviewMessageType.RenameGraph; id: string }
+	| { type: WebviewMessageType.ExportGraph; id: string };
 
 export enum ExtensionMessageType {
 	SetState = 'setState',

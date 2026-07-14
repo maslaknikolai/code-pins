@@ -18,10 +18,6 @@
         "title": "Code Pins: Add pin"
       },
       {
-        "command": "code-pins.exportActiveGraph",
-        "title": "Code Pins: Export Active Graph"
-      },
-      {
         "command": "code-pins.clearActiveGraph",
         "title": "Code Pins: Clear Active Graph"
       }
@@ -32,12 +28,6 @@
         "key": "ctrl+y",
         "mac": "ctrl+y",
         "when": "editorTextFocus"
-      },
-      {
-        "command": "code-pins.exportActiveGraph",
-        "key": "ctrl+s",
-        "mac": "cmd+s",
-        "when": "activeWebviewPanelId == 'codePins'"
       }
     ]
   },

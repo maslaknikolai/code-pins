@@ -5,6 +5,7 @@ import { renderHtml } from './panel/html';
 import { sendActiveFileToWebview } from './panel/sendActiveFileToWebview';
 import { sendStateToWebview } from './panel/sendStateToWebview';
 import { deletePinsGraph } from './deletePinsGraph';
+import { exportGraph } from './exportGraph';
 import { AppCtx } from '../types';
 import { cloneGraph } from './cloneGraph';
 import { createGraph } from './createGraph';
@@ -88,6 +89,9 @@ function createPanel(appCtx: AppCtx): vscode.WebviewPanel {
 			}
 			if (message.type === WebviewMessageType.RenameGraph) {
 				renameGraph(appCtx, message.id);
+			}
+			if (message.type === WebviewMessageType.ExportGraph) {
+				exportGraph(appCtx, message.id);
 			}
 		}),
 		activePinsGraphState.onDidChange(() => {
