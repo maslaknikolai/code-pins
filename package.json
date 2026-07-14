@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "code-pins.pin",
-        "title": "Code Pins: Pin Symbol to Graph"
+        "command": "code-pins.addPin",
+        "title": "Code Pins: Add pin"
       },
       {
         "command": "code-pins.showPinsPanel",
@@ -40,7 +40,7 @@
     ],
     "keybindings": [
       {
-        "command": "code-pins.pin",
+        "command": "code-pins.addPin",
         "key": "ctrl+y",
         "mac": "ctrl+y",
         "when": "editorTextFocus"

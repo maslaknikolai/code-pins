@@ -6,7 +6,7 @@ import { buildPin } from '../pin';
 import { retryUnresolvedDefinitions } from '../retryUnresolvedDefinitions';
 import { ViewportCenterStore } from '../viewport-center-store';
 
-export async function pinCommand({
+export async function addPinCommand({
 	fileNodesStore,
 	viewportCenterStore,
 	graphPanel,

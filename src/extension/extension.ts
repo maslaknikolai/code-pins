@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { importToActiveGraphCommand } from './commands/importToActiveGraphCommand';
-import { pinCommand } from './commands/pinCommand';
+import { addPinCommand } from './commands/addPinCommand';
 import { showPinsPanelCommand } from './commands/showPinsPanelCommand';
 import { switchPinsGraphCommand } from './commands/switchPinsGraphCommand';
 import { FileNodesStore } from './file-nodes-store';
@@ -29,7 +29,7 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('code-pins.pin', () => pinCommand({ fileNodesStore, viewportCenterStore, graphPanel })),
+		vscode.commands.registerCommand('code-pins.addPin', () => addPinCommand({ fileNodesStore, viewportCenterStore, graphPanel })),
 		vscode.commands.registerCommand('code-pins.showPinsPanel', () => showPinsPanelCommand({ fileNodesStore, graphPanel })),
 		vscode.commands.registerCommand('code-pins.switchPinsGraph', () => switchPinsGraphCommand({ pinsGraphsStore, fileNodesStore, graphPanel })),
 		vscode.commands.registerCommand('code-pins.exportActiveGraph', () => exportActiveGraphCommand({ fileNodesStore })),
