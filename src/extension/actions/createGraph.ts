@@ -1,4 +1,3 @@
-import { sendStateToWebview } from './panel/sendStateToWebview';
 import { createPinsGraph } from '../states/active-pins-graph-state';
 import { AppCtx } from '../types';
 
@@ -8,8 +7,4 @@ export function createGraph(appCtx: AppCtx): void {
 
 	appCtx.activePinsGraphState.setPinsGraph(createPinsGraph(name));
 
-	const panel = appCtx.vsCodePanelState.getPanel();
-	if (panel) {
-		sendStateToWebview(panel.webview, appCtx);
-	}
 }

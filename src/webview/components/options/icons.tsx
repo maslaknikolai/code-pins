@@ -9,6 +9,22 @@ const iconProps = {
 	strokeLinejoin: 'round',
 } as const;
 
+export function ChevronUpIcon() {
+	return (
+		<svg {...iconProps}>
+			<path d="M3.5 10l4.5-4.5L12.5 10" />
+		</svg>
+	);
+}
+
+export function ChevronDownIcon() {
+	return (
+		<svg {...iconProps}>
+			<path d="M3.5 6l4.5 4.5L12.5 6" />
+		</svg>
+	);
+}
+
 export function PlusIcon() {
 	return (
 		<svg {...iconProps}>

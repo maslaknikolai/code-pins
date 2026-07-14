@@ -20,6 +20,10 @@ export async function renameGraph(appCtx: AppCtx, id: string): Promise<void> {
 
 	await appCtx.pinsGraphsStore.saveGraph(renamed);
 
+	// Renaming the active graph already sends state via the panel's onDidChange subscription.
+	if (appCtx.activePinsGraphState.getPinsGraph().id === id) {
+		return;
+	}
 
 	const panel = appCtx.vsCodePanelState.getPanel();
 	if (panel) {

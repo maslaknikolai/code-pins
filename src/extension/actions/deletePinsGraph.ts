@@ -17,6 +17,9 @@ export async function deletePinsGraph(appCtx: AppCtx, id: string): Promise<void>
 		} else {
 			activePinsGraphState.setPinsGraph(createPinsGraph(DEFAULT_PINS_GRAPH_NAME));
 		}
+
+		// Switching the active graph already sends state via the panel's onDidChange subscription.
+		return;
 	}
 
 	const panel = appCtx.vsCodePanelState.getPanel();

@@ -29,7 +29,7 @@ export function GraphListItem({ graph, isActive }: { graph: PinsGraph; isActive:
 	return (
 		<div
 			className={cn(
-				'flex cursor-pointer items-center rounded px-2 py-1 hover:bg-(--vscode-list-hoverBackground)',
+				'flex cursor-pointer items-center gap-1 rounded px-2 py-1 hover:bg-(--vscode-list-hoverBackground)',
 				isActive && 'bg-(--vscode-list-activeSelectionBackground) text-(--vscode-list-activeSelectionForeground)'
 			)}
 			onClick={switchGraph}
@@ -37,7 +37,7 @@ export function GraphListItem({ graph, isActive }: { graph: PinsGraph; isActive:
 			<span className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap">{graph.label}</span>
 
 			<button
-				className="ml-1 shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100!"
+				className="shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100!"
 				title={`Rename graph "${graph.label}"`}
 				onClick={renameGraph}
 			>
@@ -45,7 +45,7 @@ export function GraphListItem({ graph, isActive }: { graph: PinsGraph; isActive:
 			</button>
 
 			<button
-				className="ml-1 shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100!"
+				className="shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100!"
 				title={`Clone graph "${graph.label}"`}
 				onClick={cloneGraph}
 			>
@@ -53,7 +53,7 @@ export function GraphListItem({ graph, isActive }: { graph: PinsGraph; isActive:
 			</button>
 
 			<button
-				className="ml-1 shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100! hover:text-(--vscode-errorForeground,#f66)"
+				className="shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100! hover:text-(--vscode-errorForeground,#f66)"
 				title={`Delete graph "${graph.label}"`}
 				onClick={deleteGraph}
 			>

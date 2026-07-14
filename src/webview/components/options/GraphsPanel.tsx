@@ -18,8 +18,8 @@ export function GraphsPanel() {
 	};
 
 	return (
-		<div className="flex flex-col">
-			<div className="mb-1 flex gap-1">
+		<div className="flex flex-col gap-1">
+			<div className="flex gap-1">
 				<button
 					className="flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded border border-(--vscode-editorWidget-border) px-2 py-1 opacity-70 hover:opacity-100 hover:bg-(--vscode-list-hoverBackground)"
 					onClick={newGraph}
@@ -39,13 +39,15 @@ export function GraphsPanel() {
 
 			{graphs.length === 0 && <div className="px-1 py-2 opacity-60">No saved graphs.</div>}
 
-			{[...graphs].reverse().map((graph) => (
-				<GraphListItem
-					key={graph.id}
-					graph={graph}
-					isActive={graph.id === activeGraphId}
-				/>
-			))}
+			<div className="h-48 overflow-y-scroll">
+				{[...graphs].reverse().map((graph) => (
+					<GraphListItem
+						key={graph.id}
+						graph={graph}
+						isActive={graph.id === activeGraphId}
+					/>
+				))}
+			</div>
 		</div>
 	);
 }

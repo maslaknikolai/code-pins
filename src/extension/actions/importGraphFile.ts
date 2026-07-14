@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import { PinsGraphFile, SUPPORTED_PINS_GRAPH_FILE_VERSION } from '../../shared/types';
 import { FILE_FILTERS } from '../commands/exportActiveGraphCommand';
 import { createPinsGraph } from '../states/active-pins-graph-state';
-import { sendStateToWebview } from './panel/sendStateToWebview';
 import { AppCtx } from '../types';
 
 
@@ -38,10 +37,6 @@ export async function importGraphFile(appCtx: AppCtx): Promise<void> {
 
 	appCtx.activePinsGraphState.setPinsGraph(createPinsGraph(input, pinsGraphFile.pinsGraph.fileNodes));
 
-	const panel = appCtx.vsCodePanelState.getPanel();
-	if (panel) {
-		sendStateToWebview(panel.webview, appCtx);
-	}
 }
 
 function parsePinsGraphFile(raw: Uint8Array): PinsGraphFile | undefined {

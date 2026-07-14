@@ -1,6 +1,6 @@
 import { cn } from '../../utils/cn';
 
-export function TabButton({ label, isActive, onClick }: { label: string; isActive: boolean; onClick: () => void }) {
+export function TabButton({ label, isActive, onClick }: { label: string; isActive: boolean; onClick?: () => void }) {
 	return (
 		<button
 			className={cn(
