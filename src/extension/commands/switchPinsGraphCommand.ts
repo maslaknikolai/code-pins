@@ -32,17 +32,17 @@ export function switchPinsGraphCommand({
 	const quickPick = vscode.window.createQuickPick();
 	quickPick.placeholder = 'Switch graph';
 
-	const activeName = pinsGraphsStore.getActiveGraphName();
+	const activePinsGraphName = activePinsGraphStore.getGraphName();
 	const names = pinsGraphsStore.getGraphNames();
 
-	if (!names.includes(activeName)) {
-		names.unshift(activeName);
+	if (!names.includes(activePinsGraphName)) {
+		names.unshift(activePinsGraphName);
 	}
 
 	quickPick.items = [
 		...names.map((name) => ({
 			label: name,
-			description: name === activeName ? 'active' : undefined,
+			description: name === activePinsGraphName ? 'active' : undefined,
 			buttons: [RENAME_BUTTON, DELETE_BUTTON],
 		})),
 		{ label: NEW_GRAPH_LABEL, alwaysShow: true },
@@ -65,8 +65,7 @@ export function switchPinsGraphCommand({
 		}
 
 		saveActivePinsGraph(pinsGraphsStore, activePinsGraphStore);
-		await pinsGraphsStore.setActiveGraphName(name);
-		activePinsGraphStore.setFileNodes(pinsGraphsStore.getGraph(name) ?? []);
+		activePinsGraphStore.setGraph(name, pinsGraphsStore.getGraph(name) ?? []);
 
 		graphPanel.show();
 	});
@@ -81,7 +80,7 @@ export function switchPinsGraphCommand({
 			});
 
 			if (newName && newName !== item.label) {
-				const isActive = pinsGraphsStore.getActiveGraphName() === item.label;
+				const isActive = activePinsGraphStore.getGraphName() === item.label;
 
 				if (isActive) {
 					saveActivePinsGraph(pinsGraphsStore, activePinsGraphStore);
@@ -91,6 +90,7 @@ export function switchPinsGraphCommand({
 				await pinsGraphsStore.deleteGraph(item.label);
 
 				if (isActive) {
+					activePinsGraphStore.setGraph(newName, activePinsGraphStore.getFileNodes());
 					await pinsGraphsStore.setActiveGraphName(newName);
 				}
 			}

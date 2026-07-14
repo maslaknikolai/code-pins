@@ -16,7 +16,7 @@ export function activate(context: vscode.ExtensionContext) {
 	const activePinsGraphStore = new ActivePinsGraphStore();
 	const viewportCenterStore = new ViewportCenterStore();
 	const pinsGraphsStore = new PinsGraphsStore(context.workspaceState);
-	const graphPanel = new GraphPanel(context, activePinsGraphStore, viewportCenterStore, pinsGraphsStore);
+	const graphPanel = new GraphPanel(context, activePinsGraphStore, viewportCenterStore);
 
 	loadActivePinsGraph(pinsGraphsStore, activePinsGraphStore);
 

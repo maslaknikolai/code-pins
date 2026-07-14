@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import { WebviewToExtensionMessage } from '../../shared/messages';
 import { ActivePinsGraphStore } from '../active-pins-graph-store';
-import { PinsGraphsStore } from '../pins-graphs-store';
 import { ViewportCenterStore } from '../viewport-center-store';
 import { renderHtml } from './html';
 import { handleWebviewMessage } from './messages';
@@ -15,8 +14,7 @@ export class GraphPanel {
 	constructor(
 		private readonly context: vscode.ExtensionContext,
 		private readonly activePinsGraphStore: ActivePinsGraphStore,
-		private readonly viewportCenterStore: ViewportCenterStore,
-		private readonly pinsGraphsStore: PinsGraphsStore
+		private readonly viewportCenterStore: ViewportCenterStore
 	) {}
 
 	/** Reveals the existing panel or creates one, and refreshes the title with the active graph name. */
@@ -36,7 +34,7 @@ export class GraphPanel {
 	/** Puts the active graph's name into the panel tab; no-op while the panel is closed. */
 	refreshTitle(): void {
 		if (this.panel) {
-			this.panel.title = `Code Pins — ${this.pinsGraphsStore.getActiveGraphName()}`;
+			this.panel.title = `Code Pins — ${this.activePinsGraphStore.getGraphName()}`;
 		}
 	}
 
