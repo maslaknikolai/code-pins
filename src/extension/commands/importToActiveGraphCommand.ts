@@ -1,14 +1,14 @@
 import * as vscode from 'vscode';
 import { PinsGraph } from '../../shared/types';
-import { FileNodesStore } from '../file-nodes-store';
+import { ActivePinsGraphStore } from '../active-pins-graph-store';
 import { FILE_FILTERS } from './exportActiveGraphCommand';
 import { GraphPanel } from '../panel/graph-panel';
 
 export async function importToActiveGraphCommand({
-	fileNodesStore,
+	activePinsGraphStore,
 	graphPanel,
 }: {
-	fileNodesStore: FileNodesStore;
+	activePinsGraphStore: ActivePinsGraphStore;
 	graphPanel: GraphPanel;
 }): Promise<void> {
 	const pickedFile = await vscode.window.showOpenDialog({
@@ -28,7 +28,7 @@ export async function importToActiveGraphCommand({
 		return;
 	}
 
-	fileNodesStore.setFileNodes(importedPinsGraph.fileNodes);
+	activePinsGraphStore.setFileNodes(importedPinsGraph.fileNodes);
 	graphPanel.show();
 }
 

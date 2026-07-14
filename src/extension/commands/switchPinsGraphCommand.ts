@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { FileNodesStore } from '../file-nodes-store';
+import { ActivePinsGraphStore } from '../active-pins-graph-store';
 import { deletePinsGraph, saveActivePinsGraph } from '../graph/activePinsGraphStorage';
 import { GraphPanel } from '../panel/graph-panel';
 import { PinsGraphsStore } from '../pins-graphs-store';
@@ -22,11 +22,11 @@ const DELETE_BUTTON: vscode.QuickInputButton = {
  */
 export function switchPinsGraphCommand({
 	pinsGraphsStore,
-	fileNodesStore,
+	activePinsGraphStore,
 	graphPanel,
 }: {
 	pinsGraphsStore: PinsGraphsStore;
-	fileNodesStore: FileNodesStore;
+	activePinsGraphStore: ActivePinsGraphStore;
 	graphPanel: GraphPanel;
 }): void {
 	const quickPick = vscode.window.createQuickPick();
@@ -64,9 +64,9 @@ export function switchPinsGraphCommand({
 			name = input;
 		}
 
-		saveActivePinsGraph(pinsGraphsStore, fileNodesStore);
+		saveActivePinsGraph(pinsGraphsStore, activePinsGraphStore);
 		await pinsGraphsStore.setActiveGraphName(name);
-		fileNodesStore.setFileNodes(pinsGraphsStore.getGraph(name) ?? []);
+		activePinsGraphStore.setFileNodes(pinsGraphsStore.getGraph(name) ?? []);
 
 		graphPanel.show();
 	});
@@ -84,7 +84,7 @@ export function switchPinsGraphCommand({
 				const isActive = pinsGraphsStore.getActiveGraphName() === item.label;
 
 				if (isActive) {
-					saveActivePinsGraph(pinsGraphsStore, fileNodesStore);
+					saveActivePinsGraph(pinsGraphsStore, activePinsGraphStore);
 				}
 
 				await pinsGraphsStore.saveGraph(newName, pinsGraphsStore.getGraph(item.label) ?? []);
@@ -103,12 +103,12 @@ export function switchPinsGraphCommand({
 				'Delete'
 			);
 			if (confirmed === 'Delete') {
-				await deletePinsGraph(pinsGraphsStore, fileNodesStore, item.label);
+				await deletePinsGraph(pinsGraphsStore, activePinsGraphStore, item.label);
 			}
 		}
 
 		graphPanel.refreshTitle();
-		switchPinsGraphCommand({ pinsGraphsStore, fileNodesStore, graphPanel });
+		switchPinsGraphCommand({ pinsGraphsStore, activePinsGraphStore, graphPanel });
 	});
 
 	quickPick.onDidHide(() => quickPick.dispose());

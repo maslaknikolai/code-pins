@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { FileNode } from '../shared/types';
 
 
-export class FileNodesStore {
+export class ActivePinsGraphStore {
 	private fileNodes: FileNode[] = [];
 
 	private readonly _onDidChange = new vscode.EventEmitter<void>();

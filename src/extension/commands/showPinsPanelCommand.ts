@@ -1,14 +1,14 @@
-import { FileNodesStore } from '../file-nodes-store';
+import { ActivePinsGraphStore } from '../active-pins-graph-store';
 import { GraphPanel } from '../panel/graph-panel';
 import { retryUnresolvedDefinitions } from '../retryUnresolvedDefinitions';
 
 export function showPinsPanelCommand({
-	fileNodesStore,
+	activePinsGraphStore,
 	graphPanel,
 }: {
-	fileNodesStore: FileNodesStore;
+	activePinsGraphStore: ActivePinsGraphStore;
 	graphPanel: GraphPanel;
 }): void {
 	graphPanel.show();
-	retryUnresolvedDefinitions(fileNodesStore);
+	retryUnresolvedDefinitions(activePinsGraphStore);
 }

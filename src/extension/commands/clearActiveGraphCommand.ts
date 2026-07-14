@@ -1,5 +1,5 @@
-import { FileNodesStore } from '../file-nodes-store';
+import { ActivePinsGraphStore } from '../active-pins-graph-store';
 
-export function clearActiveGraphCommand({ fileNodesStore }: { fileNodesStore: FileNodesStore }): void {
-	fileNodesStore.setFileNodes([]);
+export function clearActiveGraphCommand({ activePinsGraphStore }: { activePinsGraphStore: ActivePinsGraphStore }): void {
+	activePinsGraphStore.setFileNodes([]);
 }

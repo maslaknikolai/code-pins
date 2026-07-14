@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
 import { ExtensionMessageType } from '../../shared/messages';
-import { FileNodesStore } from '../file-nodes-store';
+import { ActivePinsGraphStore } from '../active-pins-graph-store';
 import { sendToWebview } from './sendToWebview';
 
-export function sendStateToWebview(webview: vscode.Webview, fileNodesStore: FileNodesStore): void {
+export function sendStateToWebview(webview: vscode.Webview, activePinsGraphStore: ActivePinsGraphStore): void {
 	sendToWebview(webview, {
 		type: ExtensionMessageType.SetState,
-		fileNodes: fileNodesStore.getFileNodes(),
+		fileNodes: activePinsGraphStore.getFileNodes(),
 	});
 }

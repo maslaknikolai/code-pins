@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { FileNodesStore } from '../file-nodes-store';
+import { ActivePinsGraphStore } from '../active-pins-graph-store';
 import { addPin } from '../graph/actions';
 import { GraphPanel } from '../panel/graph-panel';
 import { buildPin } from '../pin';
@@ -7,11 +7,11 @@ import { retryUnresolvedDefinitions } from '../retryUnresolvedDefinitions';
 import { ViewportCenterStore } from '../viewport-center-store';
 
 export async function addPinCommand({
-	fileNodesStore,
+	activePinsGraphStore,
 	viewportCenterStore,
 	graphPanel,
 }: {
-	fileNodesStore: FileNodesStore;
+	activePinsGraphStore: ActivePinsGraphStore;
 	viewportCenterStore: ViewportCenterStore;
 	graphPanel: GraphPanel;
 }): Promise<void> {
@@ -29,7 +29,7 @@ export async function addPinCommand({
 		return;
 	}
 
-	addPin(fileNodesStore, built.filePath, built.pin, viewportCenterStore.getCenter());
+	addPin(activePinsGraphStore, built.filePath, built.pin, viewportCenterStore.getCenter());
 	graphPanel.show();
-	retryUnresolvedDefinitions(fileNodesStore);
+	retryUnresolvedDefinitions(activePinsGraphStore);
 }

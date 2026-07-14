@@ -3,7 +3,7 @@ import { importToActiveGraphCommand } from './commands/importToActiveGraphComman
 import { addPinCommand } from './commands/addPinCommand';
 import { showPinsPanelCommand } from './commands/showPinsPanelCommand';
 import { switchPinsGraphCommand } from './commands/switchPinsGraphCommand';
-import { FileNodesStore } from './file-nodes-store';
+import { ActivePinsGraphStore } from './active-pins-graph-store';
 import { clearActiveGraphCommand } from './commands/clearActiveGraphCommand';
 import { exportActiveGraphCommand } from './commands/exportActiveGraphCommand';
 import { loadActivePinsGraph, saveActivePinsGraph } from './graph/activePinsGraphStorage';
@@ -13,28 +13,30 @@ import { PinsGraphsStore } from './pins-graphs-store';
 import { ViewportCenterStore } from './viewport-center-store';
 
 export function activate(context: vscode.ExtensionContext) {
-	const fileNodesStore = new FileNodesStore();
+	const activePinsGraphStore = new ActivePinsGraphStore();
 	const viewportCenterStore = new ViewportCenterStore();
 	const pinsGraphsStore = new PinsGraphsStore(context.workspaceState);
-	const graphPanel = new GraphPanel(context, fileNodesStore, viewportCenterStore, pinsGraphsStore);
+	const graphPanel = new GraphPanel(context, activePinsGraphStore, viewportCenterStore, pinsGraphsStore);
 
-	loadActivePinsGraph(pinsGraphsStore, fileNodesStore);
+	loadActivePinsGraph(pinsGraphsStore, activePinsGraphStore);
 
-	context.subscriptions.push(fileNodesStore.onDidChange(() => {
-		saveActivePinsGraph(pinsGraphsStore, fileNodesStore);
-	}));
+	context.subscriptions.push(
+		activePinsGraphStore.onDidChange(() => {
+			saveActivePinsGraph(pinsGraphsStore, activePinsGraphStore);
+		})
+	);
 
 	if (context.extensionMode === vscode.ExtensionMode.Development) {
-		context.subscriptions.push(fileNodesStore.onDidChange(() => saveDevSnapshot(fileNodesStore)));
+		context.subscriptions.push(activePinsGraphStore.onDidChange(() => saveDevSnapshot(activePinsGraphStore)));
 	}
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('code-pins.addPin', () => addPinCommand({ fileNodesStore, viewportCenterStore, graphPanel })),
-		vscode.commands.registerCommand('code-pins.showPinsPanel', () => showPinsPanelCommand({ fileNodesStore, graphPanel })),
-		vscode.commands.registerCommand('code-pins.switchPinsGraph', () => switchPinsGraphCommand({ pinsGraphsStore, fileNodesStore, graphPanel })),
-		vscode.commands.registerCommand('code-pins.exportActiveGraph', () => exportActiveGraphCommand({ fileNodesStore })),
-		vscode.commands.registerCommand('code-pins.importToActiveGraph', () => importToActiveGraphCommand({ fileNodesStore, graphPanel })),
-		vscode.commands.registerCommand('code-pins.clearActiveGraph', () => clearActiveGraphCommand({ fileNodesStore }))
+		vscode.commands.registerCommand('code-pins.addPin', () => addPinCommand({ activePinsGraphStore, viewportCenterStore, graphPanel })),
+		vscode.commands.registerCommand('code-pins.showPinsPanel', () => showPinsPanelCommand({ activePinsGraphStore, graphPanel })),
+		vscode.commands.registerCommand('code-pins.switchPinsGraph', () => switchPinsGraphCommand({ pinsGraphsStore, activePinsGraphStore, graphPanel })),
+		vscode.commands.registerCommand('code-pins.exportActiveGraph', () => exportActiveGraphCommand({ activePinsGraphStore })),
+		vscode.commands.registerCommand('code-pins.importToActiveGraph', () => importToActiveGraphCommand({ activePinsGraphStore, graphPanel })),
+		vscode.commands.registerCommand('code-pins.clearActiveGraph', () => clearActiveGraphCommand({ activePinsGraphStore }))
 	);
 }
 

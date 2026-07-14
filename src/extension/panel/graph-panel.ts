@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { WebviewToExtensionMessage } from '../../shared/messages';
-import { FileNodesStore } from '../file-nodes-store';
+import { ActivePinsGraphStore } from '../active-pins-graph-store';
 import { PinsGraphsStore } from '../pins-graphs-store';
 import { ViewportCenterStore } from '../viewport-center-store';
 import { renderHtml } from './html';
@@ -14,7 +14,7 @@ export class GraphPanel {
 
 	constructor(
 		private readonly context: vscode.ExtensionContext,
-		private readonly fileNodesStore: FileNodesStore,
+		private readonly activePinsGraphStore: ActivePinsGraphStore,
 		private readonly viewportCenterStore: ViewportCenterStore,
 		private readonly pinsGraphsStore: PinsGraphsStore
 	) {}
@@ -57,14 +57,14 @@ export class GraphPanel {
 		const disposables: vscode.Disposable[] = [
 			panel.webview.onDidReceiveMessage((message: WebviewToExtensionMessage) => {
 				handleWebviewMessage(message, {
-					fileNodesStore: this.fileNodesStore,
-					sendStateToWebview: () => sendStateToWebview(panel.webview, this.fileNodesStore),
+					activePinsGraphStore: this.activePinsGraphStore,
+					sendStateToWebview: () => sendStateToWebview(panel.webview, this.activePinsGraphStore),
 					sendActiveFileToWebview: () => sendActiveFileToWebview(panel.webview),
 					viewportCenterStore: this.viewportCenterStore,
 				});
 			}),
-			this.fileNodesStore.onDidChange(() => {
-				sendStateToWebview(panel.webview, this.fileNodesStore);
+			this.activePinsGraphStore.onDidChange(() => {
+				sendStateToWebview(panel.webview, this.activePinsGraphStore);
 			}),
 			vscode.window.onDidChangeActiveTextEditor((editor) => {
 				sendActiveFileToWebview(panel.webview, editor);

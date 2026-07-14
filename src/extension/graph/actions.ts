@@ -1,14 +1,14 @@
 import * as vscode from 'vscode';
-import { FileNodesStore } from '../file-nodes-store';
+import { ActivePinsGraphStore } from '../active-pins-graph-store';
 import { Coords, FileNode, Pin } from '../../shared/types';
 
 export function addPin(
-	fileNodesStore: FileNodesStore,
+	activePinsGraphStore: ActivePinsGraphStore,
 	filePath: string,
 	pin: Pin,
 	viewportCenter?: Coords
 ): void {
-	const currentFileNodes = fileNodesStore.getFileNodes();
+	const currentFileNodes = activePinsGraphStore.getFileNodes();
 	const existingNode = currentFileNodes.find((node) => node.filePath === filePath);
 
 	if (!existingNode) {
@@ -20,7 +20,7 @@ export function addPin(
 
 		const newFileNodes = [ ...currentFileNodes, newFileNode ];
 		console.log('Code Pins: adding new node for pin', {newFileNodes});
-		fileNodesStore.setFileNodes(newFileNodes);
+		activePinsGraphStore.setFileNodes(newFileNodes);
 		return;
 	}
 
@@ -43,24 +43,24 @@ export function addPin(
 
 	console.log('Code Pins: adding pin', {existingNode, newFileNodes});
 
-	fileNodesStore.setFileNodes(newFileNodes);
+	activePinsGraphStore.setFileNodes(newFileNodes);
 }
 
-export function moveFileNode(fileNodesStore: FileNodesStore, filePath: string, x: number, y: number): void {
-	fileNodesStore.setFileNodes(
-		fileNodesStore.getFileNodes().map((node) => (node.filePath === filePath ? { ...node, x, y } : node))
+export function moveFileNode(activePinsGraphStore: ActivePinsGraphStore, filePath: string, x: number, y: number): void {
+	activePinsGraphStore.setFileNodes(
+		activePinsGraphStore.getFileNodes().map((node) => (node.filePath === filePath ? { ...node, x, y } : node))
 	);
 }
 
-export function removeFileNode(fileNodesStore: FileNodesStore, filePath: string): void {
-	fileNodesStore.setFileNodes(fileNodesStore.getFileNodes().filter((node) => node.filePath !== filePath));
+export function removeFileNode(activePinsGraphStore: ActivePinsGraphStore, filePath: string): void {
+	activePinsGraphStore.setFileNodes(activePinsGraphStore.getFileNodes().filter((node) => node.filePath !== filePath));
 }
 
-export function removePin(fileNodesStore: FileNodesStore, id: string): void {
-	const fileNodes = fileNodesStore.getFileNodes()
+export function removePin(activePinsGraphStore: ActivePinsGraphStore, id: string): void {
+	const fileNodes = activePinsGraphStore.getFileNodes()
 		.map((node) => ({ ...node, pins: node.pins.filter((pin) => pin.id !== id) }))
 		.filter((node) => node.pins.length > 0);
-	fileNodesStore.setFileNodes(fileNodes);
+	activePinsGraphStore.setFileNodes(fileNodes);
 }
 
 /** Two pins are the same when they pin the same symbol occurrence. */

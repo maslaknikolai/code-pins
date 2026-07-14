@@ -1,11 +1,11 @@
-import { FileNodesStore } from '../file-nodes-store';
+import { ActivePinsGraphStore } from '../active-pins-graph-store';
 import { ViewportCenterStore } from '../viewport-center-store';
 import { moveFileNode, removeFileNode, removePin } from '../graph/actions';
 import { WebviewMessageType, WebviewToExtensionMessage } from '../../shared/messages';
 import { openLocation } from './openLocation';
 
 export interface MessageContext {
-	fileNodesStore: FileNodesStore;
+	activePinsGraphStore: ActivePinsGraphStore;
 	sendStateToWebview: () => void;
 	sendActiveFileToWebview: () => void;
 	viewportCenterStore: ViewportCenterStore;
@@ -23,9 +23,9 @@ const handlers: {
 		ctx.sendStateToWebview();
 		ctx.sendActiveFileToWebview();
 	},
-	[WebviewMessageType.MoveFileNode]: (message, ctx) => moveFileNode(ctx.fileNodesStore, message.filePath, message.x, message.y),
-	[WebviewMessageType.RemovePin]: (message, ctx) => removePin(ctx.fileNodesStore, message.id),
-	[WebviewMessageType.RemoveFileNode]: (message, ctx) => removeFileNode(ctx.fileNodesStore, message.filePath),
+	[WebviewMessageType.MoveFileNode]: (message, ctx) => moveFileNode(ctx.activePinsGraphStore, message.filePath, message.x, message.y),
+	[WebviewMessageType.RemovePin]: (message, ctx) => removePin(ctx.activePinsGraphStore, message.id),
+	[WebviewMessageType.RemoveFileNode]: (message, ctx) => removeFileNode(ctx.activePinsGraphStore, message.filePath),
 	[WebviewMessageType.OpenLocation]: (message) => openLocation(message.file, message.line),
 	[WebviewMessageType.ViewportChanged]: (message, ctx) => ctx.viewportCenterStore.setCenter({ x: message.x, y: message.y }),
 };
