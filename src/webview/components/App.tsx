@@ -21,6 +21,7 @@ import { sendToExtension } from '../utils/vscodeApi';
 import { FileNodeView } from './FileNodeView';
 import { FLOATING_EDGE_TYPE, FloatingEdge } from './FloatingEdge';
 import { GroupOutlines } from './GroupOutlines';
+import { OptionsDrawer } from './options/OptionsDrawer';
 import { ViewportCenterReporter } from './ViewportCenterReporter';
 
 const nodeTypes = {
@@ -87,6 +88,7 @@ export function App() {
 			<Controls />
 			<GroupOutlines />
 			<ViewportCenterReporter />
+			<OptionsDrawer />
 		</ReactFlow>
 	);
 }

@@ -1,10 +1,5 @@
-import type { FileNode } from './types';
+import type { PinsGraph } from './types';
 
-/**
- * Everything the two processes say to each other, in one place.
- * The enums name the messages, the unions type their payloads; the senders are
- * `sendToExtension` (webview side) and `sendToWebview` (extension side).
- */
 
 export enum WebviewMessageType {
 	Ready = 'ready',
@@ -13,6 +8,12 @@ export enum WebviewMessageType {
 	RemoveFileNode = 'removeFileNode',
 	OpenLocation = 'openLocation',
 	ViewportChanged = 'viewportChanged',
+	SwitchGraph = 'switchGraph',
+	DeleteGraph = 'deleteGraph',
+	ImportGraph = 'importGraph',
+	NewGraph = 'newGraph',
+	CloneGraph = 'cloneGraph',
+	RenameGraph = 'renameGraph',
 }
 
 export type WebviewToExtensionMessage =
@@ -21,8 +22,13 @@ export type WebviewToExtensionMessage =
 	| { type: WebviewMessageType.RemovePin; id: string }
 	| { type: WebviewMessageType.RemoveFileNode; filePath: string }
 	| { type: WebviewMessageType.OpenLocation; file: string; line: number }
-	/** The viewport center in flow coordinates — new nodes land there. */
-	| { type: WebviewMessageType.ViewportChanged; x: number; y: number };
+	| { type: WebviewMessageType.ViewportChanged; x: number; y: number }
+	| { type: WebviewMessageType.SwitchGraph; id: string }
+	| { type: WebviewMessageType.DeleteGraph; id: string }
+	| { type: WebviewMessageType.ImportGraph }
+	| { type: WebviewMessageType.NewGraph }
+	| { type: WebviewMessageType.CloneGraph; id: string }
+	| { type: WebviewMessageType.RenameGraph; id: string };
 
 export enum ExtensionMessageType {
 	SetState = 'setState',
@@ -30,6 +36,5 @@ export enum ExtensionMessageType {
 }
 
 export type ExtensionToWebviewMessage =
-	| { type: ExtensionMessageType.SetState; fileNodes: FileNode[] }
-	/** Workspace-relative path of the active editor's file — its node highlights on the map. */
+	| { type: ExtensionMessageType.SetState; graphs: PinsGraph[]; activeGraphId: string }
 	| { type: ExtensionMessageType.SetActiveFile; filePath: string };

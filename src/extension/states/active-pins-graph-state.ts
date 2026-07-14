@@ -1,33 +1,64 @@
+import { randomUUID } from 'crypto';
 import * as vscode from 'vscode';
-import { FileNode } from '../../shared/types';
+import { FileNode, PinsGraph } from '../../shared/types';
+import type { ActivePinsGraphIdStore } from '../storage/active-pins-graph-id-store';
+import type { PinsGraphsStore } from '../storage/pins-graphs-store';
 
 export const DEFAULT_PINS_GRAPH_NAME = 'default';
 
+export function createPinsGraph(label: string, fileNodes: FileNode[] = []): PinsGraph {
+	return {
+		id: randomUUID(),
+		label,
+		fileNodes,
+	};
+}
+
 export class ActivePinsGraphState {
-	private graphName: string = DEFAULT_PINS_GRAPH_NAME;
-	private fileNodes: FileNode[] = [];
+	private pinsGraph: PinsGraph = createPinsGraph(DEFAULT_PINS_GRAPH_NAME);
 
 	private readonly _onDidChange = new vscode.EventEmitter<void>();
 	readonly onDidChange = this._onDidChange.event;
 
+	constructor(
+		private readonly pinsGraphsStore: PinsGraphsStore,
+		private readonly activePinsGraphIdStore: ActivePinsGraphIdStore
+	) {
+		this.pinsGraphsStore.onDidChange(() => {
+			const stored = this.pinsGraphsStore.getGraphById(this.pinsGraph.id);
+			if (stored) {
+				this.setPinsGraph(stored);
+			}
+		});
+	}
+
+	getPinsGraph(): PinsGraph {
+		return this.pinsGraph;
+	}
+
 	getGraphName(): string {
-		return this.graphName;
+		return this.pinsGraph.label;
 	}
 
 	getFileNodes(): FileNode[] {
-		return this.fileNodes;
+		return this.pinsGraph.fileNodes;
 	}
 
-	setGraph(graphName: string, fileNodes: FileNode[]): void {
-		if (graphName === this.graphName && JSON.stringify(fileNodes) === JSON.stringify(this.fileNodes)) {
+	setPinsGraph(pinsGraph: PinsGraph): void {
+		if (JSON.stringify(pinsGraph) === JSON.stringify(this.pinsGraph)) {
 			return;
 		}
-		this.graphName = graphName;
-		this.fileNodes = fileNodes;
-		this._onDidChange.fire();
+		this.pinsGraph = pinsGraph;
+		this.saveToPinsGraphStoreStore();
 	}
 
 	setFileNodes(fileNodes: FileNode[]): void {
-		this.setGraph(this.graphName, fileNodes);
+		this.setPinsGraph({ ...this.pinsGraph, fileNodes });
+	}
+
+	private saveToPinsGraphStoreStore(): void {
+		this.pinsGraphsStore.saveGraph(this.pinsGraph);
+		this.activePinsGraphIdStore.setId(this.pinsGraph.id);
+		this._onDidChange.fire();
 	}
 }

@@ -1,11 +1,12 @@
 import * as vscode from 'vscode';
 import { PinsGraphFile, SUPPORTED_PINS_GRAPH_FILE_VERSION } from '../../shared/types';
-import { FILE_FILTERS } from './exportActiveGraphCommand';
-import { showGraphPanel } from '../actions/showGraphPanel';
+import { FILE_FILTERS } from '../commands/exportActiveGraphCommand';
+import { createPinsGraph } from '../states/active-pins-graph-state';
+import { sendStateToWebview } from './panel/sendStateToWebview';
 import { AppCtx } from '../types';
 
-export async function importToActiveGraphCommand(appCtx: AppCtx): Promise<void> {
-	const { activePinsGraphState } = appCtx;
+
+export async function importGraphFile(appCtx: AppCtx): Promise<void> {
 	const pickedFile = await vscode.window.showOpenDialog({
 		filters: FILE_FILTERS,
 		canSelectMany: false
@@ -28,8 +29,19 @@ export async function importToActiveGraphCommand(appCtx: AppCtx): Promise<void> 
 		return;
 	}
 
-	activePinsGraphState.setFileNodes(pinsGraphFile.pinsGraph.fileNodes);
-	showGraphPanel(appCtx);
+	const defaultName = appCtx.pinsGraphsStore.getNextName(pinsGraphFile.pinsGraph.label || '');
+	const input = await vscode.window.showInputBox({ prompt: 'Imported graph name', value: defaultName });
+
+	if (!input) {
+		return;
+	}
+
+	appCtx.activePinsGraphState.setPinsGraph(createPinsGraph(input, pinsGraphFile.pinsGraph.fileNodes));
+
+	const panel = appCtx.vsCodePanelState.getPanel();
+	if (panel) {
+		sendStateToWebview(panel.webview, appCtx);
+	}
 }
 
 function parsePinsGraphFile(raw: Uint8Array): PinsGraphFile | undefined {

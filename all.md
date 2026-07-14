@@ -275,5 +275,3 @@ interface LineElement {
 ## Сборка
 
 esbuild, два бандла: `dist/extension.js` (Node) и `dist/webview.js` (+`webview.css` — esbuild сам собирает импортированный CSS). Tailwind v4 отдельно: `src/webview/tailwind.css` → `dist/tailwind.css`. `pnpm watch` крутит всё; F5 сначала гоняет unit-тесты.
-
-[ ] Добавленную ноду делать выделенной

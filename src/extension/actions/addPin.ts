@@ -24,7 +24,7 @@ export function addPin(
 		return;
 	}
 
-	if (existingNode.pins.some((existing) => checkIsSamePin(existing, pin))) {
+	if (existingNode.pins.some((existing) => existing.pinPath === pin.pinPath)) {
 		vscode.window.setStatusBarMessage('Code Pins: already on the graph', 2000);
 		return;
 	}
@@ -46,10 +46,6 @@ export function addPin(
 	activePinsGraphState.setFileNodes(newFileNodes);
 }
 
-/** Two pins are the same when they pin the same symbol occurrence. */
-function checkIsSamePin(a: Pin, b: Pin): boolean {
-	return a.pinPath === b.pinPath;
-}
 
 const CORNER_MARGIN = 40;
 const CASCADE_STEP = 30;

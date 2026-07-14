@@ -1,13 +1,14 @@
 import { atom } from 'jotai';
-import type { Pin } from '../shared/types';
+import type { Pin, PinsGraph } from '../shared/types';
 import type { FileFlowNode } from './types';
 
 
-// Stored as nodes to make them not rerender on every postiion change
 export const flowNodesAtom = atom<FileFlowNode[]>([]);
 
-/** The selected pin — the same symbol lights up across all nodes, Delete removes the pin. */
 export const selectedPinAtom = atom<Pin | undefined>(undefined);
 
-/** Workspace-relative path of the last active editor file — its node highlights on the map. */
 export const activeFilePathAtom = atom<string | undefined>(undefined);
+
+export const allGraphsAtom = atom<PinsGraph[]>([]);
+
+export const activeGraphIdAtom = atom<string | undefined>(undefined);

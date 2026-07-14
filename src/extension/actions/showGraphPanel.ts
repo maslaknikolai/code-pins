@@ -1,33 +1,39 @@
 import * as vscode from 'vscode';
 import { WebviewMessageType, WebviewToExtensionMessage } from '../../shared/messages';
-import { openLocation } from '../panel/openLocation';
-import { renderHtml } from '../panel/html';
-import { sendActiveFileToWebview } from '../panel/sendActiveFileToWebview';
-import { sendStateToWebview } from '../panel/sendStateToWebview';
+import { openLocation } from './panel/openLocation';
+import { renderHtml } from './panel/html';
+import { sendActiveFileToWebview } from './panel/sendActiveFileToWebview';
+import { sendStateToWebview } from './panel/sendStateToWebview';
+import { deletePinsGraph } from './deletePinsGraph';
 import { AppCtx } from '../types';
+import { cloneGraph } from './cloneGraph';
+import { createGraph } from './createGraph';
+import { importGraphFile } from './importGraphFile';
 import { moveFileNode } from './moveFileNode';
-import { refreshGraphPanelTitle } from './refreshGraphPanelTitle';
+import { refreshVsCodePanelTitle } from './refreshVsCodePanelTitle';
 import { removeFileNode } from './removeFileNode';
+import { renameGraph } from './renameGraph';
 import { removePin } from './removePin';
 
 export function showGraphPanel(appCtx: AppCtx): void {
-	const { graphPanelState } = appCtx;
-	const existingPanel = graphPanelState.getPanel();
+	const { vsCodePanelState } = appCtx;
+	const existingPanel = vsCodePanelState.getPanel();
 
 	if (!existingPanel) {
 		const panel = createPanel(appCtx);
-		graphPanelState.setPanel(panel);
+		vsCodePanelState.setPanel(panel);
 		panel.onDidDispose(() => {
-			graphPanelState.setPanel(undefined);
+			vsCodePanelState.setPanel(undefined);
 		});
 	} else {
 		existingPanel.reveal(undefined, true);
 	}
 
-	refreshGraphPanelTitle(appCtx);
+	refreshVsCodePanelTitle(appCtx);
 }
 
-function createPanel({ context, activePinsGraphState, viewportCenterState }: AppCtx): vscode.WebviewPanel {
+function createPanel(appCtx: AppCtx): vscode.WebviewPanel {
+	const { context, activePinsGraphState, viewportCenterState, pinsGraphsStore } = appCtx;
 	const panel = vscode.window.createWebviewPanel(
 		'codePins',
 		'Code Pins',
@@ -44,7 +50,7 @@ function createPanel({ context, activePinsGraphState, viewportCenterState }: App
 	const disposables: vscode.Disposable[] = [
 		panel.webview.onDidReceiveMessage((message: WebviewToExtensionMessage) => {
 			if (message.type === WebviewMessageType.Ready) {
-				sendStateToWebview(panel.webview, activePinsGraphState);
+				sendStateToWebview(panel.webview, appCtx);
 				sendActiveFileToWebview(panel.webview);
 			}
 			if (message.type === WebviewMessageType.MoveFileNode) {
@@ -62,9 +68,31 @@ function createPanel({ context, activePinsGraphState, viewportCenterState }: App
 			if (message.type === WebviewMessageType.ViewportChanged) {
 				viewportCenterState.setCenter({ x: message.x, y: message.y });
 			}
+			if (message.type === WebviewMessageType.SwitchGraph) {
+				const pickedGraph = pinsGraphsStore.getGraphById(message.id);
+				if (pickedGraph) {
+					activePinsGraphState.setPinsGraph(pickedGraph);
+				}
+			}
+			if (message.type === WebviewMessageType.DeleteGraph) {
+				deletePinsGraph(appCtx, message.id);
+			}
+			if (message.type === WebviewMessageType.ImportGraph) {
+				importGraphFile(appCtx);
+			}
+			if (message.type === WebviewMessageType.NewGraph) {
+				createGraph(appCtx);
+			}
+			if (message.type === WebviewMessageType.CloneGraph) {
+				cloneGraph(appCtx, message.id);
+			}
+			if (message.type === WebviewMessageType.RenameGraph) {
+				renameGraph(appCtx, message.id);
+			}
 		}),
 		activePinsGraphState.onDidChange(() => {
-			sendStateToWebview(panel.webview, activePinsGraphState);
+			sendStateToWebview(panel.webview, appCtx);
+			refreshVsCodePanelTitle(appCtx);
 		}),
 		vscode.window.onDidChangeActiveTextEditor((editor) => {
 			sendActiveFileToWebview(panel.webview, editor);

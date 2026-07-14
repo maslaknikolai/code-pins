@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { resolveUri } from '../utils/resolveUri';
+import { resolveUri } from '../../utils/resolveUri';
 
 /** Opens the file in the first editor column with the cursor on the given line, centered. */
 export async function openLocation(file: string, line: number): Promise<void> {

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 
-export class GraphPanelState {
+export class VSCodePanelState {
 	private panel: vscode.WebviewPanel | undefined;
 
 	getPanel(): vscode.WebviewPanel | undefined {

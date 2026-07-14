@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { ExtensionMessageType } from '../../shared/messages';
-import { getRelativePath } from '../utils/getRelativePath';
+import { ExtensionMessageType } from '../../../shared/messages';
+import { getRelativePath } from '../../utils/getRelativePath';
 import { sendToWebview } from './sendToWebview';
 
 

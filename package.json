@@ -22,16 +22,8 @@
         "title": "Code Pins: Show Pins Panel"
       },
       {
-        "command": "code-pins.switchPinsGraph",
-        "title": "Code Pins: Switch Graph"
-      },
-      {
         "command": "code-pins.exportActiveGraph",
         "title": "Code Pins: Export Active Graph"
-      },
-      {
-        "command": "code-pins.importToActiveGraph",
-        "title": "Code Pins: Import to Active Graph"
       },
       {
         "command": "code-pins.clearActiveGraph",
