@@ -1,10 +1,10 @@
 import * as vscode from 'vscode';
-import { ActivePinsGraphStore } from '../active-pins-graph-store';
-import { addPin } from '../graph/actions';
+import { ActivePinsGraphStore } from '../stores/active-pins-graph-store';
+import { addPin } from '../actions/addPin';
 import { GraphPanel } from '../panel/graph-panel';
-import { buildPin } from '../pin';
-import { retryUnresolvedDefinitions } from '../retryUnresolvedDefinitions';
-import { ViewportCenterStore } from '../viewport-center-store';
+import { buildPin } from '../actions/buildPin';
+import { retryUnresolvedDefinitions } from '../actions/retryUnresolvedDefinitions';
+import { ViewportCenterStore } from '../stores/viewport-center-store';
 
 export async function addPinCommand({
 	activePinsGraphStore,

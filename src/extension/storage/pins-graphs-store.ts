@@ -1,10 +1,9 @@
 import * as vscode from 'vscode';
-import { FileNode } from '../shared/types';
+import { FileNode } from '../../shared/types';
+import { DEFAULT_PINS_GRAPH_NAME } from '../stores/active-pins-graph-store';
 
 const GRAPHS_KEY = 'codePins.graphs';
 const ACTIVE_GRAPH_KEY = 'codePins.activeGraphName';
-
-export const DEFAULT_PINS_GRAPH_NAME = 'default';
 
 type StoredGraphs = Record<string, FileNode[]>;
 

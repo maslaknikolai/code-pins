@@ -1,6 +1,6 @@
-import { ActivePinsGraphStore } from '../active-pins-graph-store';
+import { ActivePinsGraphStore } from '../stores/active-pins-graph-store';
 import { GraphPanel } from '../panel/graph-panel';
-import { retryUnresolvedDefinitions } from '../retryUnresolvedDefinitions';
+import { retryUnresolvedDefinitions } from '../actions/retryUnresolvedDefinitions';
 
 export function showPinsPanelCommand({
 	activePinsGraphStore,

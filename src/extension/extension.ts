@@ -3,14 +3,15 @@ import { importToActiveGraphCommand } from './commands/importToActiveGraphComman
 import { addPinCommand } from './commands/addPinCommand';
 import { showPinsPanelCommand } from './commands/showPinsPanelCommand';
 import { switchPinsGraphCommand } from './commands/switchPinsGraphCommand';
-import { ActivePinsGraphStore } from './active-pins-graph-store';
+import { ActivePinsGraphStore } from './stores/active-pins-graph-store';
 import { clearActiveGraphCommand } from './commands/clearActiveGraphCommand';
 import { exportActiveGraphCommand } from './commands/exportActiveGraphCommand';
-import { loadActivePinsGraph, saveActivePinsGraph } from './graph/activePinsGraphStorage';
-import { saveDevSnapshot } from './graph/saveDevSnapshot';
+import { loadActivePinsGraph } from './storage/loadActivePinsGraph';
+import { saveActivePinsGraph } from './storage/saveActivePinsGraph';
+import { saveDevSnapshot } from './storage/saveDevSnapshot';
 import { GraphPanel } from './panel/graph-panel';
-import { PinsGraphsStore } from './pins-graphs-store';
-import { ViewportCenterStore } from './viewport-center-store';
+import { PinsGraphsStore } from './storage/pins-graphs-store';
+import { ViewportCenterStore } from './stores/viewport-center-store';
 
 export function activate(context: vscode.ExtensionContext) {
 	const activePinsGraphStore = new ActivePinsGraphStore();

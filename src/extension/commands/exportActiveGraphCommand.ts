@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { PinsGraph } from '../../shared/types';
-import { ActivePinsGraphStore } from '../active-pins-graph-store';
+import { ActivePinsGraphStore } from '../stores/active-pins-graph-store';
 
 export const FILE_FILTERS = { 'Code Pins File': ['json'] };
 

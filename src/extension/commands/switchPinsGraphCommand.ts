@@ -1,8 +1,9 @@
 import * as vscode from 'vscode';
-import { ActivePinsGraphStore } from '../active-pins-graph-store';
-import { deletePinsGraph, saveActivePinsGraph } from '../graph/activePinsGraphStorage';
+import { ActivePinsGraphStore } from '../stores/active-pins-graph-store';
+import { deletePinsGraph } from '../storage/deletePinsGraph';
+import { saveActivePinsGraph } from '../storage/saveActivePinsGraph';
 import { GraphPanel } from '../panel/graph-panel';
-import { PinsGraphsStore } from '../pins-graphs-store';
+import { PinsGraphsStore } from '../storage/pins-graphs-store';
 
 const NEW_GRAPH_LABEL = '$(add) New graph…';
 

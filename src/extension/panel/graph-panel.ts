@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { WebviewToExtensionMessage } from '../../shared/messages';
-import { ActivePinsGraphStore } from '../active-pins-graph-store';
-import { ViewportCenterStore } from '../viewport-center-store';
+import { ActivePinsGraphStore } from '../stores/active-pins-graph-store';
+import { ViewportCenterStore } from '../stores/viewport-center-store';
 import { renderHtml } from './html';
 import { handleWebviewMessage } from './messages';
 import { sendActiveFileToWebview } from './sendActiveFileToWebview';

@@ -1,4 +1,4 @@
-import { Coords } from '../shared/types';
+import { Coords } from '../../shared/types';
 
 /** Last viewport center reported by the webview, in flow coordinates — new nodes land there. */
 export class ViewportCenterStore {

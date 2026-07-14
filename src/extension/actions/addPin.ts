@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { ActivePinsGraphStore } from '../active-pins-graph-store';
 import { Coords, FileNode, Pin } from '../../shared/types';
+import { ActivePinsGraphStore } from '../stores/active-pins-graph-store';
 
 export function addPin(
 	activePinsGraphStore: ActivePinsGraphStore,
@@ -44,23 +44,6 @@ export function addPin(
 	console.log('Code Pins: adding pin', {existingNode, newFileNodes});
 
 	activePinsGraphStore.setFileNodes(newFileNodes);
-}
-
-export function moveFileNode(activePinsGraphStore: ActivePinsGraphStore, filePath: string, x: number, y: number): void {
-	activePinsGraphStore.setFileNodes(
-		activePinsGraphStore.getFileNodes().map((node) => (node.filePath === filePath ? { ...node, x, y } : node))
-	);
-}
-
-export function removeFileNode(activePinsGraphStore: ActivePinsGraphStore, filePath: string): void {
-	activePinsGraphStore.setFileNodes(activePinsGraphStore.getFileNodes().filter((node) => node.filePath !== filePath));
-}
-
-export function removePin(activePinsGraphStore: ActivePinsGraphStore, id: string): void {
-	const fileNodes = activePinsGraphStore.getFileNodes()
-		.map((node) => ({ ...node, pins: node.pins.filter((pin) => pin.id !== id) }))
-		.filter((node) => node.pins.length > 0);
-	activePinsGraphStore.setFileNodes(fileNodes);
 }
 
 /** Two pins are the same when they pin the same symbol occurrence. */

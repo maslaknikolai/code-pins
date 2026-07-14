@@ -1,6 +1,8 @@
-import { ActivePinsGraphStore } from '../active-pins-graph-store';
-import { ViewportCenterStore } from '../viewport-center-store';
-import { moveFileNode, removeFileNode, removePin } from '../graph/actions';
+import { ActivePinsGraphStore } from '../stores/active-pins-graph-store';
+import { ViewportCenterStore } from '../stores/viewport-center-store';
+import { moveFileNode } from '../actions/moveFileNode';
+import { removeFileNode } from '../actions/removeFileNode';
+import { removePin } from '../actions/removePin';
 import { WebviewMessageType, WebviewToExtensionMessage } from '../../shared/messages';
 import { openLocation } from './openLocation';
 

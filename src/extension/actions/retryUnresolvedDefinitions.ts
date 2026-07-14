@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
-import { ActivePinsGraphStore } from './active-pins-graph-store';
-import { parsePinPath } from '../shared/pinPath';
-import { Pin } from '../shared/types';
-import { resolveSymbolDefinitionPath } from './pin';
-import { resolveUri } from './utils/resolveUri';
+import { ActivePinsGraphStore } from '../stores/active-pins-graph-store';
+import { parsePinPath } from '../../shared/pinPath';
+import { Pin } from '../../shared/types';
+import { resolveSymbolDefinitionPath } from './resolveSymbolDefinitionPath';
+import { resolveUri } from '../utils/resolveUri';
 
 export async function retryUnresolvedDefinitions(activePinsGraphStore: ActivePinsGraphStore): Promise<void> {
 	let changed = false;

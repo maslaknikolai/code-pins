@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { ActivePinsGraphStore } from '../active-pins-graph-store';
+import { ActivePinsGraphStore } from '../stores/active-pins-graph-store';
 import { PinsGraph } from '../../shared/types';
 
 export async function saveDevSnapshot(activePinsGraphStore: ActivePinsGraphStore): Promise<void> {

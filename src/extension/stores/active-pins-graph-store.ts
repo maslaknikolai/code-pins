@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { FileNode } from '../shared/types';
-import { DEFAULT_PINS_GRAPH_NAME } from './pins-graphs-store';
+import { FileNode } from '../../shared/types';
 
+export const DEFAULT_PINS_GRAPH_NAME = 'default';
 
 export class ActivePinsGraphStore {
 	private graphName: string = DEFAULT_PINS_GRAPH_NAME;
