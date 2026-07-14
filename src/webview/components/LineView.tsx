@@ -1,18 +1,19 @@
 import { useMemo, type ReactNode } from 'react';
-import { useAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { parsePinPath } from '../../shared/pinPath';
 import { WebviewMessageType } from '../../shared/messages';
-import { FileNode, type Pin } from '../../shared/types';
+import { FileNode } from '../../shared/types';
 import { selectedPinAtom } from '../atoms';
 import type { LineElement } from '../utils/buildPinLinesTree';
 import { checkIsSameSymbol } from '../utils/checkIsSameSymbol';
 import { cn } from '../utils/cn';
 import { sendToExtension } from '../utils/vscodeApi';
 import { HoverScrollText } from './HoverScrollText';
+import { PinHighlight } from './PinHighlight';
 
 
 export function LineView({ element, fileNode }: { element: LineElement; fileNode: FileNode }) {
-	const [selectedPin, setSelectedPin] = useAtom(selectedPinAtom);
+	const selectedPin = useAtomValue(selectedPinAtom);
 	const { line, pins } = element;
 
 	const segments = useMemo(() => {
@@ -20,40 +21,23 @@ export function LineView({ element, fileNode }: { element: LineElement; fileNode
 			(a, b) => parsePinPath(a.pinPath).character - parsePinPath(b.pinPath).character
 		);
 
-		const toggleSelection = (event: React.MouseEvent, pin: Pin, isSelectedPin: boolean) => {
-			event.stopPropagation();
-			setSelectedPin(isSelectedPin ? undefined : pin);
-		};
-
 		const result: ReactNode[] = [];
 		let cursor = 0;
 		for (const pin of sortedPins) {
 			const start = parsePinPath(pin.pinPath).character;
 			const end = start + pin.symbolName.length;
-			const isSelectedPin = selectedPin?.id === pin.id;
-			const isSelectedSymbol = Boolean(selectedPin && checkIsSameSymbol(selectedPin, pin));
 
 			result.push(line.text.slice(cursor, start));
 			result.push(
-				<span
-					key={pin.id}
-					className={cn(
-						'nodrag cursor-pointer rounded-xs bg-(--vscode-editor-findMatchHighlightBackground,rgba(234,92,0,0.33))',
-						isSelectedPin
-							? 'bg-(--vscode-focusBorder) font-bold text-(--vscode-editor-background)'
-							: isSelectedSymbol &&
-								'bg-(--vscode-editor-selectionBackground) outline outline-(--vscode-focusBorder)'
-					)}
-					onClick={(event) => toggleSelection(event, pin, isSelectedPin)}
-				>
+				<PinHighlight key={pin.id} pin={pin}>
 					{line.text.slice(start, end)}
-				</span>
+				</PinHighlight>
 			);
 			cursor = end;
 		}
 		result.push(line.text.slice(cursor));
 		return result;
-	}, [line, pins, selectedPin, setSelectedPin]);
+	}, [line, pins]);
 
 	const hasDeclarationPin = useMemo(() => {
 		return pins.some(pin => pin.symbolDefinitionPath === pin.pinPath)
