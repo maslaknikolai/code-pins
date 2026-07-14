@@ -5,7 +5,7 @@ import { WebviewMessageType, WebviewToExtensionMessage } from '../../shared/mess
 import { openLocation } from './openLocation';
 
 export interface MessageContext {
-	store: FileNodesStore;
+	fileNodesStore: FileNodesStore;
 	sendStateToWebview: () => void;
 	sendActiveFileToWebview: () => void;
 	viewportCenterStore: ViewportCenterStore;
@@ -23,9 +23,9 @@ const handlers: {
 		ctx.sendStateToWebview();
 		ctx.sendActiveFileToWebview();
 	},
-	[WebviewMessageType.MoveFileNode]: (message, ctx) => moveFileNode(ctx.store, message.filePath, message.x, message.y),
-	[WebviewMessageType.RemovePin]: (message, ctx) => removePin(ctx.store, message.id),
-	[WebviewMessageType.RemoveFileNode]: (message, ctx) => removeFileNode(ctx.store, message.filePath),
+	[WebviewMessageType.MoveFileNode]: (message, ctx) => moveFileNode(ctx.fileNodesStore, message.filePath, message.x, message.y),
+	[WebviewMessageType.RemovePin]: (message, ctx) => removePin(ctx.fileNodesStore, message.id),
+	[WebviewMessageType.RemoveFileNode]: (message, ctx) => removeFileNode(ctx.fileNodesStore, message.filePath),
 	[WebviewMessageType.OpenLocation]: (message) => openLocation(message.file, message.line),
 	[WebviewMessageType.ViewportChanged]: (message, ctx) => ctx.viewportCenterStore.setCenter({ x: message.x, y: message.y }),
 };

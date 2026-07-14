@@ -18,24 +18,24 @@
         "title": "Code Pins: Pin Symbol to Graph"
       },
       {
-        "command": "code-pins.showPinsGraph",
-        "title": "Code Pins: Show Graph"
+        "command": "code-pins.showPinsPanel",
+        "title": "Code Pins: Show Pins Panel"
       },
       {
         "command": "code-pins.switchPinsGraph",
         "title": "Code Pins: Switch Graph"
       },
       {
-        "command": "code-pins.savePinsGraph",
-        "title": "Code Pins: Save Graph File"
+        "command": "code-pins.exportActiveGraph",
+        "title": "Code Pins: Export Active Graph"
       },
       {
-        "command": "code-pins.openPinsGraph",
-        "title": "Code Pins: Open Graph File"
+        "command": "code-pins.importToActiveGraph",
+        "title": "Code Pins: Import to Active Graph"
       },
       {
-        "command": "code-pins.clearPinsGraph",
-        "title": "Code Pins: Clear"
+        "command": "code-pins.clearActiveGraph",
+        "title": "Code Pins: Clear Active Graph"
       }
     ],
     "keybindings": [
@@ -46,7 +46,7 @@
         "when": "editorTextFocus"
       },
       {
-        "command": "code-pins.savePinsGraph",
+        "command": "code-pins.exportActiveGraph",
         "key": "ctrl+s",
         "mac": "cmd+s",
         "when": "activeWebviewPanelId == 'codePins'"

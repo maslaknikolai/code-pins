@@ -3,12 +3,12 @@ import { FileNodesStore } from '../file-nodes-store';
 import { Coords, FileNode, Pin } from '../../shared/types';
 
 export function addPin(
-	store: FileNodesStore,
+	fileNodesStore: FileNodesStore,
 	filePath: string,
 	pin: Pin,
 	viewportCenter?: Coords
 ): void {
-	const currentFileNodes = store.getFileNodes();
+	const currentFileNodes = fileNodesStore.getFileNodes();
 	const existingNode = currentFileNodes.find((node) => node.filePath === filePath);
 
 	if (!existingNode) {
@@ -20,7 +20,7 @@ export function addPin(
 
 		const newFileNodes = [ ...currentFileNodes, newFileNode ];
 		console.log('Code Pins: adding new node for pin', {newFileNodes});
-		store.setFileNodes(newFileNodes);
+		fileNodesStore.setFileNodes(newFileNodes);
 		return;
 	}
 
@@ -43,28 +43,24 @@ export function addPin(
 
 	console.log('Code Pins: adding pin', {existingNode, newFileNodes});
 
-	store.setFileNodes(newFileNodes);
+	fileNodesStore.setFileNodes(newFileNodes);
 }
 
-export function moveFileNode(store: FileNodesStore, filePath: string, x: number, y: number): void {
-	store.setFileNodes(
-		store.getFileNodes().map((node) => (node.filePath === filePath ? { ...node, x, y } : node))
+export function moveFileNode(fileNodesStore: FileNodesStore, filePath: string, x: number, y: number): void {
+	fileNodesStore.setFileNodes(
+		fileNodesStore.getFileNodes().map((node) => (node.filePath === filePath ? { ...node, x, y } : node))
 	);
 }
 
-export function removeFileNode(store: FileNodesStore, filePath: string): void {
-	store.setFileNodes(store.getFileNodes().filter((node) => node.filePath !== filePath));
+export function removeFileNode(fileNodesStore: FileNodesStore, filePath: string): void {
+	fileNodesStore.setFileNodes(fileNodesStore.getFileNodes().filter((node) => node.filePath !== filePath));
 }
 
-export function removePin(store: FileNodesStore, id: string): void {
-	const fileNodes = store.getFileNodes()
+export function removePin(fileNodesStore: FileNodesStore, id: string): void {
+	const fileNodes = fileNodesStore.getFileNodes()
 		.map((node) => ({ ...node, pins: node.pins.filter((pin) => pin.id !== id) }))
 		.filter((node) => node.pins.length > 0);
-	store.setFileNodes(fileNodes);
-}
-
-export function clearPinsGraph(store: FileNodesStore): void {
-	store.setFileNodes([]);
+	fileNodesStore.setFileNodes(fileNodes);
 }
 
 /** Two pins are the same when they pin the same symbol occurrence. */

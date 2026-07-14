@@ -5,10 +5,10 @@ import { Pin } from '../shared/types';
 import { resolveSymbolDefinitionPath } from './pin';
 import { resolveUri } from './utils/resolveUri';
 
-export async function retryUnresolvedDefinitions(store: FileNodesStore): Promise<void> {
+export async function retryUnresolvedDefinitions(fileNodesStore: FileNodesStore): Promise<void> {
 	let changed = false;
 
-	const updated = await Promise.all(store.getFileNodes().map(async (node) => {
+	const updated = await Promise.all(fileNodesStore.getFileNodes().map(async (node) => {
 		const pins = await Promise.all(node.pins.map(async (pin) => {
 			const symbolDefinitionPath = await resolveSymbolDefinitionPathAtPinLocation(node.filePath, pin);
 			if (!symbolDefinitionPath || symbolDefinitionPath === pin.symbolDefinitionPath) {
@@ -22,7 +22,7 @@ export async function retryUnresolvedDefinitions(store: FileNodesStore): Promise
 	}));
 
 	if (changed) {
-		store.setFileNodes(updated);
+		fileNodesStore.setFileNodes(updated);
 	}
 }
 

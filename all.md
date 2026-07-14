@@ -265,12 +265,12 @@ interface LineElement {
 
 Основной сценарий — как bookmarks, без файлов и диалогов:
 
-- Все графы живут в `context.workspaceState` (Memento VS Code, per-workspace): `codePins.graphs` — `{ [имя]: FileNode[] }`, `codePins.activeGraphName` — активный граф.
+- Все графы живут в `context.workspaceState` (Memento VS Code, per-workspace): `codePins.graphs` — `{ [имя]: FileNode[] }`, `codePins.activeGraphName` — активный граф. Единственное место, знающее про Memento и ключи — класс `PinsGraphsStore`; оркестрация (флаш/загрузка/rename/delete + связка с `FileNodesStore`) — свободные функции в `activePinsGraphStorage.ts`.
 - Автосейв: каждый `onDidChange` стора пишет активный граф в workspaceState (`saveActivePinsGraph`). Ctrl+Y всегда добавляет в активный.
 - «Code Pins: Switch PinsGraph» — QuickPick по графам + «New PinsGraph…», у каждого пункта кнопки rename/delete (после операции пикер открывается заново; удаление активного — фолбэк на первый оставшийся). Выбор: текущий флашится, выбранный грузится в стор. Имя активного графа — в title панели.
 - При активации расширения активный граф загружается обратно (`loadActivePinsGraph`).
 
-Файлы — второстепенно, для экспорта/шаринга: команды Save/Open/Clear (`.json`, формат `PinsGraph`, `cmd+s` при фокусе на панели). Пути и ключи относительные от корня workspace — файл переносим между машинами.
+Файлы — второстепенно, для экспорта/шаринга: Save (`cmd+s` при фокусе на панели) экспортирует `.json` формата `PinsGraph`, «Import to Active Graph» вливает такой файл в активный граф, Clear очищает его. Пути и ключи относительные от корня workspace — файл переносим между машинами.
 
 ## Сборка
 

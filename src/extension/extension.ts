@@ -1,75 +1,40 @@
 import * as vscode from 'vscode';
+import { importToActiveGraphCommand } from './commands/importToActiveGraphCommand';
+import { pinCommand } from './commands/pinCommand';
+import { showPinsPanelCommand } from './commands/showPinsPanelCommand';
+import { switchPinsGraphCommand } from './commands/switchPinsGraphCommand';
 import { FileNodesStore } from './file-nodes-store';
-import { addPin, clearPinsGraph } from './graph/actions';
-import { getActivePinsGraphName, loadActivePinsGraph, saveActivePinsGraph } from './graph/activePinsGraphStorage';
-import { openPinsGraph, savePinsGraph } from './graph/persistence';
+import { clearActiveGraphCommand } from './commands/clearActiveGraphCommand';
+import { exportActiveGraphCommand } from './commands/exportActiveGraphCommand';
+import { loadActivePinsGraph, saveActivePinsGraph } from './graph/activePinsGraphStorage';
 import { saveDevSnapshot } from './graph/saveDevSnapshot';
-import { switchPinsGraph } from './graph/switchPinsGraph';
-import { setGraphPanelTitle, showGraphPanel } from './panel/showGraphPanel';
-import { buildPin } from './pin';
-import { retryUnresolvedDefinitions } from './retryUnresolvedDefinitions';
+import { GraphPanel } from './panel/graph-panel';
+import { PinsGraphsStore } from './pins-graphs-store';
 import { ViewportCenterStore } from './viewport-center-store';
 
 export function activate(context: vscode.ExtensionContext) {
-	const store = new FileNodesStore();
+	const fileNodesStore = new FileNodesStore();
 	const viewportCenterStore = new ViewportCenterStore();
+	const pinsGraphsStore = new PinsGraphsStore(context.workspaceState);
+	const graphPanel = new GraphPanel(context, fileNodesStore, viewportCenterStore, pinsGraphsStore);
 
-	loadActivePinsGraph(context, store);
-	context.subscriptions.push(store.onDidChange(() => saveActivePinsGraph(context, store)));
+	loadActivePinsGraph(pinsGraphsStore, fileNodesStore);
+
+	context.subscriptions.push(fileNodesStore.onDidChange(() => {
+		saveActivePinsGraph(pinsGraphsStore, fileNodesStore);
+	}));
 
 	if (context.extensionMode === vscode.ExtensionMode.Development) {
-		context.subscriptions.push(store.onDidChange(() => saveDevSnapshot(store)));
+		context.subscriptions.push(fileNodesStore.onDidChange(() => saveDevSnapshot(fileNodesStore)));
 	}
 
-	const showPanel = () => {
-		showGraphPanel(context.extensionUri, store, viewportCenterStore);
-		setGraphPanelTitle(getActivePinsGraphName(context));
-	};
-
 	context.subscriptions.push(
-		vscode.commands.registerCommand('code-pins.pin', async () => {
-			const editor = vscode.window.activeTextEditor;
-
-			if (!editor) {
-				vscode.window.showWarningMessage('Code Pins: open a file and place the cursor on a symbol.');
-				return;
-			}
-
-			const built = await buildPin(editor);
-
-			if (!built) {
-				vscode.window.showWarningMessage('Code Pins: failed to create pin.');
-				return;
-			}
-
-			addPin(store, built.filePath, built.pin, viewportCenterStore.getCenter());
-			showPanel();
-			retryUnresolvedDefinitions(store);
-		}),
-
-		vscode.commands.registerCommand('code-pins.showPinsGraph', () => {
-			showPanel();
-			retryUnresolvedDefinitions(store);
-		}),
-
-		vscode.commands.registerCommand('code-pins.switchPinsGraph', async () => {
-			const picked = await switchPinsGraph(context, store);
-			// Rename/delete can change the active graph even when the pick was cancelled.
-			setGraphPanelTitle(getActivePinsGraphName(context));
-			if (picked) {
-				showPanel();
-			}
-		}),
-
-		vscode.commands.registerCommand('code-pins.savePinsGraph', () => savePinsGraph(store)),
-
-		vscode.commands.registerCommand('code-pins.openPinsGraph', async () => {
-			if (await openPinsGraph(store)) {
-				showPanel();
-			}
-		}),
-
-		vscode.commands.registerCommand('code-pins.clearPinsGraph', () => clearPinsGraph(store))
+		vscode.commands.registerCommand('code-pins.pin', () => pinCommand({ fileNodesStore, viewportCenterStore, graphPanel })),
+		vscode.commands.registerCommand('code-pins.showPinsPanel', () => showPinsPanelCommand({ fileNodesStore, graphPanel })),
+		vscode.commands.registerCommand('code-pins.switchPinsGraph', () => switchPinsGraphCommand({ pinsGraphsStore, fileNodesStore, graphPanel })),
+		vscode.commands.registerCommand('code-pins.exportActiveGraph', () => exportActiveGraphCommand({ fileNodesStore })),
+		vscode.commands.registerCommand('code-pins.importToActiveGraph', () => importToActiveGraphCommand({ fileNodesStore, graphPanel })),
+		vscode.commands.registerCommand('code-pins.clearActiveGraph', () => clearActiveGraphCommand({ fileNodesStore }))
 	);
 }
 
