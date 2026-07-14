@@ -53,6 +53,10 @@ export class ActivePinsGraphState {
 		this.saveToPinsGraphStore();
 	}
 
+	removeAllNodes(): void {
+		this.setPinsGraph({ ...this.pinsGraph, fileNodes: [] });
+	}
+
 	setFileNodes(fileNodes: FileNode[]): void {
 		this.setPinsGraph({ ...this.pinsGraph, fileNodes });
 	}

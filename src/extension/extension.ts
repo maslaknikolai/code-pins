@@ -9,7 +9,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('code-pins.addPin', () => addPinCommand(appCtx)),
-		vscode.commands.registerCommand('code-pins.clearActiveGraph', () => appCtx.activePinsGraphState.setFileNodes([]))
+		vscode.commands.registerCommand('code-pins.clearActiveGraph', () => appCtx.activePinsGraphState.removeAllNodes())
 	);
 }
 

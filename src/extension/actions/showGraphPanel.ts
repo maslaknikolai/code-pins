@@ -54,7 +54,7 @@ function createPanel(appCtx: AppCtx): vscode.WebviewPanel {
 				sendActiveFileToWebview(panel.webview);
 			}
 			if (message.type === WebviewMessageType.MoveFileNode) {
-				moveFileNode(activePinsGraphState, message.filePath, message.x, message.y);
+				moveFileNode(activePinsGraphState, message.filePath, message.position);
 			}
 			if (message.type === WebviewMessageType.RemovePin) {
 				removePin(activePinsGraphState, message.id);
@@ -66,7 +66,7 @@ function createPanel(appCtx: AppCtx): vscode.WebviewPanel {
 				openLocation(message.file, message.line);
 			}
 			if (message.type === WebviewMessageType.ViewportChanged) {
-				viewportCenterState.setCenter({ x: message.x, y: message.y });
+				viewportCenterState.setCenter(message.position);
 			}
 			if (message.type === WebviewMessageType.SwitchGraph) {
 				const pickedGraph = pinsGraphsStore.getGraphById(message.id);

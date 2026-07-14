@@ -18,8 +18,7 @@ export interface Pin {
 
 export interface FileNode {
 	filePath: string;
-	x: number;
-	y: number;
+	position: Coords
 	pins: Pin[];
 }
 

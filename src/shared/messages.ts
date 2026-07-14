@@ -1,4 +1,4 @@
-import type { PinsGraph } from './types';
+import type { Coords, PinsGraph } from './types';
 
 
 export enum WebviewMessageType {
@@ -19,11 +19,11 @@ export enum WebviewMessageType {
 
 export type WebviewToExtensionMessage =
 	| { type: WebviewMessageType.Ready }
-	| { type: WebviewMessageType.MoveFileNode; filePath: string; x: number; y: number }
+	| { type: WebviewMessageType.MoveFileNode; filePath: string; position: Coords }
 	| { type: WebviewMessageType.RemovePin; id: string }
 	| { type: WebviewMessageType.RemoveFileNode; filePath: string }
 	| { type: WebviewMessageType.OpenLocation; file: string; line: number }
-	| { type: WebviewMessageType.ViewportChanged; x: number; y: number }
+	| { type: WebviewMessageType.ViewportChanged; position: Coords }
 	| { type: WebviewMessageType.SwitchGraph; id: string }
 	| { type: WebviewMessageType.DeleteGraph; id: string }
 	| { type: WebviewMessageType.ImportGraph }

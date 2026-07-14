@@ -5,7 +5,7 @@ export function toFlowNode(fileNode: FileNode): FileFlowNode {
 	return {
 		id: fileNode.filePath,
 		type: 'file',
-		position: { x: fileNode.x, y: fileNode.y },
+		position: fileNode.position,
 		data: { fileNode },
 	};
 }

@@ -59,8 +59,7 @@ export function App() {
 		sendToExtension({
 			type: WebviewMessageType.MoveFileNode,
 			filePath: node.id,
-			x: node.position.x,
-			y: node.position.y,
+			position: node.position,
 		});
 	});
 

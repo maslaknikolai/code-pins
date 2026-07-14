@@ -14,7 +14,7 @@ export function addPin(
 	if (!existingNode) {
 		const newFileNode: FileNode = {
 			filePath,
-			...nextPosition(currentFileNodes.length, viewportCenter),
+			position: nextPosition(viewportCenter),
 			pins: [pin]
 		};
 
@@ -48,21 +48,21 @@ export function addPin(
 
 
 const CORNER_MARGIN = 40;
-const CASCADE_STEP = 30;
-const CASCADE_LENGTH = 8;
 const NODE_WIDTH = 360;
 
 /**
  * New file nodes land at the viewport center (top-left corner before the
  * webview has reported one), cascading slightly so they don't fully overlap.
  */
-function nextPosition(count: number, viewportCenter?: Coords): Pick<FileNode, 'x' | 'y'> {
-	const offset = (count % CASCADE_LENGTH) * CASCADE_STEP;
+function nextPosition(viewportCenter?: Coords): Coords {
 	if (!viewportCenter) {
-		return { x: CORNER_MARGIN + offset, y: CORNER_MARGIN + offset };
+		return {
+			x: CORNER_MARGIN,
+			y: CORNER_MARGIN
+		};
 	}
 	return {
-		x: Math.max(0, viewportCenter.x - NODE_WIDTH / 2 + offset),
-		y: Math.max(0, viewportCenter.y - 40 + offset),
+		x: Math.max(0, viewportCenter.x - NODE_WIDTH / 2),
+		y: Math.max(0, viewportCenter.y - 40),
 	};
 }
