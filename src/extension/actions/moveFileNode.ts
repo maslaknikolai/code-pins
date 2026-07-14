@@ -1,7 +1,7 @@
-import { ActivePinsGraphStore } from '../stores/active-pins-graph-store';
+import { ActivePinsGraphState } from '../states/active-pins-graph-state';
 
-export function moveFileNode(activePinsGraphStore: ActivePinsGraphStore, filePath: string, x: number, y: number): void {
-	activePinsGraphStore.setFileNodes(
-		activePinsGraphStore.getFileNodes().map((node) => (node.filePath === filePath ? { ...node, x, y } : node))
+export function moveFileNode(activePinsGraphState: ActivePinsGraphState, filePath: string, x: number, y: number): void {
+	activePinsGraphState.setFileNodes(
+		activePinsGraphState.getFileNodes().map((node) => (node.filePath === filePath ? { ...node, x, y } : node))
 	);
 }

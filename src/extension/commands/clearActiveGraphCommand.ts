@@ -1,5 +1,5 @@
-import { ActivePinsGraphStore } from '../stores/active-pins-graph-store';
+import { AppCtx } from '../types';
 
-export function clearActiveGraphCommand(activePinsGraphStore: ActivePinsGraphStore): void {
-	activePinsGraphStore.setFileNodes([]);
+export function clearActiveGraphCommand({ activePinsGraphState }: AppCtx): void {
+	activePinsGraphState.setFileNodes([]);
 }

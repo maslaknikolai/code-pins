@@ -3,7 +3,7 @@ import { FileNode } from '../../shared/types';
 
 export const DEFAULT_PINS_GRAPH_NAME = 'default';
 
-export class ActivePinsGraphStore {
+export class ActivePinsGraphState {
 	private graphName: string = DEFAULT_PINS_GRAPH_NAME;
 	private fileNodes: FileNode[] = [];
 

@@ -1,14 +1,8 @@
-import { ActivePinsGraphStore } from '../stores/active-pins-graph-store';
-import { GraphPanel } from '../panel/graph-panel';
 import { retryUnresolvedDefinitions } from '../actions/retryUnresolvedDefinitions';
+import { showGraphPanel } from '../actions/showGraphPanel';
+import { AppCtx } from '../types';
 
-export function showPinsPanelCommand({
-	activePinsGraphStore,
-	graphPanel,
-}: {
-	activePinsGraphStore: ActivePinsGraphStore;
-	graphPanel: GraphPanel;
-}): void {
-	graphPanel.show();
-	retryUnresolvedDefinitions(activePinsGraphStore);
+export function showPinsPanelCommand(appCtx: AppCtx): void {
+	showGraphPanel(appCtx);
+	retryUnresolvedDefinitions(appCtx.activePinsGraphState);
 }

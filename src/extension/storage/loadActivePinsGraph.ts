@@ -1,7 +1,6 @@
-import { ActivePinsGraphStore } from '../stores/active-pins-graph-store';
-import { PinsGraphsStore } from './pins-graphs-store';
+import { AppCtx } from '../types';
 
-export function loadActivePinsGraph(pinsGraphsStore: PinsGraphsStore, activePinsGraphStore: ActivePinsGraphStore): void {
-	const name = pinsGraphsStore.getActiveGraphName();
-	activePinsGraphStore.setGraph(name, pinsGraphsStore.getGraph(name) ?? []);
+export function loadActivePinsGraph({ pinsGraphsState, activePinsGraphState }: AppCtx): void {
+	const name = pinsGraphsState.getActiveGraphName();
+	activePinsGraphState.setGraph(name, pinsGraphsState.getGraph(name) ?? []);
 }

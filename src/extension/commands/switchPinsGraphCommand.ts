@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
-import { ActivePinsGraphStore } from '../stores/active-pins-graph-store';
 import { deletePinsGraph } from '../storage/deletePinsGraph';
 import { saveActivePinsGraph } from '../storage/saveActivePinsGraph';
-import { GraphPanel } from '../panel/graph-panel';
-import { PinsGraphsStore } from '../storage/pins-graphs-store';
+import { refreshGraphPanelTitle } from '../actions/refreshGraphPanelTitle';
+import { showGraphPanel } from '../actions/showGraphPanel';
+import { AppCtx } from '../types';
 
 const NEW_GRAPH_LABEL = '$(add) New graph…';
 
@@ -21,20 +21,13 @@ const DELETE_BUTTON: vscode.QuickInputButton = {
  * QuickPick over stored graphs: pick to switch, `+` to create, per-item buttons
  * rename/delete (the picker reopens after either).
  */
-export function switchPinsGraphCommand({
-	pinsGraphsStore,
-	activePinsGraphStore,
-	graphPanel,
-}: {
-	pinsGraphsStore: PinsGraphsStore;
-	activePinsGraphStore: ActivePinsGraphStore;
-	graphPanel: GraphPanel;
-}): void {
+export function switchPinsGraphCommand(appCtx: AppCtx): void {
+	const { pinsGraphsState, activePinsGraphState } = appCtx;
 	const quickPick = vscode.window.createQuickPick();
 	quickPick.placeholder = 'Switch graph';
 
-	const activePinsGraphName = activePinsGraphStore.getGraphName();
-	const names = pinsGraphsStore.getGraphNames();
+	const activePinsGraphName = activePinsGraphState.getGraphName();
+	const names = pinsGraphsState.getGraphNames();
 
 	if (!names.includes(activePinsGraphName)) {
 		names.unshift(activePinsGraphName);
@@ -65,10 +58,10 @@ export function switchPinsGraphCommand({
 			name = input;
 		}
 
-		saveActivePinsGraph(pinsGraphsStore, activePinsGraphStore);
-		activePinsGraphStore.setGraph(name, pinsGraphsStore.getGraph(name) ?? []);
+		saveActivePinsGraph(appCtx);
+		activePinsGraphState.setGraph(name, pinsGraphsState.getGraph(name) ?? []);
 
-		graphPanel.show();
+		showGraphPanel(appCtx);
 	});
 
 	quickPick.onDidTriggerItemButton(async ({ item, button }) => {
@@ -81,18 +74,18 @@ export function switchPinsGraphCommand({
 			});
 
 			if (newName && newName !== item.label) {
-				const isActive = activePinsGraphStore.getGraphName() === item.label;
+				const isActive = activePinsGraphState.getGraphName() === item.label;
 
 				if (isActive) {
-					saveActivePinsGraph(pinsGraphsStore, activePinsGraphStore);
+					saveActivePinsGraph(appCtx);
 				}
 
-				await pinsGraphsStore.saveGraph(newName, pinsGraphsStore.getGraph(item.label) ?? []);
-				await pinsGraphsStore.deleteGraph(item.label);
+				await pinsGraphsState.saveGraph(newName, pinsGraphsState.getGraph(item.label) ?? []);
+				await pinsGraphsState.deleteGraph(item.label);
 
 				if (isActive) {
-					activePinsGraphStore.setGraph(newName, activePinsGraphStore.getFileNodes());
-					await pinsGraphsStore.setActiveGraphName(newName);
+					activePinsGraphState.setGraph(newName, activePinsGraphState.getFileNodes());
+					await pinsGraphsState.setActiveGraphName(newName);
 				}
 			}
 		}
@@ -104,12 +97,12 @@ export function switchPinsGraphCommand({
 				'Delete'
 			);
 			if (confirmed === 'Delete') {
-				await deletePinsGraph(pinsGraphsStore, activePinsGraphStore, item.label);
+				await deletePinsGraph(pinsGraphsState, activePinsGraphState, item.label);
 			}
 		}
 
-		graphPanel.refreshTitle();
-		switchPinsGraphCommand({ pinsGraphsStore, activePinsGraphStore, graphPanel });
+		refreshGraphPanelTitle(appCtx);
+		switchPinsGraphCommand(appCtx);
 	});
 
 	quickPick.onDidHide(() => quickPick.dispose());

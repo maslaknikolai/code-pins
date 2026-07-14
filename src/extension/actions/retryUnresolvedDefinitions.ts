@@ -1,14 +1,14 @@
 import * as vscode from 'vscode';
-import { ActivePinsGraphStore } from '../stores/active-pins-graph-store';
+import { ActivePinsGraphState } from '../states/active-pins-graph-state';
 import { parsePinPath } from '../../shared/pinPath';
 import { Pin } from '../../shared/types';
 import { resolveSymbolDefinitionPath } from './resolveSymbolDefinitionPath';
 import { resolveUri } from '../utils/resolveUri';
 
-export async function retryUnresolvedDefinitions(activePinsGraphStore: ActivePinsGraphStore): Promise<void> {
+export async function retryUnresolvedDefinitions(activePinsGraphState: ActivePinsGraphState): Promise<void> {
 	let changed = false;
 
-	const updated = await Promise.all(activePinsGraphStore.getFileNodes().map(async (node) => {
+	const updated = await Promise.all(activePinsGraphState.getFileNodes().map(async (node) => {
 		const pins = await Promise.all(node.pins.map(async (pin) => {
 			const symbolDefinitionPath = await resolveSymbolDefinitionPathAtPinLocation(node.filePath, pin);
 			if (!symbolDefinitionPath || symbolDefinitionPath === pin.symbolDefinitionPath) {
@@ -22,7 +22,7 @@ export async function retryUnresolvedDefinitions(activePinsGraphStore: ActivePin
 	}));
 
 	if (changed) {
-		activePinsGraphStore.setFileNodes(updated);
+		activePinsGraphState.setFileNodes(updated);
 	}
 }
 

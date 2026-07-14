@@ -1,14 +1,14 @@
 import * as vscode from 'vscode';
 import { Coords, FileNode, Pin } from '../../shared/types';
-import { ActivePinsGraphStore } from '../stores/active-pins-graph-store';
+import { AppCtx } from '../types';
 
 export function addPin(
-	activePinsGraphStore: ActivePinsGraphStore,
+	{ activePinsGraphState, viewportCenterState }: AppCtx,
 	filePath: string,
-	pin: Pin,
-	viewportCenter?: Coords
+	pin: Pin
 ): void {
-	const currentFileNodes = activePinsGraphStore.getFileNodes();
+	const viewportCenter = viewportCenterState.getCenter();
+	const currentFileNodes = activePinsGraphState.getFileNodes();
 	const existingNode = currentFileNodes.find((node) => node.filePath === filePath);
 
 	if (!existingNode) {
@@ -20,7 +20,7 @@ export function addPin(
 
 		const newFileNodes = [ ...currentFileNodes, newFileNode ];
 		console.log('Code Pins: adding new node for pin', {newFileNodes});
-		activePinsGraphStore.setFileNodes(newFileNodes);
+		activePinsGraphState.setFileNodes(newFileNodes);
 		return;
 	}
 
@@ -43,7 +43,7 @@ export function addPin(
 
 	console.log('Code Pins: adding pin', {existingNode, newFileNodes});
 
-	activePinsGraphStore.setFileNodes(newFileNodes);
+	activePinsGraphState.setFileNodes(newFileNodes);
 }
 
 /** Two pins are the same when they pin the same symbol occurrence. */

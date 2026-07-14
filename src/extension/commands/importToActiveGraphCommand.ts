@@ -1,16 +1,11 @@
 import * as vscode from 'vscode';
 import { PinsGraphFile, SUPPORTED_PINS_GRAPH_FILE_VERSION } from '../../shared/types';
-import { ActivePinsGraphStore } from '../stores/active-pins-graph-store';
 import { FILE_FILTERS } from './exportActiveGraphCommand';
-import { GraphPanel } from '../panel/graph-panel';
+import { showGraphPanel } from '../actions/showGraphPanel';
+import { AppCtx } from '../types';
 
-export async function importToActiveGraphCommand({
-	activePinsGraphStore,
-	graphPanel,
-}: {
-	activePinsGraphStore: ActivePinsGraphStore;
-	graphPanel: GraphPanel;
-}): Promise<void> {
+export async function importToActiveGraphCommand(appCtx: AppCtx): Promise<void> {
+	const { activePinsGraphState } = appCtx;
 	const pickedFile = await vscode.window.showOpenDialog({
 		filters: FILE_FILTERS,
 		canSelectMany: false
@@ -33,8 +28,8 @@ export async function importToActiveGraphCommand({
 		return;
 	}
 
-	activePinsGraphStore.setFileNodes(pinsGraphFile.pinsGraph.fileNodes);
-	graphPanel.show();
+	activePinsGraphState.setFileNodes(pinsGraphFile.pinsGraph.fileNodes);
+	showGraphPanel(appCtx);
 }
 
 function parsePinsGraphFile(raw: Uint8Array): PinsGraphFile | undefined {

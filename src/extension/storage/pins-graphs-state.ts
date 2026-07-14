@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { FileNode } from '../../shared/types';
-import { DEFAULT_PINS_GRAPH_NAME } from '../stores/active-pins-graph-store';
+import { DEFAULT_PINS_GRAPH_NAME } from '../states/active-pins-graph-state';
 
 const GRAPHS_KEY = 'codePins.graphs';
 const ACTIVE_GRAPH_KEY = 'codePins.activeGraphName';
@@ -8,7 +8,7 @@ const ACTIVE_GRAPH_KEY = 'codePins.activeGraphName';
 type StoredGraphs = Record<string, FileNode[]>;
 
 /** The only place that knows how graphs live in workspaceState. */
-export class PinsGraphsStore {
+export class PinsGraphsState {
 	constructor(private readonly workspaceState: vscode.Memento) {}
 
 	getActiveGraphName(): string {

@@ -1,20 +1,11 @@
 import * as vscode from 'vscode';
-import { ActivePinsGraphStore } from '../stores/active-pins-graph-store';
 import { addPin } from '../actions/addPin';
-import { GraphPanel } from '../panel/graph-panel';
 import { buildPin } from '../actions/buildPin';
 import { retryUnresolvedDefinitions } from '../actions/retryUnresolvedDefinitions';
-import { ViewportCenterStore } from '../stores/viewport-center-store';
+import { showGraphPanel } from '../actions/showGraphPanel';
+import { AppCtx } from '../types';
 
-export async function addPinCommand({
-	activePinsGraphStore,
-	viewportCenterStore,
-	graphPanel,
-}: {
-	activePinsGraphStore: ActivePinsGraphStore;
-	viewportCenterStore: ViewportCenterStore;
-	graphPanel: GraphPanel;
-}): Promise<void> {
+export async function addPinCommand(appCtx: AppCtx): Promise<void> {
 	const editor = vscode.window.activeTextEditor;
 
 	if (!editor) {
@@ -29,7 +20,7 @@ export async function addPinCommand({
 		return;
 	}
 
-	addPin(activePinsGraphStore, built.filePath, built.pin, viewportCenterStore.getCenter());
-	graphPanel.show();
-	retryUnresolvedDefinitions(activePinsGraphStore);
+	addPin(appCtx, built.filePath, built.pin);
+	showGraphPanel(appCtx);
+	retryUnresolvedDefinitions(appCtx.activePinsGraphState);
 }

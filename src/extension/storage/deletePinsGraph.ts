@@ -1,17 +1,17 @@
-import { ActivePinsGraphStore, DEFAULT_PINS_GRAPH_NAME } from '../stores/active-pins-graph-store';
-import { PinsGraphsStore } from './pins-graphs-store';
+import { ActivePinsGraphState, DEFAULT_PINS_GRAPH_NAME } from '../states/active-pins-graph-state';
+import { PinsGraphsState } from './pins-graphs-state';
 
 export async function deletePinsGraph(
-	pinsGraphsStore: PinsGraphsStore,
-	activePinsGraphStore: ActivePinsGraphStore,
+	pinsGraphsState: PinsGraphsState,
+	activePinsGraphState: ActivePinsGraphState,
 	name: string
 ): Promise<void> {
-	const wasActive = activePinsGraphStore.getGraphName() === name;
-	await pinsGraphsStore.deleteGraph(name);
+	const wasActive = activePinsGraphState.getGraphName() === name;
+	await pinsGraphsState.deleteGraph(name);
 
 	if (wasActive) {
-		const fallback = pinsGraphsStore.getGraphNames()[0] ?? DEFAULT_PINS_GRAPH_NAME;
-		await pinsGraphsStore.setActiveGraphName(fallback);
-		activePinsGraphStore.setGraph(fallback, pinsGraphsStore.getGraph(fallback) ?? []);
+		const fallback = pinsGraphsState.getGraphNames()[0] ?? DEFAULT_PINS_GRAPH_NAME;
+		await pinsGraphsState.setActiveGraphName(fallback);
+		activePinsGraphState.setGraph(fallback, pinsGraphsState.getGraph(fallback) ?? []);
 	}
 }
