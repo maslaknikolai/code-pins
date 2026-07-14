@@ -18,10 +18,6 @@
         "title": "Code Pins: Add pin"
       },
       {
-        "command": "code-pins.showPinsPanel",
-        "title": "Code Pins: Show Pins Panel"
-      },
-      {
         "command": "code-pins.exportActiveGraph",
         "title": "Code Pins: Export Active Graph"
       },
