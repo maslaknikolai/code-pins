@@ -19,7 +19,7 @@ export function GraphsPanel() {
 
 	return (
 		<div className="flex flex-col gap-1">
-			<div className="flex gap-1">
+			<div className="flex gap-1 px-1">
 				<button
 					className="flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded border border-(--vscode-editorWidget-border) px-2 py-1 opacity-70 hover:opacity-100 hover:bg-(--vscode-list-hoverBackground)"
 					onClick={newGraph}

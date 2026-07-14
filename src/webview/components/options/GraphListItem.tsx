@@ -29,7 +29,7 @@ export function GraphListItem({ graph, isActive }: { graph: PinsGraph; isActive:
 	return (
 		<div
 			className={cn(
-				'flex cursor-pointer items-center gap-1 rounded px-2 py-1 hover:bg-(--vscode-list-hoverBackground)',
+				'flex cursor-pointer items-center gap-0.5 rounded px-2 py-1 hover:bg-(--vscode-list-hoverBackground)',
 				isActive && 'bg-(--vscode-list-activeSelectionBackground) text-(--vscode-list-activeSelectionForeground)'
 			)}
 			onClick={switchGraph}

@@ -11,7 +11,7 @@ export function OptionsDrawer() {
 	return (
 		<div className="fixed bottom-0 left-1/2 z-10 -translate-x-1/2">
 			{isOpen ? (
-				<div className="w-80 rounded-t-md border border-b-0 border-(--vscode-editorWidget-border) bg-(--vscode-editorWidget-background) text-(--vscode-editorWidget-foreground) shadow-lg">
+				<div className="w-80 rounded-t-md border border-b-0 border-(--vscode-editorWidget-border) bg-(--vscode-editorWidget-background) text-(--vscode-editorWidget-foreground) shadow-lg flex flex-col gap-1">
 					<div className="flex items-center justify-between border-b border-(--vscode-editorWidget-border)">
 						<TabButton label="Graphs" isActive />
 
