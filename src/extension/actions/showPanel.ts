@@ -13,14 +13,14 @@ export interface PanelCallbacks {
 }
 
 export function createOrShowPanel(appCtx: AppCtx, callbacks: PanelCallbacks = {}): void {
-	const existingPanel = appCtx.vsCodePanelState.getPanel();
+	const existingPanel = appCtx.vscodePanel;
 
 	if (!existingPanel) {
 		const panel = createPanel(appCtx, callbacks);
 
-		appCtx.vsCodePanelState.setPanel(panel);
+		appCtx.vscodePanel = panel;
 		panel.onDidDispose(() => {
-			appCtx.vsCodePanelState.setPanel(undefined);
+			appCtx.vscodePanel = undefined;
 		});
 	} else {
 		existingPanel.reveal(undefined, false);

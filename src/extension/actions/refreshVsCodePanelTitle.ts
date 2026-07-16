@@ -3,7 +3,7 @@ import { getActiveGraph } from './getActiveGraph';
 
 
 export function refreshVsCodePanelTitle(appCtx: AppCtx): void {
-	const panel = appCtx.vsCodePanelState.getPanel();
+	const panel = appCtx.vscodePanel;
 
 	if (!panel) {
 		return;
