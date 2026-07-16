@@ -16,8 +16,8 @@ export function FlowControls() {
 				<span className="font-mono text-xs">−</span>
 			</ControlButton>
 
-			<ControlButton onClick={toggleFitView} title="Fit into view, again to undo (A)">
-				<span className="font-mono text-xs">A</span>
+			<ControlButton onClick={toggleFitView} title="Fit into view, again to undo (F)">
+				<span className="font-mono text-xs">F</span>
 			</ControlButton>
 		</Controls>
 	);

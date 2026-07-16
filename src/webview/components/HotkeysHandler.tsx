@@ -48,7 +48,7 @@ export function HotkeysHandler() {
 			return;
 		}
 
-		if (event.code === 'KeyA') {
+		if (event.code === 'KeyF') {
 			toggleFitView();
 			return;
 		}
@@ -58,36 +58,35 @@ export function HotkeysHandler() {
 			return;
 		}
 
-		if (event.code === 'KeyW') {
-			selectGraphByOffset(-1);
-			return;
-		}
-
-		if (event.code === 'KeyS') {
-			selectGraphByOffset(1);
-			return;
-		}
-
 		if (event.code === 'ArrowUp') {
 			event.preventDefault();
-			panBy({ x: 0, y: PAN_STEP });
+			selectGraphByOffset(-1);
 			return;
 		}
 
 		if (event.code === 'ArrowDown') {
 			event.preventDefault();
+			selectGraphByOffset(1);
+			return;
+		}
+
+		// WASD pans: the delta shifts the field, so it's opposite to the travel direction.
+		if (event.code === 'KeyW') {
+			panBy({ x: 0, y: PAN_STEP });
+			return;
+		}
+
+		if (event.code === 'KeyS') {
 			panBy({ x: 0, y: -PAN_STEP });
 			return;
 		}
 
-		if (event.code === 'ArrowLeft') {
-			event.preventDefault();
+		if (event.code === 'KeyA') {
 			panBy({ x: PAN_STEP, y: 0 });
 			return;
 		}
 
-		if (event.code === 'ArrowRight') {
-			event.preventDefault();
+		if (event.code === 'KeyD') {
 			panBy({ x: -PAN_STEP, y: 0 });
 			return;
 		}
