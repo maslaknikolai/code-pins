@@ -23,7 +23,7 @@ export function createOrShowPanel(appCtx: AppCtx, callbacks: PanelCallbacks = {}
 			appCtx.vsCodePanelState.setPanel(undefined);
 		});
 	} else {
-		existingPanel.reveal(undefined, true);
+		existingPanel.reveal(undefined, false);
 		callbacks.onShow?.(existingPanel);
 	}
 
@@ -35,7 +35,7 @@ function createPanel(appCtx: AppCtx, callbacks: PanelCallbacks): vscode.WebviewP
 	const panel = vscode.window.createWebviewPanel(
 		'codePins',
 		'Code Pins',
-		{ viewColumn: vscode.ViewColumn.Beside, preserveFocus: true },
+		{ viewColumn: vscode.ViewColumn.Beside, preserveFocus: false },
 		{
 			enableScripts: true,
 			retainContextWhenHidden: true,
