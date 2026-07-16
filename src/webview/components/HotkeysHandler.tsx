@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { WebviewMessageType } from '../../shared/messages';
 import { selectedPinAtom, viewSettingsAtom } from '../atoms';
 import { useEvent } from '../hooks/useEvent';
-import { useFitViewWithinField } from '../hooks/useFitViewWithinField';
+import { useFitViewToggle } from '../hooks/useFitViewToggle';
 import { useSelectGraphByOffset } from '../hooks/useSelectGraphByOffset';
 import { sendToExtension } from '../utils/vscodeApi';
 
@@ -16,7 +16,7 @@ export function HotkeysHandler() {
 	const [selectedPin, setSelectedPin] = useAtom(selectedPinAtom);
 	const setViewSettings = useSetAtom(viewSettingsAtom);
 	const { selectGraphByOffset } = useSelectGraphByOffset();
-	const fitViewWithinField = useFitViewWithinField();
+	const toggleFitView = useFitViewToggle();
 	const panBy = useStore((state) => state.panBy);
 
 	const onKeyDown = useEvent((event: KeyboardEvent) => {
@@ -49,7 +49,7 @@ export function HotkeysHandler() {
 		}
 
 		if (event.code === 'KeyA') {
-			fitViewWithinField();
+			toggleFitView();
 			return;
 		}
 
