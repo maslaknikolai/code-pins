@@ -1,4 +1,4 @@
-import type { Coords, PinsGraph, ViewSettings } from './types';
+import type { Coords, Pin, PinsGraph, ViewSettings } from './types';
 
 
 export enum WebviewMessageType {
@@ -36,6 +36,7 @@ export enum ExtensionMessageType {
 	SetInitialState = 'setInitialState',
 	SetActiveFile = 'setActiveFile',
 	SetGraphs = 'setGraphs',
+	SetSelectedPin = 'setSelectedPin',
 }
 
 export type ExtensionToWebviewMessage =
@@ -49,4 +50,7 @@ export type ExtensionToWebviewMessage =
 		type: ExtensionMessageType.SetGraphs;
 		activeGraph: PinsGraph | undefined
 		graphs: PinsGraph[]
+	} | {
+		type: ExtensionMessageType.SetSelectedPin;
+		pin: Pin | undefined
 	};

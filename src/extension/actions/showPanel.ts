@@ -8,11 +8,15 @@ import { handleMessageFromWebview } from './panel/handleMessageFromWebview';
 import { onGraphsChange } from './onGraphsChange';
 import { retryUnresolvedDefinitions } from './retryUnresolvedDefinitions';
 
-export function showPanel(appCtx: AppCtx): void {
+export interface PanelCallbacks {
+	onShow?: (panel: vscode.WebviewPanel) => void;
+}
+
+export function createOrShowPanel(appCtx: AppCtx, callbacks: PanelCallbacks = {}): void {
 	const existingPanel = appCtx.vsCodePanelState.getPanel();
 
 	if (!existingPanel) {
-		const panel = createPanel(appCtx);
+		const panel = createPanel(appCtx, callbacks);
 
 		appCtx.vsCodePanelState.setPanel(panel);
 		panel.onDidDispose(() => {
@@ -20,13 +24,14 @@ export function showPanel(appCtx: AppCtx): void {
 		});
 	} else {
 		existingPanel.reveal(undefined, true);
+		callbacks.onShow?.(existingPanel);
 	}
 
 	refreshVsCodePanelTitle(appCtx);
 	retryUnresolvedDefinitions(appCtx);
 }
 
-function createPanel(appCtx: AppCtx): vscode.WebviewPanel {
+function createPanel(appCtx: AppCtx, callbacks: PanelCallbacks): vscode.WebviewPanel {
 	const panel = vscode.window.createWebviewPanel(
 		'codePins',
 		'Code Pins',
@@ -44,7 +49,7 @@ function createPanel(appCtx: AppCtx): vscode.WebviewPanel {
 
 	const disposables: vscode.Disposable[] = [
 		panel.webview.onDidReceiveMessage((message) => {
-			handleMessageFromWebview(message, panel, appCtx);
+			handleMessageFromWebview(message, panel, appCtx, callbacks);
 		}),
 		onGraphsChange(appCtx, () => {
 			sendGraphsToWebview(panel.webview, appCtx);

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useReactFlow } from '@xyflow/react';
 import { useSetAtom } from 'jotai';
 import { ExtensionMessageType, WebviewMessageType, type ExtensionToWebviewMessage } from '../../shared/messages';
-import { activeFilePathAtom, activeGraphAtom, flowNodesAtom, allGraphsAtom, viewSettingsAtom } from '../atoms';
+import { activeFilePathAtom, activeGraphAtom, flowNodesAtom, allGraphsAtom, selectedPinAtom, viewSettingsAtom } from '../atoms';
 import { toFlowNode } from '../utils/flowNodes';
 import { sendToExtension } from '../utils/vscodeApi';
 
@@ -14,6 +14,7 @@ export function ExtensionMessageHandler() {
 	const setGraphs = useSetAtom(allGraphsAtom);
 	const setActiveGraph = useSetAtom(activeGraphAtom);
 	const setViewSettings = useSetAtom(viewSettingsAtom);
+	const setSelectedPin = useSetAtom(selectedPinAtom);
 
 	useEffect(() => {
 		const onMessage = (event: MessageEvent<ExtensionToWebviewMessage>) => {
@@ -48,10 +49,15 @@ export function ExtensionMessageHandler() {
 				return;
 			}
 
+			if (event.data.type === ExtensionMessageType.SetSelectedPin) {
+				setSelectedPin(event.data.pin);
+				return;
+			}
+
 		};
 		window.addEventListener('message', onMessage);
 		return () => window.removeEventListener('message', onMessage);
-	}, [setNodes, setActiveFilePath, setGraphs, setActiveGraph, setViewSettings, setViewport]);
+	}, [setNodes, setActiveFilePath, setGraphs, setActiveGraph, setSelectedPin, setViewSettings, setViewport]);
 
 	useEffect(() => {
 		sendToExtension({ type: WebviewMessageType.Ready });

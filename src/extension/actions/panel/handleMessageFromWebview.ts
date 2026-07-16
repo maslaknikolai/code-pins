@@ -14,16 +14,19 @@ import { removePin } from '../removePin';
 import { sendGraphsToWebview } from "./sendGraphsToWebview";
 import { sendActiveFileToWebview } from "./sendActiveFileToWebview";
 import { WebviewPanel } from "vscode";
+import { PanelCallbacks } from "../showPanel";
 
 export function handleMessageFromWebview(
     message: WebviewToExtensionMessage,
     panel: WebviewPanel,
     appCtx: AppCtx,
+    callbacks: PanelCallbacks = {},
 ) {
     if (message.type === WebviewMessageType.Ready) {
         sendInitialStateToWebview(panel.webview, appCtx);
         sendGraphsToWebview(panel.webview, appCtx);
         sendActiveFileToWebview(panel.webview);
+        callbacks.onShow?.(panel);
     }
     if (message.type === WebviewMessageType.MoveFileNode) {
         moveFileNode(appCtx, message.filePath, message.position);

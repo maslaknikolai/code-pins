@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { createLastAddedPinState } from './states/last-added-pin-state';
 import { createVSCodePanelState } from './states/vscode-panel-state';
 import { createActivePinsGraphIdStore } from './storage/active-pins-graph-id-store';
 import { createPinsGraphsStore } from './storage/pins-graphs-store';
@@ -13,7 +14,8 @@ export function createAppCtx(context: vscode.ExtensionContext): AppCtx {
 		pinsGraphsStore: createPinsGraphsStore(context.workspaceState),
 		activePinsGraphIdStore: createActivePinsGraphIdStore(context.workspaceState),
 		viewSettingsStore: createViewSettingsStore(context.workspaceState),
-		vsCodePanelState: createVSCodePanelState()
+		vsCodePanelState: createVSCodePanelState(),
+		lastAddedPinState: createLastAddedPinState()
 	};
 
 	if (!appCtx.activePinsGraphIdStore.get()) {
