@@ -2,7 +2,7 @@ import { PinsGraph } from '../../shared/types';
 import { AppCtx } from '../types';
 
 export function saveOrAddGraph(pinsGraph: PinsGraph, { pinsGraphsStore }: AppCtx): Thenable<void> {
-	const graphs = pinsGraphsStore.getGraphs();
+	const graphs = pinsGraphsStore.get();
 	const index = graphs.findIndex((graph) => graph.id === pinsGraph.id);
 
 	if (index === -1) {
@@ -11,5 +11,5 @@ export function saveOrAddGraph(pinsGraph: PinsGraph, { pinsGraphsStore }: AppCtx
 		graphs[index] = pinsGraph;
 	}
 
-	return pinsGraphsStore.setGraphs(graphs);
+	return pinsGraphsStore.set(graphs);
 }

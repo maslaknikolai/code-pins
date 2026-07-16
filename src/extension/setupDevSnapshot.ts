@@ -5,9 +5,9 @@ import { AppCtx } from './types';
 
 
 export function setupDevSnapshot(appCtx: AppCtx): void {
-	if (appCtx.context.extensionMode !== vscode.ExtensionMode.Development) {
+	if (appCtx.vscodeContext.extensionMode !== vscode.ExtensionMode.Development) {
 		return;
 	}
 
-	appCtx.context.subscriptions.push(onGraphsChange(appCtx, () => saveDevSnapshot(appCtx)));
+	appCtx.vscodeContext.subscriptions.push(onGraphsChange(appCtx, () => saveDevSnapshot(appCtx)));
 }

@@ -1,6 +1,6 @@
 # Как работает Code Pins
 
-Расширение VS Code: дает визуальную карту взаимоотношений кодовой базы. Пользователь ставит курсор на `symbol`. Нажимает сочетание клавишь (Ctrl+Y) и сущность `Pin` добавляется на канвас в открышейся панели. Пины одного файла живут в одном `FileNode`. Каждый `FileNode` на канвасе представляет файл из анализируемой кодовой базы, в котором создан `Pin`. Между `FileNode` рисуются стрелки.
+Расширение VS Code для построения визуальной карты взаимоотношения сущностей кодовой базы. Пользователь ставит курсор на `symbol`. Нажимает сочетание клавиш (Ctrl+Y). Далее отправляется запрос в langserver на definition symbola. `Pin` добавляется на канвас в открышейся панели. Пины одного файла живут в одном `FileNode`. Каждый `FileNode` на канвасе представляет файл из анализируемой кодовой базы, в котором создан `Pin`. Между `FileNode` рисуются стрелки.
 
 `Symbol` — Термин из VS Code / language server. Именованная сущность кода: переменная, функция, метод, класс и подобное.
 
@@ -26,21 +26,16 @@ export interface Pin {
 }
 
 export interface PinLine {
-	/** Zero-based line number in the source file. */
 	line: number;
-	/** Raw source line, indentation included */
 	text: string;
 }
 
-/** A node on the graph: one file, holding every pin made in it. filePath is the node's identity. */
 export interface FileNode {
 	filePath: string;
-	x: number;
-	y: number;
+	position: Coords
 	pins: Pin[];
 }
 
-/** Saved file format */
 export interface PinsGraph {
 	version: 1;
 	fileNodes: FileNode[];

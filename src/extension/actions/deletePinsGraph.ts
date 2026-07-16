@@ -6,7 +6,7 @@ import { setActiveGraph } from './setActiveGraph';
 
 export async function deletePinsGraph(appCtx: AppCtx, id: string): Promise<void> {
 	const wasActive = getActiveGraph(appCtx)?.id === id;
-	const deletedIndex = appCtx.pinsGraphsStore.getGraphs().findIndex((graph) => graph.id === id);
+	const deletedIndex = appCtx.pinsGraphsStore.get().findIndex((graph) => graph.id === id);
 
 	await deleteGraphById(id, appCtx);
 
@@ -14,7 +14,7 @@ export async function deletePinsGraph(appCtx: AppCtx, id: string): Promise<void>
 		return;
 	}
 
-	const graphs = appCtx.pinsGraphsStore.getGraphs();
+	const graphs = appCtx.pinsGraphsStore.get();
 	const fallback = graphs[deletedIndex - 1] ?? graphs[deletedIndex];
 
 	setActiveGraph(fallback ?? createPinsGraph(DEFAULT_PINS_GRAPH_NAME), appCtx);

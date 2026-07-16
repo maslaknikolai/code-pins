@@ -40,12 +40,12 @@ function createPanel(appCtx: AppCtx, callbacks: PanelCallbacks): vscode.WebviewP
 			enableScripts: true,
 			retainContextWhenHidden: true,
 			localResourceRoots: [
-				vscode.Uri.joinPath(appCtx.context.extensionUri, 'dist')
+				vscode.Uri.joinPath(appCtx.vscodeContext.extensionUri, 'dist')
 			],
 		}
 	);
 
-	panel.webview.html = renderHtml(panel.webview, appCtx.context.extensionUri);
+	panel.webview.html = renderHtml(panel.webview, appCtx.vscodeContext.extensionUri);
 
 	const disposables: vscode.Disposable[] = [
 		panel.webview.onDidReceiveMessage((message) => {

@@ -6,7 +6,7 @@ import { PinsGraphsStore } from './storage/pins-graphs-store';
 import { ViewSettingsStore } from './storage/viewport-data-store';
 
 export interface AppCtx {
-	context: vscode.ExtensionContext;
+	vscodeContext: vscode.ExtensionContext;
 	viewSettingsStore: ViewSettingsStore;
 	pinsGraphsStore: PinsGraphsStore;
 	activePinsGraphIdStore: ActivePinsGraphIdStore;

@@ -10,7 +10,7 @@ import { AppCtx } from './types';
 
 export function createAppCtx(context: vscode.ExtensionContext): AppCtx {
 	const appCtx: AppCtx = {
-		context,
+		vscodeContext: context,
 		pinsGraphsStore: createPinsGraphsStore(context.workspaceState),
 		activePinsGraphIdStore: createActivePinsGraphIdStore(context.workspaceState),
 		viewSettingsStore: createViewSettingsStore(context.workspaceState),

@@ -7,7 +7,7 @@ import { sendToWebview } from './sendToWebview';
 export function sendGraphsToWebview(webview: vscode.Webview, appCtx: AppCtx): void {
 	sendToWebview(webview, {
 		type: ExtensionMessageType.SetGraphs,
-		graphs: appCtx.pinsGraphsStore.getGraphs(),
+		graphs: appCtx.pinsGraphsStore.get(),
 		activeGraph: getActiveGraph(appCtx),
 	});
 }

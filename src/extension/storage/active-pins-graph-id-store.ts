@@ -1,24 +1,11 @@
 import * as vscode from 'vscode';
+import { createWorkspaceStore, type WorkspaceStore } from './createWorkspaceStore';
 
 
 const ACTIVE_GRAPH_ID_KEY = 'codePins.activeGraphId';
 
-export function createActivePinsGraphIdStore(workspaceState: vscode.Memento) {
-	const onDidChangeEmitter = new vscode.EventEmitter<void>();
+export type ActivePinsGraphIdStore = WorkspaceStore<string | undefined>;
 
-	return {
-		onDidChange: onDidChangeEmitter.event,
-
-		get(): string | undefined {
-			return workspaceState.get<string>(ACTIVE_GRAPH_ID_KEY);
-		},
-
-		set(id: string): Thenable<void> {
-			const updated = workspaceState.update(ACTIVE_GRAPH_ID_KEY, id);
-			onDidChangeEmitter.fire();
-			return updated;
-		}
-	};
+export function createActivePinsGraphIdStore(workspaceState: vscode.Memento): ActivePinsGraphIdStore {
+	return createWorkspaceStore(workspaceState, ACTIVE_GRAPH_ID_KEY, undefined);
 }
-
-export type ActivePinsGraphIdStore = ReturnType<typeof createActivePinsGraphIdStore>;
