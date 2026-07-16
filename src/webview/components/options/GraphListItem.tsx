@@ -1,4 +1,5 @@
 import { useAtomValue } from 'jotai';
+import { useEffect, useRef } from 'react';
 import { WebviewMessageType } from '../../../shared/messages';
 import type { PinsGraph } from '../../../shared/types';
 import { activeGraphAtom } from '../../atoms';
@@ -9,6 +10,13 @@ import { CloneIcon, EditIcon, ExportIcon, TrashIcon } from './icons';
 export function GraphListItem({ graph }: { graph: PinsGraph; }) {
 	const activeGraph = useAtomValue(activeGraphAtom);
 	const isActive = graph.id === activeGraph?.id
+	const rowRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (isActive) {
+			rowRef.current?.scrollIntoView({ block: 'center' });
+		}
+	}, [isActive]);
 
 	const switchGraph = () => {
 		if (!isActive) {
@@ -38,6 +46,7 @@ export function GraphListItem({ graph }: { graph: PinsGraph; }) {
 
 	return (
 		<div
+			ref={rowRef}
 			className={cn(
 				'flex cursor-pointer items-center gap-0.5 rounded px-2 py-1 hover:bg-(--vscode-list-hoverBackground)',
 				isActive && 'bg-(--vscode-list-activeSelectionBackground) text-(--vscode-list-activeSelectionForeground)'

@@ -39,7 +39,7 @@ export function ExtensionMessageHandler() {
             if (event.data.type === ExtensionMessageType.SetGraphs) {
                 const { graphs, activeGraph } = event.data;
                 setNodes(activeGraph?.fileNodes?.map(toFlowNode) || []);
-                setGraphs(graphs);
+                setGraphs([...graphs].reverse());
 				setActiveGraph(activeGraph);
 				return;
 			}

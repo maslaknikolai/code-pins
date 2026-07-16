@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { GraphsPanel } from './GraphsPanel';
 import { ChevronDownIcon, ChevronUpIcon } from './icons';
 import { TabButton } from './TabButton';
 import { useAtom } from 'jotai';
 import { viewSettingsAtom } from '../../atoms';
+import { HotkeyHint } from '../HotkeyHint';
 
 
 export function OptionsDrawer() {
@@ -17,10 +17,11 @@ export function OptionsDrawer() {
 						<TabButton label="Graphs" isActive />
 
 						<button
-							className="cursor-pointer px-3 py-1.5 opacity-60 hover:opacity-100"
-							title="Close"
+							className="flex cursor-pointer items-center gap-1.5 px-3 py-1.5 opacity-60 hover:opacity-100"
+							title="Close (Space)"
 							onClick={() => setViewSettings(v => ({...v, isDrawerOpen: false}))}
 						>
+							<HotkeyHint>␣</HotkeyHint>
 							<ChevronDownIcon />
 						</button>
 					</div>
@@ -30,10 +31,11 @@ export function OptionsDrawer() {
 			) : (
 				<button
 					className="flex cursor-pointer items-center gap-1.5 rounded-t-md border border-b-0 border-(--vscode-editorWidget-border) bg-(--vscode-editorWidget-background) px-4 py-1 text-(--vscode-editorWidget-foreground) opacity-70 hover:opacity-100"
-					title="Open options"
+					title="Open options (Space)"
 					onClick={() => setViewSettings(v => ({...v, isDrawerOpen: true}))}
 				>
 					<ChevronUpIcon />
+					<HotkeyHint>␣</HotkeyHint>
 				</button>
 			)}
 		</div>

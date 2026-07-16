@@ -1,7 +1,6 @@
 import {
 	applyNodeChanges,
 	Background,
-	Controls,
 	ReactFlow,
 	type CoordinateExtent,
 	type NodeChange,
@@ -11,7 +10,6 @@ import { useAtom } from 'jotai';
 import { WebviewMessageType } from '../../shared/messages';
 import { MAP_FIELD } from '../../shared/types';
 import { flowNodesAtom } from '../atoms';
-import { useHotkeys } from '../hooks/useHotkeys';
 import { useEdges } from '../hooks/useEdges';
 import { useEvent } from '../hooks/useEvent';
 import type { FileFlowNode } from '../types';
@@ -22,6 +20,8 @@ import { GroupOutlines } from './GroupOutlines';
 import { OptionsDrawer } from './options/OptionsDrawer';
 import { ViewportSettingsReporter } from './ViewportSettingsReporter';
 import { ExtensionMessageHandler } from './ExtensionMessageHandler';
+import { FlowControls } from './FlowControls';
+import { HotkeysHandler } from './HotkeysHandler';
 import { useViewSettingsAutosave } from '../hooks/useViewSettingsAutosave';
 
 const nodeTypes = {
@@ -42,7 +42,6 @@ const GRID_SIZE = 20;
 export function App() {
 	const [nodes, setNodes] = useAtom(flowNodesAtom);
 
-	useHotkeys();
 	useViewSettingsAutosave()
 
 	const edges = useEdges();
@@ -80,9 +79,10 @@ export function App() {
 		>
 
 			<Background gap={GRID_SIZE} color={colorMode === 'light' ? '#7d7d88' : '#6b6b78'} />
-			<Controls />
+			<FlowControls />
 			<GroupOutlines />
 			<ExtensionMessageHandler />
+			<HotkeysHandler />
 			<ViewportSettingsReporter />
 			<OptionsDrawer />
 		</ReactFlow>
