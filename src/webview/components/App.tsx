@@ -79,7 +79,7 @@ export function App() {
 			nodeExtent={fieldExtent}
 		>
 
-			<Background gap={GRID_SIZE} />
+			<Background gap={GRID_SIZE} color={colorMode === 'light' ? '#7d7d88' : '#6b6b78'} />
 			<Controls />
 			<GroupOutlines />
 			<ExtensionMessageHandler />
