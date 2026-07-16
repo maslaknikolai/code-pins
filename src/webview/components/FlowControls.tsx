@@ -1,8 +1,10 @@
 import { ControlButton, Controls, useReactFlow } from '@xyflow/react';
+import { useFitViewWithinField } from '../hooks/useFitViewWithinField';
 
 /** Replaces the built-in zoom/fitView buttons so each one can show its hotkey. */
 export function FlowControls() {
-	const { zoomIn, zoomOut, fitView } = useReactFlow();
+	const { zoomIn, zoomOut } = useReactFlow();
+	const fitViewWithinField = useFitViewWithinField();
 
 	return (
 		<Controls showZoom={false} showFitView={false}>
@@ -14,7 +16,7 @@ export function FlowControls() {
 				<span className="font-mono text-xs">−</span>
 			</ControlButton>
 
-			<ControlButton onClick={() => fitView()} title="Fit into view (A)">
+			<ControlButton onClick={fitViewWithinField} title="Fit into view (A)">
 				<span className="font-mono text-xs">A</span>
 			</ControlButton>
 		</Controls>

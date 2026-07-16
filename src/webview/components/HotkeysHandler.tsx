@@ -1,65 +1,94 @@
-import { useReactFlow } from '@xyflow/react';
+import { useReactFlow, useStore } from '@xyflow/react';
 import { useAtom, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
 import { WebviewMessageType } from '../../shared/messages';
 import { selectedPinAtom, viewSettingsAtom } from '../atoms';
 import { useEvent } from '../hooks/useEvent';
+import { useFitViewWithinField } from '../hooks/useFitViewWithinField';
 import { useSelectGraphByOffset } from '../hooks/useSelectGraphByOffset';
 import { sendToExtension } from '../utils/vscodeApi';
 
+const PAN_STEP = 60;
+
 /** made as component to have access to ReactFlow */
 export function HotkeysHandler() {
-	const { zoomIn, zoomOut, fitView } = useReactFlow();
+	const { zoomIn, zoomOut } = useReactFlow();
 	const [selectedPin, setSelectedPin] = useAtom(selectedPinAtom);
 	const setViewSettings = useSetAtom(viewSettingsAtom);
 	const { selectGraphByOffset } = useSelectGraphByOffset();
+	const fitViewWithinField = useFitViewWithinField();
+	const panBy = useStore((state) => state.panBy);
 
 	const onKeyDown = useEvent((event: KeyboardEvent) => {
-		if (selectedPin && event.key === 'Escape') {
+		if (selectedPin && event.code === 'Escape') {
 			setSelectedPin(undefined);
 			return;
 		}
 
-		if (selectedPin && (event.key === 'Delete' || event.key === 'Backspace')) {
+		if (selectedPin && (event.code === 'Delete' || event.code === 'Backspace')) {
 			sendToExtension({ type: WebviewMessageType.RemovePin, id: selectedPin.id });
 			setSelectedPin(undefined);
 			return;
 		}
 
-		if (event.key === ' ') {
+		if (event.code === 'Space') {
 			// A focused button would treat Space as a click, toggling the drawer twice.
 			event.preventDefault();
 			setViewSettings((v) => ({ ...v, isDrawerOpen: !v?.isDrawerOpen }));
 			return;
 		}
 
-		if (event.key === '+' || event.key === '=') {
+		if (event.code === 'Equal' || event.code === 'NumpadAdd') {
 			zoomIn();
 			return;
 		}
 
-		if (event.key === '-' || event.key === '_') {
+		if (event.code === 'Minus' || event.code === 'NumpadSubtract') {
 			zoomOut();
 			return;
 		}
 
-		if (event.key === 'a' || event.key === 'A') {
-			fitView();
+		if (event.code === 'KeyA') {
+			fitViewWithinField();
 			return;
 		}
 
-		if (event.key === 'x' || event.key === 'X') {
+		if (event.code === 'KeyX') {
 			sendToExtension({ type: WebviewMessageType.NewGraph });
 			return;
 		}
 
-		if (event.key === 'w' || event.key === 'W') {
+		if (event.code === 'KeyW') {
 			selectGraphByOffset(-1);
 			return;
 		}
 
-		if (event.key === 's' || event.key === 'S') {
+		if (event.code === 'KeyS') {
 			selectGraphByOffset(1);
+			return;
+		}
+
+		if (event.code === 'ArrowUp') {
+			event.preventDefault();
+			panBy({ x: 0, y: PAN_STEP });
+			return;
+		}
+
+		if (event.code === 'ArrowDown') {
+			event.preventDefault();
+			panBy({ x: 0, y: -PAN_STEP });
+			return;
+		}
+
+		if (event.code === 'ArrowLeft') {
+			event.preventDefault();
+			panBy({ x: PAN_STEP, y: 0 });
+			return;
+		}
+
+		if (event.code === 'ArrowRight') {
+			event.preventDefault();
+			panBy({ x: -PAN_STEP, y: 0 });
 			return;
 		}
 	});
