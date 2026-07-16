@@ -14,7 +14,7 @@ import { removePin } from '../removePin';
 import { sendGraphsToWebview } from "./sendGraphsToWebview";
 import { sendActiveFileToWebview } from "./sendActiveFileToWebview";
 import { WebviewPanel } from "vscode";
-import { PanelCallbacks } from "../showPanel";
+import type { PanelCallbacks } from "./createPanel";
 
 export function handleMessageFromWebview(
     message: WebviewToExtensionMessage,

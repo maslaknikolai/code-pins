@@ -1,37 +1,18 @@
 import * as vscode from 'vscode';
-import { AppCtx } from '../types';
-import { renderHtml } from './panel/html';
-import { sendActiveFileToWebview } from './panel/sendActiveFileToWebview';
-import { sendGraphsToWebview } from './panel/sendGraphsToWebview';
+import { AppCtx } from '../../types';
+import { onGraphsChange } from '../onGraphsChange';
+import { handleMessageFromWebview } from './handleMessageFromWebview';
+import { renderHtml } from './html';
 import { refreshVsCodePanelTitle } from './refreshVsCodePanelTitle';
-import { handleMessageFromWebview } from './panel/handleMessageFromWebview';
-import { onGraphsChange } from './onGraphsChange';
-import { retryUnresolvedDefinitions } from './retryUnresolvedDefinitions';
+import { sendActiveFileToWebview } from './sendActiveFileToWebview';
+import { sendGraphsToWebview } from './sendGraphsToWebview';
 
 export interface PanelCallbacks {
+	/** Runs once the webview can receive messages. */
 	onShow?: (panel: vscode.WebviewPanel) => void;
 }
 
-export function createOrShowPanel(appCtx: AppCtx, callbacks: PanelCallbacks = {}): void {
-	const existingPanel = appCtx.vscodePanel;
-
-	if (!existingPanel) {
-		const panel = createPanel(appCtx, callbacks);
-
-		appCtx.vscodePanel = panel;
-		panel.onDidDispose(() => {
-			appCtx.vscodePanel = undefined;
-		});
-	} else {
-		existingPanel.reveal(undefined, false);
-		callbacks.onShow?.(existingPanel);
-	}
-
-	refreshVsCodePanelTitle(appCtx);
-	retryUnresolvedDefinitions(appCtx);
-}
-
-function createPanel(appCtx: AppCtx, callbacks: PanelCallbacks): vscode.WebviewPanel {
+export function createPanel(appCtx: AppCtx, callbacks: PanelCallbacks): vscode.WebviewPanel {
 	const panel = vscode.window.createWebviewPanel(
 		'codePins',
 		'Code Pins',
