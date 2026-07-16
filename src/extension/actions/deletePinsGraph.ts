@@ -1,30 +1,21 @@
-import { sendStateToWebview } from './panel/sendStateToWebview';
-import { createPinsGraph, DEFAULT_PINS_GRAPH_NAME } from '../states/active-pins-graph-state';
 import { AppCtx } from '../types';
+import { createPinsGraph, DEFAULT_PINS_GRAPH_NAME } from './createPinsGraph';
+import { deleteGraphById } from './deleteGraphById';
+import { getActiveGraph } from './getActiveGraph';
+import { setActiveGraph } from './setActiveGraph';
 
 export async function deletePinsGraph(appCtx: AppCtx, id: string): Promise<void> {
-	const { pinsGraphsStore, activePinsGraphState } = appCtx;
-	const wasActive = activePinsGraphState.getPinsGraph().id === id;
-	const deletedIndex = pinsGraphsStore.getGraphs().findIndex((graph) => graph.id === id);
-	await pinsGraphsStore.deleteGraphById(id);
+	const wasActive = getActiveGraph(appCtx)?.id === id;
+	const deletedIndex = appCtx.pinsGraphsStore.getGraphs().findIndex((graph) => graph.id === id);
 
-	if (wasActive) {
-		const graphs = pinsGraphsStore.getGraphs();
-		const fallback = graphs[deletedIndex - 1] ?? graphs[deletedIndex];
+	await deleteGraphById(id, appCtx);
 
-		if (fallback) {
-			activePinsGraphState.setPinsGraph(fallback);
-		} else {
-			activePinsGraphState.setPinsGraph(createPinsGraph(DEFAULT_PINS_GRAPH_NAME));
-		}
-
-		// Switching the active graph already sends state via the panel's onDidChange subscription.
+	if (!wasActive) {
 		return;
 	}
 
-	const panel = appCtx.vsCodePanelState.getPanel();
+	const graphs = appCtx.pinsGraphsStore.getGraphs();
+	const fallback = graphs[deletedIndex - 1] ?? graphs[deletedIndex];
 
-	if (panel) {
-		sendStateToWebview(panel.webview, appCtx);
-	}
+	setActiveGraph(fallback ?? createPinsGraph(DEFAULT_PINS_GRAPH_NAME), appCtx);
 }

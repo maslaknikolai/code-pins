@@ -1,11 +1,10 @@
 import * as vscode from 'vscode';
 import { addPin } from '../actions/addPin';
 import { buildPin } from '../actions/buildPin';
-import { retryUnresolvedDefinitions } from '../actions/retryUnresolvedDefinitions';
-import { showGraphPanel } from '../actions/showGraphPanel';
+import { showPanel } from '../actions/showPanel';
 import { AppCtx } from '../types';
 
-export async function addPinCommand(appCtx: AppCtx): Promise<void> {
+export async function addActiveEditorSymbolAsPinCommand(appCtx: AppCtx) {
 	const editor = vscode.window.activeTextEditor;
 
 	const built = editor
@@ -16,6 +15,5 @@ export async function addPinCommand(appCtx: AppCtx): Promise<void> {
 		addPin(appCtx, built.filePath, built.pin);
 	}
 
-	showGraphPanel(appCtx);
-	retryUnresolvedDefinitions(appCtx.activePinsGraphState);
+	showPanel(appCtx);
 }

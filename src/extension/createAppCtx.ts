@@ -1,24 +1,24 @@
 import * as vscode from 'vscode';
-import { VSCodePanelState } from './states/vscode-panel-state';
-import { ActivePinsGraphState } from './states/active-pins-graph-state';
-import { ViewportCenterState } from './states/viewport-center-state';
-import { ActivePinsGraphIdStore } from './storage/active-pins-graph-id-store';
-import { PinsGraphsStore } from './storage/pins-graphs-store';
+import { createVSCodePanelState } from './states/vscode-panel-state';
+import { createActivePinsGraphIdStore } from './storage/active-pins-graph-id-store';
+import { createPinsGraphsStore } from './storage/pins-graphs-store';
+import { createViewSettingsStore } from './storage/viewport-data-store';
+import { createPinsGraph, DEFAULT_PINS_GRAPH_NAME } from './actions/createPinsGraph';
+import { setActiveGraph } from './actions/setActiveGraph';
 import { AppCtx } from './types';
 
 export function createAppCtx(context: vscode.ExtensionContext): AppCtx {
-	const viewportCenterState = new ViewportCenterState();
-	const pinsGraphsStore = new PinsGraphsStore(context.workspaceState);
-	const activePinsGraphIdStore = new ActivePinsGraphIdStore(context.workspaceState);
-	const activePinsGraphState = new ActivePinsGraphState(pinsGraphsStore, activePinsGraphIdStore);
-	const vsCodePanelState = new VSCodePanelState();
-
-	return {
+	const appCtx: AppCtx = {
 		context,
-		activePinsGraphState,
-		viewportCenterState,
-		pinsGraphsStore,
-		activePinsGraphIdStore,
-		vsCodePanelState
+		pinsGraphsStore: createPinsGraphsStore(context.workspaceState),
+		activePinsGraphIdStore: createActivePinsGraphIdStore(context.workspaceState),
+		viewSettingsStore: createViewSettingsStore(context.workspaceState),
+		vsCodePanelState: createVSCodePanelState()
 	};
+
+	if (!appCtx.activePinsGraphIdStore.get()) {
+		setActiveGraph(createPinsGraph(DEFAULT_PINS_GRAPH_NAME), appCtx);
+	}
+
+	return appCtx;
 }

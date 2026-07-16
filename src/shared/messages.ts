@@ -1,4 +1,4 @@
-import type { Coords, PinsGraph } from './types';
+import type { Coords, PinsGraph, ViewSettings } from './types';
 
 
 export enum WebviewMessageType {
@@ -7,7 +7,7 @@ export enum WebviewMessageType {
 	RemovePin = 'removePin',
 	RemoveFileNode = 'removeFileNode',
 	OpenLocation = 'openLocation',
-	ViewportChanged = 'viewportChanged',
+	ViewSettingsChanged = 'viewSettingsChanged',
 	SwitchGraph = 'switchGraph',
 	DeleteGraph = 'deleteGraph',
 	ImportGraph = 'importGraph',
@@ -23,7 +23,7 @@ export type WebviewToExtensionMessage =
 	| { type: WebviewMessageType.RemovePin; id: string }
 	| { type: WebviewMessageType.RemoveFileNode; filePath: string }
 	| { type: WebviewMessageType.OpenLocation; file: string; line: number }
-	| { type: WebviewMessageType.ViewportChanged; position: Coords }
+	| { type: WebviewMessageType.ViewSettingsChanged; viewSettings: ViewSettings | undefined }
 	| { type: WebviewMessageType.SwitchGraph; id: string }
 	| { type: WebviewMessageType.DeleteGraph; id: string }
 	| { type: WebviewMessageType.ImportGraph }
@@ -33,10 +33,20 @@ export type WebviewToExtensionMessage =
 	| { type: WebviewMessageType.ExportGraph; id: string };
 
 export enum ExtensionMessageType {
-	SetState = 'setState',
+	SetInitialState = 'setInitialState',
 	SetActiveFile = 'setActiveFile',
+	SetGraphs = 'setGraphs',
 }
 
 export type ExtensionToWebviewMessage =
-	| { type: ExtensionMessageType.SetState; graphs: PinsGraph[]; activeGraphId: string }
-	| { type: ExtensionMessageType.SetActiveFile; filePath: string };
+	| {
+		type: ExtensionMessageType.SetInitialState;
+		viewSettings: ViewSettings | undefined
+	} | {
+		type: ExtensionMessageType.SetActiveFile;
+		filePath: string
+	} | {
+		type: ExtensionMessageType.SetGraphs;
+		activeGraph: PinsGraph | undefined
+		graphs: PinsGraph[]
+	};

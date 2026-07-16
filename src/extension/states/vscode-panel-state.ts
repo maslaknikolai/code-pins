@@ -1,14 +1,16 @@
 import * as vscode from 'vscode';
 
 
-export class VSCodePanelState {
-	private panel: vscode.WebviewPanel | undefined;
+export function createVSCodePanelState() {
+	let panel: vscode.WebviewPanel | undefined;
 
-	getPanel(): vscode.WebviewPanel | undefined {
-		return this.panel;
-	}
+	return {
+		getPanel: (): vscode.WebviewPanel | undefined => panel,
 
-	setPanel(panel: vscode.WebviewPanel | undefined): void {
-		this.panel = panel;
-	}
+		setPanel: (next: vscode.WebviewPanel | undefined): void => {
+			panel = next;
+		}
+	};
 }
+
+export type VSCodePanelState = ReturnType<typeof createVSCodePanelState>;

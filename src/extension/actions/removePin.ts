@@ -1,9 +1,18 @@
-import { ActivePinsGraphState } from '../states/active-pins-graph-state';
+import { AppCtx } from '../types';
+import { getActiveGraph } from './getActiveGraph';
+import { setActiveGraph } from './setActiveGraph';
 
-export function removePin(activePinsGraphState: ActivePinsGraphState, id: string): void {
-	activePinsGraphState.setFileNodes(
-		activePinsGraphState.getPinsGraph().fileNodes
+export function removePin(appCtx: AppCtx, id: string): void {
+	const activeGraph = getActiveGraph(appCtx);
+
+	if (!activeGraph) {
+		return;
+	}
+
+	setActiveGraph({
+		...activeGraph,
+		fileNodes: activeGraph.fileNodes
 			.map((node) => ({ ...node, pins: node.pins.filter((pin) => pin.id !== id) }))
 			.filter((node) => node.pins.length > 0)
-	);
+	}, appCtx);
 }

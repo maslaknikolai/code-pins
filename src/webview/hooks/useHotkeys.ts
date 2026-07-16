@@ -1,12 +1,13 @@
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
 import { WebviewMessageType } from '../../shared/messages';
-import { selectedPinAtom } from '../atoms';
+import { selectedPinAtom, viewSettingsAtom } from '../atoms';
 import { sendToExtension } from '../utils/vscodeApi';
 
 
-export function useSelectedPinHotkeys() {
+export function useHotkeys() {
 	const [selectedPin, setSelectedPin] = useAtom(selectedPinAtom);
+	const setViewSettings = useSetAtom(viewSettingsAtom);
 
 	useEffect(() => {
 		if (!selectedPin) {
@@ -17,11 +18,15 @@ export function useSelectedPinHotkeys() {
 				setSelectedPin(undefined);
 				return;
 			}
-			if (event.key !== 'Delete' && event.key !== 'Backspace') {
+			if (event.key === 'Delete' || event.key === 'Backspace') {
+				sendToExtension({ type: WebviewMessageType.RemovePin, id: selectedPin.id });
+				setSelectedPin(undefined);
 				return;
 			}
-			sendToExtension({ type: WebviewMessageType.RemovePin, id: selectedPin.id });
-			setSelectedPin(undefined);
+
+			if (event.key === 'Space') {
+				setViewSettings(v => ({...v, isDrawerOpen: v?.isDrawerOpen}));
+			}
 		};
 		window.addEventListener('keydown', onKeyDown);
 		return () => window.removeEventListener('keydown', onKeyDown);

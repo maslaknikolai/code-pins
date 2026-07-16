@@ -2,15 +2,12 @@ import { AppCtx } from '../types';
 import { getActiveGraph } from './getActiveGraph';
 import { setActiveGraph } from './setActiveGraph';
 
-export function removeFileNode(appCtx: AppCtx, filePath: string): void {
+export function removeAllNodesOfActiveGraph(appCtx: AppCtx): void {
 	const activeGraph = getActiveGraph(appCtx);
 
 	if (!activeGraph) {
 		return;
 	}
 
-	setActiveGraph({
-		...activeGraph,
-		fileNodes: activeGraph.fileNodes.filter((node) => node.filePath !== filePath)
-	}, appCtx);
+	setActiveGraph({ ...activeGraph, fileNodes: [] }, appCtx);
 }

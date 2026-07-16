@@ -41,3 +41,9 @@ export interface Coords {
 	x: number;
 	y: number;
 }
+
+export type ViewSettings = {
+	position?: Coords,
+	zoom?: number
+	isDrawerOpen?: boolean
+}

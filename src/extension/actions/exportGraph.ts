@@ -3,11 +3,12 @@ import { join } from 'path';
 import * as vscode from 'vscode';
 import { PinsGraphFile, SUPPORTED_PINS_GRAPH_FILE_VERSION } from '../../shared/types';
 import { AppCtx } from '../types';
+import { getGraphById } from './getGraphById';
 
 export const FILE_FILTERS = { 'Code Pins File': ['json'] };
 
 export async function exportGraph(appCtx: AppCtx, id: string): Promise<void> {
-	const source = appCtx.pinsGraphsStore.getGraphById(id);
+	const source = getGraphById(id, appCtx);
 
 	if (!source) {
 		return;

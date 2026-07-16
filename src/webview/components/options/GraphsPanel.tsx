@@ -1,13 +1,12 @@
 import { useAtomValue } from 'jotai';
 import { WebviewMessageType } from '../../../shared/messages';
-import { activeGraphIdAtom, allGraphsAtom } from '../../atoms';
+import { activeGraphAtom, allGraphsAtom } from '../../atoms';
 import { sendToExtension } from '../../utils/vscodeApi';
 import { GraphListItem } from './GraphListItem';
 import { ImportIcon, PlusIcon } from './icons';
 
 export function GraphsPanel() {
 	const graphs = useAtomValue(allGraphsAtom);
-	const activeGraphId = useAtomValue(activeGraphIdAtom);
 
 	const newGraph = () => {
 		sendToExtension({ type: WebviewMessageType.NewGraph });
@@ -44,7 +43,6 @@ export function GraphsPanel() {
 					<GraphListItem
 						key={graph.id}
 						graph={graph}
-						isActive={graph.id === activeGraphId}
 					/>
 				))}
 			</div>

@@ -1,8 +1,10 @@
 import * as vscode from 'vscode';
 import { PinsGraphFile, SUPPORTED_PINS_GRAPH_FILE_VERSION } from '../../shared/types';
 import { FILE_FILTERS } from './exportGraph';
-import { createPinsGraph } from '../states/active-pins-graph-state';
 import { AppCtx } from '../types';
+import { createPinsGraph } from './createPinsGraph';
+import { getNextGraphName } from './getNextGraphName';
+import { setActiveGraph } from './setActiveGraph';
 
 
 export async function importGraphFile(appCtx: AppCtx): Promise<void> {
@@ -29,9 +31,9 @@ export async function importGraphFile(appCtx: AppCtx): Promise<void> {
 			continue;
 		}
 
-		const name = appCtx.pinsGraphsStore.getNextName(pinsGraphFile.pinsGraph.label || 'imported');
+		const name = getNextGraphName(appCtx.pinsGraphsStore, pinsGraphFile.pinsGraph.label || 'imported');
 
-		appCtx.activePinsGraphState.setPinsGraph(createPinsGraph(name, pinsGraphFile.pinsGraph.fileNodes));
+		setActiveGraph(createPinsGraph(name, pinsGraphFile.pinsGraph.fileNodes), appCtx);
 	}
 }
 

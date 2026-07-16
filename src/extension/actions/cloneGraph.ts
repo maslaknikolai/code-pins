@@ -1,15 +1,18 @@
-import { createPinsGraph } from '../states/active-pins-graph-state';
 import { AppCtx } from '../types';
+import { createPinsGraph } from './createPinsGraph';
+import { getGraphById } from './getGraphById';
+import { getNextGraphName } from './getNextGraphName';
+import { setActiveGraph } from './setActiveGraph';
 
 
 export function cloneGraph(appCtx: AppCtx, id: string): void {
-	const source = appCtx.pinsGraphsStore.getGraphById(id);
+	const source = getGraphById(id, appCtx);
 
 	if (!source) {
 		return;
 	}
 
-	const name = appCtx.pinsGraphsStore.getNextName(source.label);
+	const name = getNextGraphName(appCtx.pinsGraphsStore, source.label);
 
-	appCtx.activePinsGraphState.setPinsGraph(createPinsGraph(name, structuredClone(source.fileNodes)));
+	setActiveGraph(createPinsGraph(name, structuredClone(source.fileNodes)), appCtx);
 }

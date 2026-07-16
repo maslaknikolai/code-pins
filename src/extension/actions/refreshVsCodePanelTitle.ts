@@ -1,9 +1,15 @@
 import { AppCtx } from '../types';
+import { getActiveGraph } from './getActiveGraph';
 
 
-export function refreshVsCodePanelTitle({ vsCodePanelState, activePinsGraphState }: AppCtx): void {
-	const panel = vsCodePanelState.getPanel();
-	if (panel) {
-		panel.title = `Code Pins — ${activePinsGraphState.getPinsGraph().label}`;
+export function refreshVsCodePanelTitle(appCtx: AppCtx): void {
+	const panel = appCtx.vsCodePanelState.getPanel();
+
+	if (!panel) {
+		return;
 	}
+
+	const activeGraph = getActiveGraph(appCtx);
+
+	panel.title = activeGraph ? `Code Pins — ${activeGraph.label}` : 'Code Pins';
 }

@@ -1,14 +1,22 @@
 import * as vscode from 'vscode';
-import { ActivePinsGraphState } from '../states/active-pins-graph-state';
 import { parsePinPath } from '../../shared/pinPath';
 import { Pin } from '../../shared/types';
+import { AppCtx } from '../types';
+import { getActiveGraph } from './getActiveGraph';
 import { resolveSymbolDefinitionPath } from './resolveSymbolDefinitionPath';
+import { setActiveGraph } from './setActiveGraph';
 import { resolveUri } from '../utils/resolveUri';
 
-export async function retryUnresolvedDefinitions(activePinsGraphState: ActivePinsGraphState): Promise<void> {
+export async function retryUnresolvedDefinitions(appCtx: AppCtx): Promise<void> {
+	const activeGraph = getActiveGraph(appCtx);
+
+	if (!activeGraph) {
+		return;
+	}
+
 	let changed = false;
 
-	const updated = await Promise.all(activePinsGraphState.getPinsGraph().fileNodes.map(async (node) => {
+	const updated = await Promise.all(activeGraph.fileNodes.map(async (node) => {
 		const pins = await Promise.all(node.pins.map(async (pin) => {
 			const symbolDefinitionPath = await resolveSymbolDefinitionPathAtPinLocation(node.filePath, pin);
 
@@ -23,7 +31,7 @@ export async function retryUnresolvedDefinitions(activePinsGraphState: ActivePin
 	}));
 
 	if (changed) {
-		activePinsGraphState.setFileNodes(updated);
+		setActiveGraph({ ...activeGraph, fileNodes: updated }, appCtx);
 	}
 }
 

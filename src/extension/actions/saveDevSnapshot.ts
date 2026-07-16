@@ -1,13 +1,17 @@
 import * as vscode from 'vscode';
 import { PinsGraphFile, SUPPORTED_PINS_GRAPH_FILE_VERSION } from '../../shared/types';
 import { AppCtx } from '../types';
+import { getActiveGraph } from './getActiveGraph';
 
-export async function saveDevSnapshot({ activePinsGraphState }: AppCtx): Promise<void> {
+export async function saveDevSnapshot(appCtx: AppCtx): Promise<void> {
 	const root = vscode.workspace.workspaceFolders?.[0]?.uri;
-	if (!root) {
+	const activeGraph = getActiveGraph(appCtx);
+
+	if (!root || !activeGraph) {
 		return;
 	}
-	const { id: _id, ...pinsGraph } = activePinsGraphState.getPinsGraph();
+
+	const { id: _id, ...pinsGraph } = activeGraph;
 	const data: PinsGraphFile = {
 		version: SUPPORTED_PINS_GRAPH_FILE_VERSION,
 		pinsGraph,

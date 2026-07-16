@@ -1,10 +1,15 @@
+import { useAtomValue } from 'jotai';
 import { WebviewMessageType } from '../../../shared/messages';
 import type { PinsGraph } from '../../../shared/types';
+import { activeGraphAtom } from '../../atoms';
 import { cn } from '../../utils/cn';
 import { sendToExtension } from '../../utils/vscodeApi';
 import { CloneIcon, EditIcon, ExportIcon, TrashIcon } from './icons';
 
-export function GraphListItem({ graph, isActive }: { graph: PinsGraph; isActive: boolean }) {
+export function GraphListItem({ graph }: { graph: PinsGraph; }) {
+	const activeGraph = useAtomValue(activeGraphAtom);
+	const isActive = graph.id === activeGraph?.id
+
 	const switchGraph = () => {
 		if (!isActive) {
 			sendToExtension({ type: WebviewMessageType.SwitchGraph, id: graph.id });

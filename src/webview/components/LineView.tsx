@@ -56,7 +56,11 @@ export function LineView({ element, fileNode }: { element: LineElement; fileNode
 				hasHighlightedPin && 'bg-(--vscode-focusBorder)/15'
 			)}
 			title={`${fileNode.filePath}:${line.line + 1}`}
-			onClick={() => sendToExtension({ type: WebviewMessageType.OpenLocation, file: fileNode.filePath, line: line.line })}
+			onClick={() => sendToExtension({
+				type: WebviewMessageType.OpenLocation,
+				file: fileNode.filePath,
+				line: line.line
+			})}
 		>
 			<HoverScrollText>{segments}</HoverScrollText>
 		</div>

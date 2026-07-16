@@ -25,6 +25,7 @@ export function FileNodeView({ data: {fileNode} }: NodeProps<FileFlowNode>) {
 			<Handle type="target" position={Position.Left} className={handleClass} />
 
 			<FileNodeHeader fileNode={fileNode} />
+
 			<div className="flex flex-col gap-2">
 				<PinsLinesTree
 					elements={pinsTree}

@@ -8,21 +8,21 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useAtom } from 'jotai';
-import { useEffect } from 'react';
 import { WebviewMessageType } from '../../shared/messages';
 import { MAP_FIELD } from '../../shared/types';
 import { flowNodesAtom } from '../atoms';
-import { useSelectedPinHotkeys } from '../hooks/useSelectedPinHotkeys';
+import { useHotkeys } from '../hooks/useHotkeys';
 import { useEdges } from '../hooks/useEdges';
 import { useEvent } from '../hooks/useEvent';
-import { useSubscribeForExtensionMessages } from '../hooks/useExtensionMessages';
 import type { FileFlowNode } from '../types';
 import { sendToExtension } from '../utils/vscodeApi';
 import { FileNodeView } from './FileNodeView';
 import { FLOATING_EDGE_TYPE, FloatingEdge } from './FloatingEdge';
 import { GroupOutlines } from './GroupOutlines';
 import { OptionsDrawer } from './options/OptionsDrawer';
-import { ViewportCenterReporter } from './ViewportCenterReporter';
+import { ViewportSettingsReporter } from './ViewportSettingsReporter';
+import { ExtensionMessageHandler } from './ExtensionMessageHandler';
+import { useViewSettingsAutosave } from '../hooks/useViewSettingsAutosave';
 
 const nodeTypes = {
 	file: FileNodeView
@@ -42,12 +42,8 @@ const GRID_SIZE = 20;
 export function App() {
 	const [nodes, setNodes] = useAtom(flowNodesAtom);
 
-	useEffect(() => {
-		sendToExtension({ type: WebviewMessageType.Ready });
-	}, [])
-
-	useSelectedPinHotkeys();
-	useSubscribeForExtensionMessages();
+	useHotkeys();
+	useViewSettingsAutosave()
 
 	const edges = useEdges();
 
@@ -86,7 +82,8 @@ export function App() {
 			<Background gap={GRID_SIZE} />
 			<Controls />
 			<GroupOutlines />
-			<ViewportCenterReporter />
+			<ExtensionMessageHandler />
+			<ViewportSettingsReporter />
 			<OptionsDrawer />
 		</ReactFlow>
 	);
