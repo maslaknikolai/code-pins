@@ -48,44 +48,51 @@ export function GraphListItem({ graph }: { graph: PinsGraph; }) {
 		<div
 			ref={rowRef}
 			className={cn(
-				'flex cursor-pointer items-center gap-0.5 rounded px-2 py-1 hover:bg-(--vscode-list-hoverBackground)',
+				'group flex cursor-pointer items-center gap-0.5 rounded px-2 py-1 hover:bg-(--vscode-list-hoverBackground)',
 				isActive && 'bg-(--vscode-list-activeSelectionBackground) text-(--vscode-list-activeSelectionForeground)'
 			)}
 			onClick={switchGraph}
 		>
-			<span className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap">{graph.label}</span>
+			<span className="min-w-0 flex-1 truncate">{graph.label}</span>
 
-			<button
-				className="shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100!"
-				title={`Rename graph "${graph.label}"`}
-				onClick={renameGraph}
+			<div
+				className={cn(
+					'hidden shrink-0 items-center gap-0.5 group-focus-within:flex group-hover:flex',
+					isActive && 'flex'
+				)}
 			>
-				<EditIcon />
-			</button>
+				<button
+					className="shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100!"
+					title={`Rename graph "${graph.label}"`}
+					onClick={renameGraph}
+				>
+					<EditIcon />
+				</button>
 
-			<button
-				className="shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100!"
-				title={`Clone graph "${graph.label}"`}
-				onClick={cloneGraph}
-			>
-				<CloneIcon />
-			</button>
+				<button
+					className="shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100!"
+					title={`Clone graph "${graph.label}"`}
+					onClick={cloneGraph}
+				>
+					<CloneIcon />
+				</button>
 
-			<button
-				className="shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100!"
-				title={`Export graph "${graph.label}"`}
-				onClick={exportGraph}
-			>
-				<ExportIcon />
-			</button>
+				<button
+					className="shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100!"
+					title={`Export graph "${graph.label}"`}
+					onClick={exportGraph}
+				>
+					<ExportIcon />
+				</button>
 
-			<button
-				className="shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100! hover:text-(--vscode-errorForeground,#f66)"
-				title={`Delete graph "${graph.label}"`}
-				onClick={deleteGraph}
-			>
-				<TrashIcon />
-			</button>
+				<button
+					className="shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100! hover:text-(--vscode-errorForeground,#f66)"
+					title={`Delete graph "${graph.label}"`}
+					onClick={deleteGraph}
+				>
+					<TrashIcon />
+				</button>
+			</div>
 		</div>
 	);
 }
