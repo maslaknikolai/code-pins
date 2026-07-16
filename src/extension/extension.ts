@@ -4,12 +4,12 @@ import { setupDev } from './setupDev';
 import { createAppCtx } from './createAppCtx';
 import { removeAllNodesOfActiveGraph } from './actions/activeGraph/removeAllNodesOfActiveGraph';
 
-export function activate(context: vscode.ExtensionContext) {
-	const appCtx = createAppCtx(context);
+export function activate(vscodeContext: vscode.ExtensionContext) {
+	const appCtx = createAppCtx(vscodeContext);
 
 	setupDev(appCtx);
 
-	context.subscriptions.push(
+	vscodeContext.subscriptions.push(
 		vscode.commands.registerCommand('code-pins.addPin', () => addActiveEditorSymbolAsPinCommand(appCtx)),
 		vscode.commands.registerCommand('code-pins.clearActiveGraph', () => removeAllNodesOfActiveGraph(appCtx))
 	);

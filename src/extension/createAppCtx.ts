@@ -4,12 +4,12 @@ import { createPinsGraphsStore } from './storage/pins-graphs-store';
 import { createViewSettingsStore } from './storage/viewport-data-store';
 import { AppCtx } from './types';
 
-export function createAppCtx(context: vscode.ExtensionContext): AppCtx {
+export function createAppCtx(vscodeContext: vscode.ExtensionContext): AppCtx {
 	return {
-		vscodeContext: context,
-		pinsGraphsStore: createPinsGraphsStore(context.workspaceState),
-		activePinsGraphIdStore: createActivePinsGraphIdStore(context.workspaceState),
-		viewSettingsStore: createViewSettingsStore(context.workspaceState),
-		vscodePanel: undefined
+		pinsGraphsStore: createPinsGraphsStore(vscodeContext.workspaceState),
+		activePinsGraphIdStore: createActivePinsGraphIdStore(vscodeContext.workspaceState),
+		viewSettingsStore: createViewSettingsStore(vscodeContext.workspaceState),
+		vscodeContext,
+		vscodePanel: undefined,
 	};
 }
