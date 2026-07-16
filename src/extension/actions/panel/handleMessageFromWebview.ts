@@ -2,7 +2,7 @@ import { AppCtx } from "../../types";
 import { WebviewMessageType, WebviewToExtensionMessage } from '../../../shared/messages';
 import { openLocation } from './openLocation';
 import { sendInitialStateToWebview } from './sendStateToWebview';
-import { deletePinsGraph } from '../deletePinsGraph';
+import { removePinsGraph } from '../removePinsGraph';
 import { exportGraph } from '../exportGraph';
 import { cloneGraph } from '../cloneGraph';
 import { addNewGraph } from '../addNewGraph';
@@ -47,7 +47,7 @@ export function handleMessageFromWebview(
         appCtx.activePinsGraphIdStore.set(message.id);
     }
     if (message.type === WebviewMessageType.DeleteGraph) {
-        deletePinsGraph(appCtx, message.id);
+        removePinsGraph(appCtx, message.id);
     }
     if (message.type === WebviewMessageType.ImportGraph) {
         importGraphFile(appCtx);

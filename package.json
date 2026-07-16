@@ -20,8 +20,20 @@
       {
         "command": "code-pins.clearActiveGraph",
         "title": "Code Pins: Clear Active Graph"
+      },
+      {
+        "command": "code-pins.wipeStorage",
+        "title": "Code Pins: Wipe Storage (dev)"
       }
     ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "code-pins.wipeStorage",
+          "when": "codePins.isDev"
+        }
+      ]
+    },
     "keybindings": [
       {
         "command": "code-pins.addPin",

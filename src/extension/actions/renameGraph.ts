@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { AppCtx } from '../types';
 import { getGraphById } from './getGraphById';
 import { getNextGraphName } from './getNextGraphName';
-import { saveOrAddGraph } from './saveOrAddGraph';
+import { updateGraph } from './updateGraph';
 
 
 export async function renameGraph(appCtx: AppCtx, id: string): Promise<void> {
@@ -18,5 +18,5 @@ export async function renameGraph(appCtx: AppCtx, id: string): Promise<void> {
 		return;
 	}
 
-	await saveOrAddGraph({ ...source, label: getNextGraphName(appCtx.pinsGraphsStore, input) }, appCtx);
+	await updateGraph({ ...source, label: getNextGraphName(appCtx.pinsGraphsStore, input) }, appCtx);
 }
