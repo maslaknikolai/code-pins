@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { addPin } from '../actions/addPin';
+import { addPinToActiveGraph } from '../actions/activeGraph/addPinToActiveGraph';
 import { buildPin } from '../actions/buildPin';
 import { sendSelectedPinToWebview } from '../actions/panel/sendSelectedPinToWebview';
 import { createOrShowPanel } from '../actions/panel/showPanel';
@@ -13,7 +13,7 @@ export async function addActiveEditorSymbolAsPinCommand(appCtx: AppCtx) {
 		: undefined;
 
 	if (built) {
-		addPin(built.filePath, built.pin, appCtx);
+		addPinToActiveGraph(built.filePath, built.pin, appCtx);
 	}
 
 	createOrShowPanel({

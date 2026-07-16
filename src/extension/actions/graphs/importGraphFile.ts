@@ -1,10 +1,10 @@
 import * as vscode from 'vscode';
-import { PinsGraphFile, SUPPORTED_PINS_GRAPH_FILE_VERSION } from '../../shared/types';
+import { PinsGraphFile, SUPPORTED_PINS_GRAPH_FILE_VERSION } from '../../../shared/types';
 import { FILE_FILTERS } from './exportGraph';
-import { AppCtx } from '../types';
+import { AppCtx } from '../../types';
 import { createPinsGraph } from './createPinsGraph';
 import { getNextGraphName } from './getNextGraphName';
-import { setActiveGraph } from './setActiveGraph';
+import { setActiveGraph } from '../activeGraph/setActiveGraph';
 
 
 export async function importGraphFile(appCtx: AppCtx): Promise<void> {

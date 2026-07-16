@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { FileNode, PinsGraph } from '../../shared/types';
+import { FileNode, PinsGraph } from '../../../shared/types';
 
 export const DEFAULT_PINS_GRAPH_NAME = 'default';
 

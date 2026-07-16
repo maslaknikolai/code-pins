@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { AppCtx } from '../types';
+import { AppCtx } from '../../types';
 import { getGraphById } from './getGraphById';
 import { getNextGraphName } from './getNextGraphName';
 import { updateGraph } from './updateGraph';

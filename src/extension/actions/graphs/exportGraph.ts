@@ -1,8 +1,8 @@
 import { homedir } from 'os';
 import { join } from 'path';
 import * as vscode from 'vscode';
-import { PinsGraphFile, SUPPORTED_PINS_GRAPH_FILE_VERSION } from '../../shared/types';
-import { AppCtx } from '../types';
+import { PinsGraphFile, SUPPORTED_PINS_GRAPH_FILE_VERSION } from '../../../shared/types';
+import { AppCtx } from '../../types';
 import { getGraphById } from './getGraphById';
 
 export const FILE_FILTERS = { 'Code Pins File': ['json'] };

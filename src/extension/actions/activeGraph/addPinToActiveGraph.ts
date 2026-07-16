@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
-import { Coords, FileNode, Pin, ViewSettings } from '../../shared/types';
-import { AppCtx } from '../types';
-import { createPinsGraph, DEFAULT_PINS_GRAPH_NAME } from './createPinsGraph';
+import { Coords, FileNode, Pin, ViewSettings } from '../../../shared/types';
+import { AppCtx } from '../../types';
+import { createPinsGraph, DEFAULT_PINS_GRAPH_NAME } from '../graphs/createPinsGraph';
 import { getActiveGraph } from './getActiveGraph';
 import { setActiveGraph } from './setActiveGraph';
 
-export function addPin(filePath: string, pin: Pin, appCtx: AppCtx): void {
+export function addPinToActiveGraph(filePath: string, pin: Pin, appCtx: AppCtx): void {
 	const activeGraph = getActiveGraph(appCtx) ?? createPinsGraph(DEFAULT_PINS_GRAPH_NAME);
 
 	const currentFileNodes = activeGraph.fileNodes;

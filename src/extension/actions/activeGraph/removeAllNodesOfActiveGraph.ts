@@ -1,4 +1,4 @@
-import { AppCtx } from '../types';
+import { AppCtx } from '../../types';
 import { getActiveGraph } from './getActiveGraph';
 import { setActiveGraph } from './setActiveGraph';
 

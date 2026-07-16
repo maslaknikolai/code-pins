@@ -1,5 +1,5 @@
 import { AppCtx } from '../../types';
-import { getActiveGraph } from '../getActiveGraph';
+import { getActiveGraph } from '../activeGraph/getActiveGraph';
 
 
 export function refreshVsCodePanelTitle(appCtx: AppCtx): void {

@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
-import { parsePinPath } from '../../shared/pinPath';
-import { Pin } from '../../shared/types';
-import { AppCtx } from '../types';
+import { parsePinPath } from '../../../shared/pinPath';
+import { Pin } from '../../../shared/types';
+import { AppCtx } from '../../types';
 import { getActiveGraph } from './getActiveGraph';
-import { resolveSymbolDefinitionPath } from './resolveSymbolDefinitionPath';
+import { resolveSymbolDefinitionPath } from '../resolveSymbolDefinitionPath';
 import { setActiveGraph } from './setActiveGraph';
-import { resolveUri } from '../utils/resolveUri';
+import { resolveUri } from '../../utils/resolveUri';
 
 export async function retryUnresolvedDefinitions(appCtx: AppCtx): Promise<void> {
 	const activeGraph = getActiveGraph(appCtx);

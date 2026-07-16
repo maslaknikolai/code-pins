@@ -1,4 +1,4 @@
-import { AppCtx } from '../types';
+import { AppCtx } from '../../types';
 
 export function getNextGraphName(label: string, { pinsGraphsStore }: AppCtx): string {
 	const base = label.replace(/ \(\d+\)$/, '');

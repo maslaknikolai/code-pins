@@ -1,7 +1,7 @@
-import { AppCtx } from '../types';
+import { AppCtx } from '../../types';
 import { deleteGraphById } from './deleteGraphById';
-import { getActiveGraph } from './getActiveGraph';
-import { setActiveGraph } from './setActiveGraph';
+import { getActiveGraph } from '../activeGraph/getActiveGraph';
+import { setActiveGraph } from '../activeGraph/setActiveGraph';
 
 export async function removePinsGraph(id: string, appCtx: AppCtx): Promise<void> {
 	const wasActive = getActiveGraph(appCtx)?.id === id;

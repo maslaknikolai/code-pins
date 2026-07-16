@@ -1,9 +1,9 @@
-import { Coords, FileNode } from '../../shared/types';
-import { AppCtx } from '../types';
+import { Coords, FileNode } from '../../../shared/types';
+import { AppCtx } from '../../types';
 import { getActiveGraph } from './getActiveGraph';
 import { setActiveGraph } from './setActiveGraph';
 
-export function moveFileNode(filePath: string, position: Coords, appCtx: AppCtx): void {
+export function moveActiveGraphFileNode(filePath: string, position: Coords, appCtx: AppCtx): void {
 	const activeGraph = getActiveGraph(appCtx);
 
 	if (!activeGraph) {

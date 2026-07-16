@@ -1,7 +1,7 @@
-import { AppCtx } from '../types';
+import { AppCtx } from '../../types';
 import { createPinsGraph } from './createPinsGraph';
 import { getNextGraphName } from './getNextGraphName';
-import { setActiveGraph } from './setActiveGraph';
+import { setActiveGraph } from '../activeGraph/setActiveGraph';
 
 
 export function addNewGraph(appCtx: AppCtx): void {

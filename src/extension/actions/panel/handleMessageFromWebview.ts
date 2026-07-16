@@ -2,15 +2,15 @@ import { AppCtx } from "../../types";
 import { WebviewMessageType, WebviewToExtensionMessage } from '../../../shared/messages';
 import { openLocation } from './openLocation';
 import { sendInitialStateToWebview } from './sendStateToWebview';
-import { removePinsGraph } from '../removePinsGraph';
-import { exportGraph } from '../exportGraph';
-import { cloneGraph } from '../cloneGraph';
-import { addNewGraph } from '../addNewGraph';
-import { importGraphFile } from '../importGraphFile';
-import { moveFileNode } from '../moveFileNode';
-import { removeFileNode } from '../removeFileNode';
-import { renameGraph } from '../renameGraph';
-import { removePin } from '../removePin';
+import { removePinsGraph } from '../graphs/removePinsGraph';
+import { exportGraph } from '../graphs/exportGraph';
+import { cloneGraph } from '../graphs/cloneGraph';
+import { addNewGraph } from '../graphs/addNewGraph';
+import { importGraphFile } from '../graphs/importGraphFile';
+import { moveActiveGraphFileNode } from '../activeGraph/moveActiveGraphFileNode';
+import { removeFileNodeFromActiveGraph } from '../activeGraph/removeFileNodeFromActiveGraph';
+import { renameGraph } from '../graphs/renameGraph';
+import { removePinFromActiveGraph } from '../activeGraph/removePinFromActiveGraph';
 import { sendGraphsToWebview } from "./sendGraphsToWebview";
 import { sendActiveFileToWebview } from "./sendActiveFileToWebview";
 import { WebviewPanel } from "vscode";
@@ -29,13 +29,13 @@ export function handleMessageFromWebview(
         callbacks.onShow?.(panel);
     }
     if (message.type === WebviewMessageType.MoveFileNode) {
-        moveFileNode(message.filePath, message.position, appCtx);
+        moveActiveGraphFileNode(message.filePath, message.position, appCtx);
     }
     if (message.type === WebviewMessageType.RemovePin) {
-        removePin(message.id, appCtx);
+        removePinFromActiveGraph(message.id, appCtx);
     }
     if (message.type === WebviewMessageType.RemoveFileNode) {
-        removeFileNode(message.filePath, appCtx);
+        removeFileNodeFromActiveGraph(message.filePath, appCtx);
     }
     if (message.type === WebviewMessageType.OpenLocation) {
         openLocation(message.file, message.line);

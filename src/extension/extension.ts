@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { addActiveEditorSymbolAsPinCommand } from './commands/addPinCommand';
 import { setupDev } from './setupDev';
 import { createAppCtx } from './createAppCtx';
-import { removeAllNodesOfActiveGraph } from './actions/removeAllNodes';
+import { removeAllNodesOfActiveGraph } from './actions/activeGraph/removeAllNodesOfActiveGraph';
 
 export function activate(context: vscode.ExtensionContext) {
 	const appCtx = createAppCtx(context);

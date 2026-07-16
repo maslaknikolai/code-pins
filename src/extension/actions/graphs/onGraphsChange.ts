@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { AppCtx } from '../types';
+import { AppCtx } from '../../types';
 
 
 export function onGraphsChange(

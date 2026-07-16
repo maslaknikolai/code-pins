@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { AppCtx } from '../../types';
-import { onGraphsChange } from '../onGraphsChange';
+import { onGraphsChange } from '../graphs/onGraphsChange';
 import { handleMessageFromWebview } from './handleMessageFromWebview';
 import { renderHtml } from './html';
 import { refreshVsCodePanelTitle } from './refreshVsCodePanelTitle';

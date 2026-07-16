@@ -1,5 +1,5 @@
 import { AppCtx } from '../../types';
-import { retryUnresolvedDefinitions } from '../retryUnresolvedDefinitions';
+import { retryUnresolvedDefinitions } from '../activeGraph/retryUnresolvedDefinitions';
 import { createPanel, type PanelCallbacks } from './createPanel';
 import { refreshVsCodePanelTitle } from './refreshVsCodePanelTitle';
 

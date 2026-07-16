@@ -1,8 +1,8 @@
-import { AppCtx } from '../types';
+import { AppCtx } from '../../types';
 import { createPinsGraph } from './createPinsGraph';
 import { getGraphById } from './getGraphById';
 import { getNextGraphName } from './getNextGraphName';
-import { setActiveGraph } from './setActiveGraph';
+import { setActiveGraph } from '../activeGraph/setActiveGraph';
 
 
 export function cloneGraph(id: string, appCtx: AppCtx): void {

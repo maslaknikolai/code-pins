@@ -1,5 +1,5 @@
-import { PinsGraph } from '../../shared/types';
-import { AppCtx } from '../types';
+import { PinsGraph } from '../../../shared/types';
+import { AppCtx } from '../../types';
 
 
 export function updateGraph(pinsGraph: PinsGraph, { pinsGraphsStore }: AppCtx): Thenable<void> {
