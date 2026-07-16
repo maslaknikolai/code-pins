@@ -27,7 +27,7 @@
         "command": "code-pins.addPin",
         "key": "ctrl+y",
         "mac": "ctrl+y",
-        "when": "editorTextFocus"
+        "when": "editorTextFocus || (!editorIsOpen && !terminalFocus)"
       }
     ]
   },
