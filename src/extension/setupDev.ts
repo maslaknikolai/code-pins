@@ -14,7 +14,7 @@ export function setupDev(appCtx: AppCtx): void {
 	vscode.commands.executeCommand('setContext', 'codePins.isDev', true);
 
 	appCtx.vscodeContext.subscriptions.push(
-		onGraphsChange(appCtx, () => saveDevSnapshot(appCtx)),
+		onGraphsChange(() => saveDevSnapshot(appCtx), appCtx),
 		vscode.commands.registerCommand('code-pins.wipeStorage', () => wipeStorage(appCtx))
 	);
 }

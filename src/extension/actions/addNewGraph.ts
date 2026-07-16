@@ -5,7 +5,7 @@ import { setActiveGraph } from './setActiveGraph';
 
 
 export function addNewGraph(appCtx: AppCtx): void {
-	const name = getNextGraphName(appCtx.pinsGraphsStore, 'new graph');
+	const name = getNextGraphName('new graph', appCtx);
 
 	setActiveGraph(createPinsGraph(name), appCtx);
 }

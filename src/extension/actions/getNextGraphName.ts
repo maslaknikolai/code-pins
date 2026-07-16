@@ -1,6 +1,6 @@
-import type { PinsGraphsStore } from '../storage/pins-graphs-store';
+import { AppCtx } from '../types';
 
-export function getNextGraphName(pinsGraphsStore: PinsGraphsStore, label: string): string {
+export function getNextGraphName(label: string, { pinsGraphsStore }: AppCtx): string {
 	const base = label.replace(/ \(\d+\)$/, '');
 	const existingNames = pinsGraphsStore.get().map((graph) => graph.label);
 

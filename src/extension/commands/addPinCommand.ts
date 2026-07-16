@@ -13,14 +13,14 @@ export async function addActiveEditorSymbolAsPinCommand(appCtx: AppCtx) {
 		: undefined;
 
 	if (built) {
-		addPin(appCtx, built.filePath, built.pin);
+		addPin(built.filePath, built.pin, appCtx);
 	}
 
-	createOrShowPanel(appCtx, {
+	createOrShowPanel({
 		onShow: (panel) => {
 			if (built) {
 				sendSelectedPinToWebview(panel.webview, built.pin);
 			}
 		}
-	});
+	}, appCtx);
 }

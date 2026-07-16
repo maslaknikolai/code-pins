@@ -31,7 +31,7 @@ export async function importGraphFile(appCtx: AppCtx): Promise<void> {
 			continue;
 		}
 
-		const name = getNextGraphName(appCtx.pinsGraphsStore, pinsGraphFile.pinsGraph.label || 'imported');
+		const name = getNextGraphName(pinsGraphFile.pinsGraph.label || 'imported', appCtx);
 
 		setActiveGraph(createPinsGraph(name, pinsGraphFile.pinsGraph.fileNodes), appCtx);
 	}

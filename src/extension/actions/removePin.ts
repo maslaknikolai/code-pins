@@ -2,7 +2,7 @@ import { AppCtx } from '../types';
 import { getActiveGraph } from './getActiveGraph';
 import { setActiveGraph } from './setActiveGraph';
 
-export function removePin(appCtx: AppCtx, id: string): void {
+export function removePin(id: string, appCtx: AppCtx): void {
 	const activeGraph = getActiveGraph(appCtx);
 
 	if (!activeGraph) {

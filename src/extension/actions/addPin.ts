@@ -5,7 +5,7 @@ import { createPinsGraph, DEFAULT_PINS_GRAPH_NAME } from './createPinsGraph';
 import { getActiveGraph } from './getActiveGraph';
 import { setActiveGraph } from './setActiveGraph';
 
-export function addPin(appCtx: AppCtx, filePath: string, pin: Pin): void {
+export function addPin(filePath: string, pin: Pin, appCtx: AppCtx): void {
 	const activeGraph = getActiveGraph(appCtx) ?? createPinsGraph(DEFAULT_PINS_GRAPH_NAME);
 
 	const currentFileNodes = activeGraph.fileNodes;

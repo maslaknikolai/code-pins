@@ -3,7 +3,7 @@ import { AppCtx } from '../types';
 import { getActiveGraph } from './getActiveGraph';
 import { setActiveGraph } from './setActiveGraph';
 
-export function moveFileNode(appCtx: AppCtx, filePath: string, position: Coords): void {
+export function moveFileNode(filePath: string, position: Coords, appCtx: AppCtx): void {
 	const activeGraph = getActiveGraph(appCtx);
 
 	if (!activeGraph) {

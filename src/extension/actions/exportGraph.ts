@@ -7,7 +7,7 @@ import { getGraphById } from './getGraphById';
 
 export const FILE_FILTERS = { 'Code Pins File': ['json'] };
 
-export async function exportGraph(appCtx: AppCtx, id: string): Promise<void> {
+export async function exportGraph(id: string, appCtx: AppCtx): Promise<void> {
 	const source = getGraphById(id, appCtx);
 
 	if (!source) {

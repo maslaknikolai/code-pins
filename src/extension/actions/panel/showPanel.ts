@@ -3,11 +3,11 @@ import { retryUnresolvedDefinitions } from '../retryUnresolvedDefinitions';
 import { createPanel, type PanelCallbacks } from './createPanel';
 import { refreshVsCodePanelTitle } from './refreshVsCodePanelTitle';
 
-export function createOrShowPanel(appCtx: AppCtx, callbacks: PanelCallbacks = {}): void {
+export function createOrShowPanel(callbacks: PanelCallbacks, appCtx: AppCtx): void {
 	const existingPanel = appCtx.vscodePanel;
 
 	if (!existingPanel) {
-		const panel = createPanel(appCtx, callbacks);
+		const panel = createPanel(callbacks, appCtx);
 
 		appCtx.vscodePanel = panel;
 		panel.onDidDispose(() => {
@@ -15,6 +15,7 @@ export function createOrShowPanel(appCtx: AppCtx, callbacks: PanelCallbacks = {}
 		});
 	} else {
 		existingPanel.reveal(undefined, false);
+		// Ready fires once per webview load, so an already-loaded panel never repeats it.
 		callbacks.onShow?.(existingPanel);
 	}
 

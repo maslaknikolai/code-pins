@@ -12,7 +12,7 @@ export interface PanelCallbacks {
 	onShow?: (panel: vscode.WebviewPanel) => void;
 }
 
-export function createPanel(appCtx: AppCtx, callbacks: PanelCallbacks): vscode.WebviewPanel {
+export function createPanel(callbacks: PanelCallbacks, appCtx: AppCtx): vscode.WebviewPanel {
 	const panel = vscode.window.createWebviewPanel(
 		'codePins',
 		'Code Pins',
@@ -30,12 +30,12 @@ export function createPanel(appCtx: AppCtx, callbacks: PanelCallbacks): vscode.W
 
 	const disposables: vscode.Disposable[] = [
 		panel.webview.onDidReceiveMessage((message) => {
-			handleMessageFromWebview(message, panel, appCtx, callbacks);
+			handleMessageFromWebview(message, panel, callbacks, appCtx);
 		}),
-		onGraphsChange(appCtx, () => {
+		onGraphsChange(() => {
 			sendGraphsToWebview(panel.webview, appCtx);
 			refreshVsCodePanelTitle(appCtx);
-		}),
+		}, appCtx),
 		vscode.window.onDidChangeActiveTextEditor(() => {
 			sendActiveFileToWebview(panel.webview);
 		}),

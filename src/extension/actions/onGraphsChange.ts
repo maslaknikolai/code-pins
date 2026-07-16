@@ -3,8 +3,8 @@ import { AppCtx } from '../types';
 
 
 export function onGraphsChange(
-	{ pinsGraphsStore, activePinsGraphIdStore }: AppCtx,
-	listener: () => void
+	listener: () => void,
+	{ pinsGraphsStore, activePinsGraphIdStore }: AppCtx
 ): vscode.Disposable {
 	return vscode.Disposable.from(
 		pinsGraphsStore.onDidChange(listener),

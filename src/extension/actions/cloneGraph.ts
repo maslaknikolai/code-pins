@@ -5,14 +5,14 @@ import { getNextGraphName } from './getNextGraphName';
 import { setActiveGraph } from './setActiveGraph';
 
 
-export function cloneGraph(appCtx: AppCtx, id: string): void {
+export function cloneGraph(id: string, appCtx: AppCtx): void {
 	const source = getGraphById(id, appCtx);
 
 	if (!source) {
 		return;
 	}
 
-	const name = getNextGraphName(appCtx.pinsGraphsStore, source.label);
+	const name = getNextGraphName(source.label, appCtx);
 
 	setActiveGraph(createPinsGraph(name, structuredClone(source.fileNodes)), appCtx);
 }

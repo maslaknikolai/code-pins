@@ -5,7 +5,7 @@ import { getNextGraphName } from './getNextGraphName';
 import { updateGraph } from './updateGraph';
 
 
-export async function renameGraph(appCtx: AppCtx, id: string): Promise<void> {
+export async function renameGraph(id: string, appCtx: AppCtx): Promise<void> {
 	const source = getGraphById(id, appCtx);
 
 	if (!source) {
@@ -18,5 +18,5 @@ export async function renameGraph(appCtx: AppCtx, id: string): Promise<void> {
 		return;
 	}
 
-	await updateGraph({ ...source, label: getNextGraphName(appCtx.pinsGraphsStore, input) }, appCtx);
+	await updateGraph({ ...source, label: getNextGraphName(input, appCtx) }, appCtx);
 }

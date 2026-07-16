@@ -19,8 +19,8 @@ import type { PanelCallbacks } from "./createPanel";
 export function handleMessageFromWebview(
     message: WebviewToExtensionMessage,
     panel: WebviewPanel,
+    callbacks: PanelCallbacks,
     appCtx: AppCtx,
-    callbacks: PanelCallbacks = {},
 ) {
     if (message.type === WebviewMessageType.Ready) {
         sendInitialStateToWebview(panel.webview, appCtx);
@@ -29,13 +29,13 @@ export function handleMessageFromWebview(
         callbacks.onShow?.(panel);
     }
     if (message.type === WebviewMessageType.MoveFileNode) {
-        moveFileNode(appCtx, message.filePath, message.position);
+        moveFileNode(message.filePath, message.position, appCtx);
     }
     if (message.type === WebviewMessageType.RemovePin) {
-        removePin(appCtx, message.id);
+        removePin(message.id, appCtx);
     }
     if (message.type === WebviewMessageType.RemoveFileNode) {
-        removeFileNode(appCtx, message.filePath);
+        removeFileNode(message.filePath, appCtx);
     }
     if (message.type === WebviewMessageType.OpenLocation) {
         openLocation(message.file, message.line);
@@ -47,7 +47,7 @@ export function handleMessageFromWebview(
         appCtx.activePinsGraphIdStore.set(message.id);
     }
     if (message.type === WebviewMessageType.DeleteGraph) {
-        removePinsGraph(appCtx, message.id);
+        removePinsGraph(message.id, appCtx);
     }
     if (message.type === WebviewMessageType.ImportGraph) {
         importGraphFile(appCtx);
@@ -56,12 +56,12 @@ export function handleMessageFromWebview(
         addNewGraph(appCtx);
     }
     if (message.type === WebviewMessageType.CloneGraph) {
-        cloneGraph(appCtx, message.id);
+        cloneGraph(message.id, appCtx);
     }
     if (message.type === WebviewMessageType.RenameGraph) {
-        renameGraph(appCtx, message.id);
+        renameGraph(message.id, appCtx);
     }
     if (message.type === WebviewMessageType.ExportGraph) {
-        exportGraph(appCtx, message.id);
+        exportGraph(message.id, appCtx);
     }
 }
