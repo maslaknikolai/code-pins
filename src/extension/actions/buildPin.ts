@@ -17,7 +17,6 @@ export async function buildPin(
 	const wordRange = document.getWordRangeAtPosition(position);
 
 	if (!wordRange) {
-		vscode.window.showWarningMessage('Code Pins: place the cursor on a symbol to pin it.');
 		return undefined;
 	}
 
