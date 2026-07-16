@@ -22,6 +22,7 @@ import { ViewportSettingsReporter } from './ViewportSettingsReporter';
 import { ExtensionMessageHandler } from './ExtensionMessageHandler';
 import { FlowControls } from './FlowControls';
 import { HotkeysHandler } from './HotkeysHandler';
+import { useEndDragOnLeave } from '../hooks/useEndDragOnLeave';
 import { useViewSettingsAutosave } from '../hooks/useViewSettingsAutosave';
 
 const nodeTypes = {
@@ -43,6 +44,7 @@ export function App() {
 	const [nodes, setNodes] = useAtom(flowNodesAtom);
 
 	useViewSettingsAutosave()
+	useEndDragOnLeave()
 
 	const edges = useEdges();
 
