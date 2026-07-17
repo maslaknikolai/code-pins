@@ -48,8 +48,10 @@ export function GraphListItem({ graph }: { graph: PinsGraph; }) {
 		<div
 			ref={rowRef}
 			className={cn(
-				'group flex cursor-pointer items-center gap-0.5 rounded px-2 py-1 hover:bg-(--vscode-list-hoverBackground)',
-				isActive && 'bg-(--vscode-list-activeSelectionBackground) text-(--vscode-list-activeSelectionForeground)'
+				'group flex cursor-pointer items-center gap-0.5 rounded px-2 py-1',
+				isActive
+					? 'bg-(--vscode-list-activeSelectionBackground) text-(--vscode-list-activeSelectionForeground)'
+					: 'hover:bg-(--vscode-list-hoverBackground)'
 			)}
 			onClick={switchGraph}
 		>
