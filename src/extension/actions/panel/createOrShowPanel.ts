@@ -1,7 +1,9 @@
 import { AppCtx } from '../../types';
 import { retryUnresolvedDefinitions } from '../activeGraph/retryUnresolvedDefinitions';
-import { createPanel, type PanelCallbacks } from './createPanel';
+import { createPanel } from './createPanel';
 import { refreshVsCodePanelTitle } from './refreshVsCodePanelTitle';
+import { PanelCallbacks } from './types';
+
 
 export function createOrShowPanel(callbacks: PanelCallbacks, appCtx: AppCtx): void {
 	const existingPanel = appCtx.vscodePanel;

@@ -6,11 +6,8 @@ import { renderHtml } from './html';
 import { refreshVsCodePanelTitle } from './refreshVsCodePanelTitle';
 import { sendActiveFileToWebview } from './sendActiveFileToWebview';
 import { sendGraphsToWebview } from './sendGraphsToWebview';
+import { PanelCallbacks } from './types';
 
-export interface PanelCallbacks {
-	/** Runs once the webview can receive messages. */
-	onReady?: (panel: vscode.WebviewPanel) => void;
-}
 
 export function createPanel(callbacks: PanelCallbacks, appCtx: AppCtx): vscode.WebviewPanel {
 	const panel = vscode.window.createWebviewPanel(

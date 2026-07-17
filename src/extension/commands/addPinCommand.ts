@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { addPinToActiveGraph } from '../actions/activeGraph/addPinToActiveGraph';
 import { buildPin } from '../actions/buildPin';
 import { sendSelectedPinToWebview } from '../actions/panel/sendSelectedPinToWebview';
-import { createOrShowPanel } from '../actions/panel/showPanel';
+import { createOrShowPanel } from '../actions/panel/createOrShowPanel';
 import { AppCtx } from '../types';
 
 export async function addActiveEditorSymbolAsPinCommand(appCtx: AppCtx) {

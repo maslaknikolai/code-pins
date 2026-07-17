@@ -14,7 +14,7 @@ import { removePinFromActiveGraph } from '../activeGraph/removePinFromActiveGrap
 import { sendGraphsToWebview } from "./sendGraphsToWebview";
 import { sendActiveFileToWebview } from "./sendActiveFileToWebview";
 import { WebviewPanel } from "vscode";
-import type { PanelCallbacks } from "./createPanel";
+import { PanelCallbacks } from "./types";
 
 export function handleMessageFromWebview(
     message: WebviewToExtensionMessage,
