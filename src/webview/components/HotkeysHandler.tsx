@@ -9,6 +9,7 @@ import { useSelectGraphByOffset } from '../hooks/useSelectGraphByOffset';
 import { sendToExtension } from '../utils/vscodeApi';
 
 const PAN_STEP = 60;
+const PAN_STEP_FAST = 240;
 
 /** made as component to have access to ReactFlow */
 export function HotkeysHandler() {
@@ -71,23 +72,25 @@ export function HotkeysHandler() {
 		}
 
 		// WASD pans: the delta shifts the field, so it's opposite to the travel direction.
+		const panStep = event.shiftKey ? PAN_STEP_FAST : PAN_STEP;
+
 		if (event.code === 'KeyW') {
-			panBy({ x: 0, y: PAN_STEP });
+			panBy({ x: 0, y: panStep });
 			return;
 		}
 
 		if (event.code === 'KeyS') {
-			panBy({ x: 0, y: -PAN_STEP });
+			panBy({ x: 0, y: -panStep });
 			return;
 		}
 
 		if (event.code === 'KeyA') {
-			panBy({ x: PAN_STEP, y: 0 });
+			panBy({ x: panStep, y: 0 });
 			return;
 		}
 
 		if (event.code === 'KeyD') {
-			panBy({ x: -PAN_STEP, y: 0 });
+			panBy({ x: -panStep, y: 0 });
 			return;
 		}
 	});
