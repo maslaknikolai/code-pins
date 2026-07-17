@@ -1,5 +1,4 @@
 import { useOnViewportChange, useReactFlow } from '@xyflow/react';
-import { useEffect } from 'react';
 import { Coords } from '../../shared/types';
 import { useSetAtom } from 'jotai';
 import { viewSettingsAtom } from '../atoms';

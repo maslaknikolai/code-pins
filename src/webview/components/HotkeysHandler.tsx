@@ -13,7 +13,7 @@ const PAN_STEP_FAST = 240;
 
 /** made as component to have access to ReactFlow */
 export function HotkeysHandler() {
-	const { zoomIn, zoomOut } = useReactFlow();
+	const { zoomIn, zoomOut, setViewport } = useReactFlow();
 	const [selectedPin, setSelectedPin] = useAtom(selectedPinAtom);
 	const setViewSettings = useSetAtom(viewSettingsAtom);
 	const { selectGraphByOffset } = useSelectGraphByOffset();
@@ -56,6 +56,7 @@ export function HotkeysHandler() {
 
 		if (event.code === 'KeyX') {
 			sendToExtension({ type: WebviewMessageType.NewGraph });
+			setViewport({ x: 0, y: 0, zoom: 1 });
 			return;
 		}
 
