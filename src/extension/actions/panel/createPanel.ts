@@ -33,8 +33,8 @@ export function createPanel(callbacks: PanelCallbacks, appCtx: AppCtx): vscode.W
 			sendGraphsToWebview(panel.webview, appCtx);
 			refreshVsCodePanelTitle(appCtx);
 		}, appCtx),
-		vscode.window.onDidChangeActiveTextEditor(() => {
-			sendActiveFileToWebview(panel.webview);
+		appCtx.lastActiveFilePathStore.onDidChange(() => {
+			sendActiveFileToWebview(appCtx);
 		}),
 	];
 

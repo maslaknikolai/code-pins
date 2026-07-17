@@ -25,7 +25,7 @@ export function handleMessageFromWebview(
     if (message.type === WebviewMessageType.Ready) {
         sendViewportSettingToWebview(panel.webview, appCtx);
         sendGraphsToWebview(panel.webview, appCtx);
-        sendActiveFileToWebview(panel.webview);
+        sendActiveFileToWebview(appCtx);
         callbacks.onReady?.(panel);
     }
     if (message.type === WebviewMessageType.MoveFileNode) {

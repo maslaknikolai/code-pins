@@ -1,18 +1,18 @@
-import * as vscode from 'vscode';
 import { ExtensionMessageType } from '../../../shared/messages';
-import { getRelativePath } from '../../utils/getRelativePath';
+import { AppCtx } from '../../types';
 import { sendToWebview } from './sendToWebview';
 
 
-export function sendActiveFileToWebview(webview: vscode.Webview): void {
-	const editor = vscode.window.activeTextEditor;
+export function sendActiveFileToWebview(appCtx: AppCtx): void {
+	const webview = appCtx.vscodePanel?.webview;
+	const filePath = appCtx.lastActiveFilePathStore.get();
 
-	if (!editor) {
+	if (!webview || !filePath) {
 		return;
 	}
 
 	sendToWebview(webview, {
 		type: ExtensionMessageType.SetActiveFile,
-		filePath: getRelativePath(editor.document.uri),
+		filePath,
 	});
 }
