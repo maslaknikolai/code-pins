@@ -9,7 +9,7 @@ import { sendGraphsToWebview } from './sendGraphsToWebview';
 
 export interface PanelCallbacks {
 	/** Runs once the webview can receive messages. */
-	onShow?: (panel: vscode.WebviewPanel) => void;
+	onReady?: (panel: vscode.WebviewPanel) => void;
 }
 
 export function createPanel(callbacks: PanelCallbacks, appCtx: AppCtx): vscode.WebviewPanel {

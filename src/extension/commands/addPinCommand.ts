@@ -17,7 +17,7 @@ export async function addActiveEditorSymbolAsPinCommand(appCtx: AppCtx) {
 	}
 
 	createOrShowPanel({
-		onShow: (panel) => {
+		onReady: (panel) => {
 			if (built) {
 				sendSelectedPinToWebview(panel.webview, built.pin);
 			}

@@ -16,7 +16,7 @@ export function createOrShowPanel(callbacks: PanelCallbacks, appCtx: AppCtx): vo
 	} else {
 		existingPanel.reveal(undefined, false);
 		// Ready fires once per webview load, so an already-loaded panel never repeats it.
-		callbacks.onShow?.(existingPanel);
+		callbacks.onReady?.(existingPanel);
 	}
 
 	refreshVsCodePanelTitle(appCtx);

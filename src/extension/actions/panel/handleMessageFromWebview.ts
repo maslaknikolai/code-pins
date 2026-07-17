@@ -1,7 +1,7 @@
 import { AppCtx } from "../../types";
 import { WebviewMessageType, WebviewToExtensionMessage } from '../../../shared/messages';
 import { openLocation } from './openLocation';
-import { sendInitialStateToWebview } from './sendStateToWebview';
+import { sendViewportSettingToWebview } from './sendViewportSettingToWebview';
 import { removePinsGraph } from '../graphs/removePinsGraph';
 import { exportGraph } from '../graphs/exportGraph';
 import { cloneGraph } from '../graphs/cloneGraph';
@@ -23,10 +23,10 @@ export function handleMessageFromWebview(
     appCtx: AppCtx,
 ) {
     if (message.type === WebviewMessageType.Ready) {
-        sendInitialStateToWebview(panel.webview, appCtx);
+        sendViewportSettingToWebview(panel.webview, appCtx);
         sendGraphsToWebview(panel.webview, appCtx);
         sendActiveFileToWebview(panel.webview);
-        callbacks.onShow?.(panel);
+        callbacks.onReady?.(panel);
     }
     if (message.type === WebviewMessageType.MoveFileNode) {
         moveActiveGraphFileNode(message.filePath, message.position, appCtx);
