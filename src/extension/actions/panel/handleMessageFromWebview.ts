@@ -7,7 +7,7 @@ import { exportGraph } from '../graphs/exportGraph';
 import { cloneGraph } from '../graphs/cloneGraph';
 import { addNewGraph } from '../graphs/addNewGraph';
 import { importGraphFile } from '../graphs/importGraphFile';
-import { moveActiveGraphFileNode } from '../activeGraph/moveActiveGraphFileNode';
+import { moveActiveGraphFileNodes } from '../activeGraph/moveActiveGraphFileNodes';
 import { removeFileNodeFromActiveGraph } from '../activeGraph/removeFileNodeFromActiveGraph';
 import { renameGraph } from '../graphs/renameGraph';
 import { removePinFromActiveGraph } from '../activeGraph/removePinFromActiveGraph';
@@ -28,8 +28,8 @@ export function handleMessageFromWebview(
         sendActiveFileToWebview(appCtx);
         callbacks.onReady?.(panel);
     }
-    if (message.type === WebviewMessageType.MoveFileNode) {
-        moveActiveGraphFileNode(message.filePath, message.position, appCtx);
+    if (message.type === WebviewMessageType.MoveFileNodes) {
+        moveActiveGraphFileNodes(message.moves, appCtx);
     }
     if (message.type === WebviewMessageType.RemovePin) {
         removePinFromActiveGraph(message.id, appCtx);

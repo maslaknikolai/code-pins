@@ -49,14 +49,20 @@ export function App() {
 	const edges = useEdges();
 
 	const onNodesChange = useEvent((changes: NodeChange<FileFlowNode>[]) => {
-		setNodes((prev) => applyNodeChanges(changes, prev));
+		setNodes((prev) => {
+			const r = applyNodeChanges(changes, prev)
+			console.log({changes, prev, r})
+			return r
+		});
 	});
 
-	const onNodeDragStop = useEvent((_event: MouseEvent | TouchEvent, node: FileFlowNode) => {
+	const onNodeDragStop = useEvent((_event: MouseEvent | TouchEvent, _node: FileFlowNode, nodes: FileFlowNode[]) => {
 		sendToExtension({
-			type: WebviewMessageType.MoveFileNode,
-			filePath: node.id,
-			position: node.position,
+			type: WebviewMessageType.MoveFileNodes,
+			moves: nodes.map((node) => ({
+				filePath: node.id,
+				position: node.position,
+			})),
 		});
 	});
 

@@ -3,7 +3,7 @@ import type { Coords, Pin, PinsGraph, ViewSettings } from './types';
 
 export enum WebviewMessageType {
 	Ready = 'ready',
-	MoveFileNode = 'moveFileNode',
+	MoveFileNodes = 'moveFileNodes',
 	RemovePin = 'removePin',
 	RemoveFileNode = 'removeFileNode',
 	OpenLocation = 'openLocation',
@@ -19,7 +19,7 @@ export enum WebviewMessageType {
 
 export type WebviewToExtensionMessage =
 	| { type: WebviewMessageType.Ready }
-	| { type: WebviewMessageType.MoveFileNode; filePath: string; position: Coords }
+	| { type: WebviewMessageType.MoveFileNodes; moves: { filePath: string; position: Coords }[] }
 	| { type: WebviewMessageType.RemovePin; id: string }
 	| { type: WebviewMessageType.RemoveFileNode; filePath: string }
 	| { type: WebviewMessageType.OpenLocation; file: string; line: number }
