@@ -20,6 +20,7 @@ import { GroupOutlines } from './GroupOutlines';
 import { OptionsDrawer } from './options/OptionsDrawer';
 import { ViewportSettingsReporter } from './ViewportSettingsReporter';
 import { ExtensionMessageHandler } from './ExtensionMessageHandler';
+import { FitViewOnGraphSwitch } from './FitViewOnGraphSwitch';
 import { FlowControls } from './FlowControls';
 import { HotkeysHandler } from './HotkeysHandler';
 import { useEndDragOnLeave } from '../hooks/useEndDragOnLeave';
@@ -88,6 +89,7 @@ export function App() {
 				<FlowControls />
 				<GroupOutlines />
 				<ExtensionMessageHandler />
+				<FitViewOnGraphSwitch />
 				<HotkeysHandler />
 				<ViewportSettingsReporter />
 				<OptionsDrawer />
