@@ -8,6 +8,7 @@ import { cloneGraph } from '../graphs/cloneGraph';
 import { addNewGraph } from '../graphs/addNewGraph';
 import { importGraphFile } from '../graphs/importGraphFile';
 import { moveActiveGraphFileNodes } from '../activeGraph/moveActiveGraphFileNodes';
+import { undoActiveGraph } from '../activeGraph/undoActiveGraph';
 import { removeFileNodeFromActiveGraph } from '../activeGraph/removeFileNodeFromActiveGraph';
 import { renameGraph } from '../graphs/renameGraph';
 import { removePinFromActiveGraph } from '../activeGraph/removePinFromActiveGraph';
@@ -30,6 +31,9 @@ export function handleMessageFromWebview(
     }
     if (message.type === WebviewMessageType.MoveFileNodes) {
         moveActiveGraphFileNodes(message.moves, appCtx);
+    }
+    if (message.type === WebviewMessageType.Undo) {
+        undoActiveGraph(appCtx);
     }
     if (message.type === WebviewMessageType.RemovePin) {
         removePinFromActiveGraph(message.id, appCtx);

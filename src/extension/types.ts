@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { ActivePinsGraphIdStore } from './storage/active-pins-graph-id-store';
 import { LastActiveFilePathStore } from './storage/last-active-file-path-store';
 import { PinsGraphsStore } from './storage/pins-graphs-store';
+import { UndoSnapshotStore } from './storage/undo-snapshot-store';
 import { ViewSettingsStore } from './storage/viewport-data-store';
 
 export interface AppCtx {
@@ -10,5 +11,6 @@ export interface AppCtx {
 	pinsGraphsStore: PinsGraphsStore;
 	activePinsGraphIdStore: ActivePinsGraphIdStore;
 	lastActiveFilePathStore: LastActiveFilePathStore;
+	undoSnapshotStore: UndoSnapshotStore;
 	vscodePanel: vscode.WebviewPanel | undefined;
 }

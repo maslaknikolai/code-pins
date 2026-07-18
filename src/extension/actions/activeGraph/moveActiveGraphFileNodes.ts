@@ -20,12 +20,11 @@ export function moveActiveGraphFileNodes(
 
 	setActiveGraph({
 		...activeGraph,
-		fileNodes: activeGraph.fileNodes
-			.map((node) => {
-				const position = positionByFilePath.get(node.filePath);
-				return position
-					? { ...node, position } satisfies FileNode
-					: node;
-			})
+		fileNodes: activeGraph.fileNodes.map<FileNode>((node) => {
+			const position = positionByFilePath.get(node.filePath);
+			return position
+				? { ...node, position }
+				: node;
+		})
 	}, appCtx);
 }

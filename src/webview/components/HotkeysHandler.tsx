@@ -21,6 +21,12 @@ export function HotkeysHandler() {
 	const panBy = useStore((state) => state.panBy);
 
 	const onKeyDown = useEvent((event: KeyboardEvent) => {
+		if (event.code === 'KeyZ' && (event.ctrlKey || event.metaKey)) {
+			event.preventDefault();
+			sendToExtension({ type: WebviewMessageType.Undo });
+			return;
+		}
+
 		if (selectedPin && event.code === 'Escape') {
 			setSelectedPin(undefined);
 			return;
