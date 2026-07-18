@@ -3,6 +3,7 @@ import { WebviewMessageType, WebviewToExtensionMessage } from '../../../shared/m
 import { openLocation } from './openLocation';
 import { sendViewportSettingToWebview } from './sendViewportSettingToWebview';
 import { removePinsGraph } from '../graphs/removePinsGraph';
+import { copyGraphAsText } from '../graphs/copyGraphAsText';
 import { exportGraph } from '../graphs/exportGraph';
 import { cloneGraph } from '../graphs/cloneGraph';
 import { addNewGraph } from '../graphs/addNewGraph';
@@ -67,5 +68,8 @@ export function handleMessageFromWebview(
     }
     if (message.type === WebviewMessageType.ExportGraph) {
         exportGraph(message.id, appCtx);
+    }
+    if (message.type === WebviewMessageType.CopyGraphAsText) {
+        copyGraphAsText(message.id, appCtx);
     }
 }

@@ -66,6 +66,15 @@ export function CloneIcon() {
 	);
 }
 
+export function CopyTextIcon() {
+	return (
+		<svg {...iconProps}>
+			<rect x="4.5" y="2.5" width="7" height="4" rx="1" />
+			<path d="M11.5 4.5h1a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-9a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1h1M5.5 9h5M5.5 11h5" />
+		</svg>
+	);
+}
+
 export function TrashIcon() {
 	return (
 		<svg {...iconProps}>

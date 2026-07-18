@@ -5,7 +5,7 @@ import type { PinsGraph } from '../../../shared/types';
 import { activeGraphAtom } from '../../atoms';
 import { cn } from '../../utils/cn';
 import { sendToExtension } from '../../utils/vscodeApi';
-import { CloneIcon, EditIcon, ExportIcon, TrashIcon } from './icons';
+import { CloneIcon, CopyTextIcon, EditIcon, ExportIcon, TrashIcon } from './icons';
 
 export function GraphListItem({ graph }: { graph: PinsGraph; }) {
 	const activeGraph = useAtomValue(activeGraphAtom);
@@ -37,6 +37,11 @@ export function GraphListItem({ graph }: { graph: PinsGraph; }) {
 	const exportGraph = (event: React.MouseEvent) => {
 		event.stopPropagation();
 		sendToExtension({ type: WebviewMessageType.ExportGraph, id: graph.id });
+	};
+
+	const copyGraphAsText = (event: React.MouseEvent) => {
+		event.stopPropagation();
+		sendToExtension({ type: WebviewMessageType.CopyGraphAsText, id: graph.id });
 	};
 
 	const deleteGraph = (event: React.MouseEvent) => {
@@ -82,6 +87,14 @@ export function GraphListItem({ graph }: { graph: PinsGraph; }) {
 					onClick={exportGraph}
 				>
 					<ExportIcon />
+				</button>
+
+				<button
+					className="shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100!"
+					title={`Copy graph "${graph.label}" as text`}
+					onClick={copyGraphAsText}
+				>
+					<CopyTextIcon />
 				</button>
 
 				<button
