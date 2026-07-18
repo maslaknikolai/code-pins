@@ -5,6 +5,7 @@ import { useEffect, useRef } from 'react';
 import { WebviewMessageType } from '../../../shared/messages';
 import type { PinsGraph } from '../../../shared/types';
 import { activeGraphAtom } from '../../atoms';
+import { useSwitchGraph } from '../../hooks/useSwitchGraph';
 import { cn } from '../../utils/cn';
 import { sendToExtension } from '../../utils/vscodeApi';
 import { CloneIcon, CopyTextIcon, EditIcon, ExportIcon, TrashIcon } from './icons';
@@ -15,18 +16,13 @@ export function GraphListItem({ graph }: { graph: PinsGraph; }) {
 	const isActive = graph.id === activeGraph?.id
 	const rowRef = useRef<HTMLDivElement>(null);
 	const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({ id: graph.id });
+	const switchGraph = useSwitchGraph();
 
 	useEffect(() => {
 		if (isActive) {
 			rowRef.current?.scrollIntoView({ block: 'center' });
 		}
 	}, [isActive]);
-
-	const switchGraph = () => {
-		if (!isActive) {
-			sendToExtension({ type: WebviewMessageType.SwitchGraph, id: graph.id });
-		}
-	};
 
 	const renameGraph = (event: React.MouseEvent) => {
 		event.stopPropagation();
@@ -67,7 +63,7 @@ export function GraphListItem({ graph }: { graph: PinsGraph; }) {
 				isDragging && 'relative z-10 opacity-80'
 			)}
 			style={{ transform: CSS.Transform.toString(transform), transition }}
-			onClick={switchGraph}
+			onClick={() => switchGraph(graph.id)}
 			{...attributes}
 			{...listeners}
 		>
