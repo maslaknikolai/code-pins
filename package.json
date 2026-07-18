@@ -18,6 +18,10 @@
         "title": "Code Pins: Add pin"
       },
       {
+        "command": "code-pins.showPanel",
+        "title": "Code Pins: Show Panel"
+      },
+      {
         "command": "code-pins.clearActiveGraph",
         "title": "Code Pins: Clear Active Graph"
       },
