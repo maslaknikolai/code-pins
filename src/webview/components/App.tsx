@@ -24,6 +24,7 @@ import { FlowControls } from './FlowControls';
 import { HotkeysHandler } from './HotkeysHandler';
 import { useEndDragOnLeave } from '../hooks/useEndDragOnLeave';
 import { useViewSettingsAutosave } from '../hooks/useViewSettingsAutosave';
+import { TooltipProvider } from './ui/tooltip';
 
 const nodeTypes = {
 	file: FileNodeView
@@ -65,30 +66,32 @@ export function App() {
 	const colorMode = document.body.classList.contains('vscode-light') ? 'light' : 'dark';
 
 	return (
-		<ReactFlow
-			nodes={nodes}
-			edges={edges}
-			nodeTypes={nodeTypes}
-			edgeTypes={edgeTypes}
-			onNodesChange={onNodesChange}
-			onNodeDragStop={onNodeDragStop}
-			colorMode={colorMode}
-			minZoom={0.1}
-			nodesConnectable={false}
-			deleteKeyCode={null}
-			snapToGrid
-			snapGrid={[GRID_SIZE, GRID_SIZE]}
-			translateExtent={fieldExtent}
-			nodeExtent={fieldExtent}
-		>
+		<TooltipProvider>
+			<ReactFlow
+				nodes={nodes}
+				edges={edges}
+				nodeTypes={nodeTypes}
+				edgeTypes={edgeTypes}
+				onNodesChange={onNodesChange}
+				onNodeDragStop={onNodeDragStop}
+				colorMode={colorMode}
+				minZoom={0.1}
+				nodesConnectable={false}
+				deleteKeyCode={null}
+				snapToGrid
+				snapGrid={[GRID_SIZE, GRID_SIZE]}
+				translateExtent={fieldExtent}
+				nodeExtent={fieldExtent}
+			>
 
-			<Background gap={GRID_SIZE} color={colorMode === 'light' ? '#7d7d88' : '#6b6b78'} />
-			<FlowControls />
-			<GroupOutlines />
-			<ExtensionMessageHandler />
-			<HotkeysHandler />
-			<ViewportSettingsReporter />
-			<OptionsDrawer />
-		</ReactFlow>
+				<Background gap={GRID_SIZE} color={colorMode === 'light' ? '#7d7d88' : '#6b6b78'} />
+				<FlowControls />
+				<GroupOutlines />
+				<ExtensionMessageHandler />
+				<HotkeysHandler />
+				<ViewportSettingsReporter />
+				<OptionsDrawer />
+			</ReactFlow>
+		</TooltipProvider>
 	);
 }

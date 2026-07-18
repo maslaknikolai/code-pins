@@ -8,6 +8,7 @@ import { activeGraphAtom } from '../../atoms';
 import { cn } from '../../utils/cn';
 import { sendToExtension } from '../../utils/vscodeApi';
 import { CloneIcon, CopyTextIcon, EditIcon, ExportIcon, TrashIcon } from './icons';
+import { RowButton } from './RowButton';
 
 export function GraphListItem({ graph }: { graph: PinsGraph; }) {
 	const activeGraph = useAtomValue(activeGraphAtom);
@@ -75,45 +76,29 @@ export function GraphListItem({ graph }: { graph: PinsGraph; }) {
 			<div
 				className="hidden shrink-0 items-center gap-0.5 group-focus-within:flex group-hover:flex"
 			>
-				<button
-					className="shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100!"
-					title={`Rename graph "${graph.label}"`}
-					onClick={renameGraph}
-				>
+				<RowButton tooltip={`Rename graph "${graph.label}"`} onClick={renameGraph}>
 					<EditIcon />
-				</button>
+				</RowButton>
 
-				<button
-					className="shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100!"
-					title={`Clone graph "${graph.label}"`}
-					onClick={cloneGraph}
-				>
+				<RowButton tooltip={`Clone graph "${graph.label}"`} onClick={cloneGraph}>
 					<CloneIcon />
-				</button>
+				</RowButton>
 
-				<button
-					className="shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100!"
-					title={`Export graph "${graph.label}"`}
-					onClick={exportGraph}
-				>
+				<RowButton tooltip={`Export graph "${graph.label}"`} onClick={exportGraph}>
 					<ExportIcon />
-				</button>
+				</RowButton>
 
-				<button
-					className="shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100!"
-					title={`Copy graph "${graph.label}" as text`}
-					onClick={copyGraphAsText}
-				>
+				<RowButton tooltip={`Copy graph "${graph.label}" as text`} onClick={copyGraphAsText}>
 					<CopyTextIcon />
-				</button>
+				</RowButton>
 
-				<button
-					className="shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100! hover:text-(--vscode-errorForeground,#f66)"
-					title={`Delete graph "${graph.label}"`}
+				<RowButton
+					tooltip={`Delete graph "${graph.label}"`}
+					className="hover:text-(--vscode-errorForeground,#f66)"
 					onClick={deleteGraph}
 				>
 					<TrashIcon />
-				</button>
+				</RowButton>
 			</div>
 		</div>
 	);

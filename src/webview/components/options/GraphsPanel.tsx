@@ -4,6 +4,7 @@ import { allGraphsAtom } from '../../atoms';
 import { useSelectGraphByOffset } from '../../hooks/useSelectGraphByOffset';
 import { sendToExtension } from '../../utils/vscodeApi';
 import { HotkeyHint } from '../HotkeyHint';
+import { Tooltip } from '../ui/tooltip';
 import { SortableGraphList } from './SortableGraphList';
 import { ChevronDownIcon, ChevronUpIcon, ImportIcon, PlusIcon } from './icons';
 
@@ -24,15 +25,16 @@ export function GraphsPanel() {
 	return (
 		<div className="flex flex-col gap-1">
 			<div className="flex gap-1 px-1">
-				<button
-					className="flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded border border-(--vscode-editorWidget-border) px-2 py-1 opacity-70 hover:opacity-100 hover:bg-(--vscode-list-hoverBackground)"
-					title="New graph (X)"
-					onClick={newGraph}
-				>
-					<PlusIcon />
-					New graph
-					<HotkeyHint>X</HotkeyHint>
-				</button>
+				<Tooltip body="New graph (X)">
+					<button
+						className="flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded border border-(--vscode-editorWidget-border) px-2 py-1 opacity-70 hover:opacity-100 hover:bg-(--vscode-list-hoverBackground)"
+						onClick={newGraph}
+					>
+						<PlusIcon />
+						New graph
+						<HotkeyHint>X</HotkeyHint>
+					</button>
+				</Tooltip>
 
 				<button
 					className="flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded border border-(--vscode-editorWidget-border) px-2 py-1 opacity-70 hover:opacity-100 hover:bg-(--vscode-list-hoverBackground)"
@@ -54,25 +56,27 @@ export function GraphsPanel() {
 				</div>
 
 				<div className="flex shrink-0 flex-col gap-1">
-					<button
-						className={STEP_BUTTON_CLASS}
-						title="Previous graph (Q)"
-						disabled={!canSelectPrev}
-						onClick={() => selectGraphByOffset(-1)}
-					>
-						<ChevronUpIcon />
-						<HotkeyHint>Q</HotkeyHint>
-					</button>
+					<Tooltip body="Previous graph (Q)">
+						<button
+							className={STEP_BUTTON_CLASS}
+							disabled={!canSelectPrev}
+							onClick={() => selectGraphByOffset(-1)}
+						>
+							<ChevronUpIcon />
+							<HotkeyHint>Q</HotkeyHint>
+						</button>
+					</Tooltip>
 
-					<button
-						className={STEP_BUTTON_CLASS}
-						title="Next graph (E)"
-						disabled={!canSelectNext}
-						onClick={() => selectGraphByOffset(1)}
-					>
-						<ChevronDownIcon />
-						<HotkeyHint>E</HotkeyHint>
-					</button>
+					<Tooltip body="Next graph (E)">
+						<button
+							className={STEP_BUTTON_CLASS}
+							disabled={!canSelectNext}
+							onClick={() => selectGraphByOffset(1)}
+						>
+							<ChevronDownIcon />
+							<HotkeyHint>E</HotkeyHint>
+						</button>
+					</Tooltip>
 				</div>
 			</div>
 		</div>

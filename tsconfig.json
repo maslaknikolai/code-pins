@@ -12,6 +12,9 @@
             "node",
             "mocha"
         ],
+        "paths": {
+            "@/*": ["./src/webview/*"]
+        },
         "skipLibCheck": true,
         "sourceMap": true,
         "rootDir": "src",
