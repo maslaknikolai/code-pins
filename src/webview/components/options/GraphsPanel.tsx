@@ -61,22 +61,22 @@ export function GraphsPanel() {
 				<div className="flex shrink-0 flex-col gap-1">
 					<button
 						className={STEP_BUTTON_CLASS}
-						title="Previous graph (Up arrow)"
+						title="Previous graph (Q)"
 						disabled={!canSelectPrev}
 						onClick={() => selectGraphByOffset(-1)}
 					>
 						<ChevronUpIcon />
-						<HotkeyHint>↑</HotkeyHint>
+						<HotkeyHint>Q</HotkeyHint>
 					</button>
 
 					<button
 						className={STEP_BUTTON_CLASS}
-						title="Next graph (Down arrow)"
+						title="Next graph (E)"
 						disabled={!canSelectNext}
 						onClick={() => selectGraphByOffset(1)}
 					>
 						<ChevronDownIcon />
-						<HotkeyHint>↓</HotkeyHint>
+						<HotkeyHint>E</HotkeyHint>
 					</button>
 				</div>
 			</div>

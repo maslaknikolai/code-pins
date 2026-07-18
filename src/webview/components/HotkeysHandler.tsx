@@ -82,14 +82,12 @@ export function HotkeysHandler() {
 			return;
 		}
 
-		if (event.code === 'ArrowUp') {
-			event.preventDefault();
+		if (event.code === 'KeyQ') {
 			selectGraphByOffset(-1);
 			return;
 		}
 
-		if (event.code === 'ArrowDown') {
-			event.preventDefault();
+		if (event.code === 'KeyE') {
 			selectGraphByOffset(1);
 			return;
 		}
