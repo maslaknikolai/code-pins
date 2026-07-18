@@ -5,7 +5,7 @@ import { buildPinAt } from '../actions/buildPin';
 import { createOrShowPanel } from '../actions/panel/createOrShowPanel';
 import { AppCtx } from '../types';
 
-/** Pins every reference of the symbol under the cursor — bulk version of addPin. */
+
 export async function addActiveEditorSymbolReferencesCommand(appCtx: AppCtx) {
 	const editor = vscode.window.activeTextEditor;
 
@@ -22,11 +22,6 @@ export async function addActiveEditorSymbolReferencesCommand(appCtx: AppCtx) {
 	const items: { filePath: string; pin: Pin }[] = [];
 
 	for (const location of locations) {
-		// // References can land outside the workspace (node_modules, lib files) — skip those.
-		// if (!vscode.workspace.getWorkspaceFolder(location.uri)) {
-		// 	continue;
-		// }
-
 		const document = await vscode.workspace.openTextDocument(location.uri);
 		const built = await buildPinAt(document, location.range.start);
 
