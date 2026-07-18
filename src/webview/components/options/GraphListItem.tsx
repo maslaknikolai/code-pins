@@ -58,10 +58,7 @@ export function GraphListItem({ graph }: { graph: PinsGraph; }) {
 			<span className="min-w-0 flex-1 truncate">{graph.label}</span>
 
 			<div
-				className={cn(
-					'hidden shrink-0 items-center gap-0.5 group-focus-within:flex group-hover:flex',
-					isActive && 'flex'
-				)}
+				className="hidden shrink-0 items-center gap-0.5 group-focus-within:flex group-hover:flex"
 			>
 				<button
 					className="shrink-0 cursor-pointer px-1 opacity-50 hover:opacity-100!"
