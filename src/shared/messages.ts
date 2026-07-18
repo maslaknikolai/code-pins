@@ -6,7 +6,7 @@ export enum WebviewMessageType {
 	MoveFileNodes = 'moveFileNodes',
 	Undo = 'undo',
 	RemovePin = 'removePin',
-	RemoveFileNode = 'removeFileNode',
+	RemoveFileNodes = 'removeFileNodes',
 	OpenLocation = 'openLocation',
 	ViewSettingsChanged = 'viewSettingsChanged',
 	SwitchGraph = 'switchGraph',
@@ -23,7 +23,7 @@ export type WebviewToExtensionMessage =
 	| { type: WebviewMessageType.MoveFileNodes; moves: { filePath: string; position: Coords }[] }
 	| { type: WebviewMessageType.Undo }
 	| { type: WebviewMessageType.RemovePin; id: string }
-	| { type: WebviewMessageType.RemoveFileNode; filePath: string }
+	| { type: WebviewMessageType.RemoveFileNodes; filePaths: string[] }
 	| { type: WebviewMessageType.OpenLocation; file: string; line: number }
 	| { type: WebviewMessageType.ViewSettingsChanged; viewSettings: ViewSettings | undefined }
 	| { type: WebviewMessageType.SwitchGraph; id: string }

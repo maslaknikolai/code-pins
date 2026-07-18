@@ -49,11 +49,7 @@ export function App() {
 	const edges = useEdges();
 
 	const onNodesChange = useEvent((changes: NodeChange<FileFlowNode>[]) => {
-		setNodes((prev) => {
-			const r = applyNodeChanges(changes, prev)
-			console.log({changes, prev, r})
-			return r
-		});
+		setNodes((prev) => applyNodeChanges(changes, prev));
 	});
 
 	const onNodeDragStop = useEvent((_event: MouseEvent | TouchEvent, _node: FileFlowNode, nodes: FileFlowNode[]) => {

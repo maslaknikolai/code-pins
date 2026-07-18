@@ -14,7 +14,7 @@ export function FileNodeHeader({ fileNode }: { fileNode: FileNode }) {
 
 	const removeFileNode = (event: React.MouseEvent) => {
 		event.stopPropagation();
-		sendToExtension({ type: WebviewMessageType.RemoveFileNode, filePath: fileNode.filePath });
+		sendToExtension({ type: WebviewMessageType.RemoveFileNodes, filePaths: [fileNode.filePath] });
 	};
 
 	return (

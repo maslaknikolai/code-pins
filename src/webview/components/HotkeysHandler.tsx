@@ -1,8 +1,8 @@
 import { useReactFlow, useStore } from '@xyflow/react';
-import { useAtom, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
 import { WebviewMessageType } from '../../shared/messages';
-import { selectedPinAtom, viewSettingsAtom } from '../atoms';
+import { flowNodesAtom, selectedPinAtom, viewSettingsAtom } from '../atoms';
 import { useEvent } from '../hooks/useEvent';
 import { useFitViewToggle } from '../hooks/useFitViewToggle';
 import { useSelectGraphByOffset } from '../hooks/useSelectGraphByOffset';
@@ -15,6 +15,7 @@ const PAN_STEP_FAST = 240;
 export function HotkeysHandler() {
 	const { zoomIn, zoomOut, setViewport } = useReactFlow();
 	const [selectedPin, setSelectedPin] = useAtom(selectedPinAtom);
+	const nodes = useAtomValue(flowNodesAtom);
 	const setViewSettings = useSetAtom(viewSettingsAtom);
 	const { selectGraphByOffset } = useSelectGraphByOffset();
 	const toggleFitView = useFitViewToggle();
@@ -36,6 +37,21 @@ export function HotkeysHandler() {
 			sendToExtension({ type: WebviewMessageType.RemovePin, id: selectedPin.id });
 			setSelectedPin(undefined);
 			return;
+		}
+
+		if (event.code === 'Delete' || event.code === 'Backspace') {
+			const filePaths = nodes
+				.filter((node) => node.selected)
+				.map((node) => node.id)
+
+			if (!filePaths.length) {
+				return;
+			}
+
+			sendToExtension({
+				type: WebviewMessageType.RemoveFileNodes,
+				filePaths,
+			});
 		}
 
 		if (event.code === 'Space') {
