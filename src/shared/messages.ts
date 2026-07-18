@@ -33,7 +33,7 @@ export type WebviewToExtensionMessage =
 	| { type: WebviewMessageType.ImportGraph }
 	| { type: WebviewMessageType.NewGraph }
 	| { type: WebviewMessageType.CloneGraph; id: string }
-	| { type: WebviewMessageType.RenameGraph; id: string }
+	| { type: WebviewMessageType.RenameGraph; id: string; label: string }
 	| { type: WebviewMessageType.ExportGraph; id: string }
 	| { type: WebviewMessageType.CopyGraphAsText; id: string }
 	| { type: WebviewMessageType.ReorderGraphs; ids: string[] };

@@ -13,24 +13,33 @@ function pathDepth(filePath: string): number {
 }
 
 /**
- * Lays out the new nodes from the viewport corner: one row per directory depth,
- * shallow paths on top, deeper ones below; same-depth nodes spread to the right.
+ * Lays out the new nodes in a grid starting at the viewport corner.
+ *
+ * Each directory depth gets its own row: files at the project root land in the
+ * top row, deeper files in rows below. Files of the same depth fill their row
+ * left to right in alphabetical order.
  */
 function layoutNewNodes(filePaths: string[], base: Coords): Map<string, Coords> {
-	const sorted = [...filePaths].sort((a, b) => pathDepth(a) - pathDepth(b) || a.localeCompare(b));
-	const minDepth = sorted.length ? pathDepth(sorted[0]) : 0;
+	// Shallow paths first; alphabetical within the same depth so the order is stable.
+	const sorted = [...filePaths].sort((a, b) =>
+		pathDepth(a) - pathDepth(b) || a.localeCompare(b)
+	);
+
+	// Depths rarely start at 1 (e.g. everything lives under `src/`),
+	// so the shallowest actual depth becomes row 0 — the top row.
+	const shallowestDepth = sorted.length > 0 ? pathDepth(sorted[0]) : 0;
 
 	const positions = new Map<string, Coords>();
-	const columnByDepth = new Map<number, number>();
+	const filledPerRow = new Map<number, number>();
 
 	for (const filePath of sorted) {
-		const depth = pathDepth(filePath);
-		const column = columnByDepth.get(depth) ?? 0;
-		columnByDepth.set(depth, column + 1);
+		const row = pathDepth(filePath) - shallowestDepth;
+		const column = filledPerRow.get(row) ?? 0;
+		filledPerRow.set(row, column + 1);
 
 		positions.set(filePath, {
-			x: base.x + COLUMN_STEP * column,
-			y: base.y + ROW_STEP * (depth - minDepth),
+			x: base.x + column * COLUMN_STEP,
+			y: base.y + row * ROW_STEP,
 		});
 	}
 

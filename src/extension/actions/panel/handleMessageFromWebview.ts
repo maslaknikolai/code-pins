@@ -65,7 +65,7 @@ export function handleMessageFromWebview(
         cloneGraph(message.id, appCtx);
     }
     if (message.type === WebviewMessageType.RenameGraph) {
-        renameGraph(message.id, appCtx);
+        renameGraph(message.id, message.label, appCtx);
     }
     if (message.type === WebviewMessageType.ExportGraph) {
         exportGraph(message.id, appCtx);

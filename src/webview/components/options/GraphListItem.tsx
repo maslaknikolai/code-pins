@@ -1,13 +1,14 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useAtomValue } from 'jotai';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { WebviewMessageType } from '../../../shared/messages';
 import type { PinsGraph } from '../../../shared/types';
 import { activeGraphAtom } from '../../atoms';
 import { useSwitchGraph } from '../../hooks/useSwitchGraph';
 import { cn } from '../../utils/cn';
 import { sendToExtension } from '../../utils/vscodeApi';
+import { GraphLabelField } from './GraphLabelField';
 import { CloneIcon, CopyTextIcon, EditIcon, ExportIcon, TrashIcon } from './icons';
 import { RowButton } from './RowButton';
 
@@ -24,9 +25,15 @@ export function GraphListItem({ graph }: { graph: PinsGraph; }) {
 		}
 	}, [isActive]);
 
-	const renameGraph = (event: React.MouseEvent) => {
+	const [isNameEditing, setIsNameEditing] = useState(false);
+
+	const startNameEditing = (event: React.MouseEvent) => {
 		event.stopPropagation();
-		sendToExtension({ type: WebviewMessageType.RenameGraph, id: graph.id });
+		setIsNameEditing(true);
+	};
+
+	const submitLabel = (label: string) => {
+		sendToExtension({ type: WebviewMessageType.RenameGraph, id: graph.id, label });
 	};
 
 	const cloneGraph = (event: React.MouseEvent) => {
@@ -67,35 +74,41 @@ export function GraphListItem({ graph }: { graph: PinsGraph; }) {
 			{...attributes}
 			{...listeners}
 		>
-			<span className="min-w-0 flex-1 truncate">{graph.label}</span>
+			{isNameEditing ? (
+				<GraphLabelField
+					initialValue={graph.label}
+					onSubmit={submitLabel}
+					onClose={() => setIsNameEditing(false)}
+				/>
+			) : (<>
+				<span className="min-w-0 flex-1 truncate">{graph.label}</span>
 
-			<div
-				className="hidden shrink-0 items-center gap-0.5 group-focus-within:flex group-hover:flex"
-			>
-				<RowButton tooltip={`Rename graph "${graph.label}"`} onClick={renameGraph}>
-					<EditIcon />
-				</RowButton>
+				<div className="hidden shrink-0 items-center gap-0.5 group-focus-within:flex group-hover:flex">
+					<RowButton tooltip={`Rename graph "${graph.label}"`} onClick={startNameEditing}>
+						<EditIcon />
+					</RowButton>
 
-				<RowButton tooltip={`Clone graph "${graph.label}"`} onClick={cloneGraph}>
-					<CloneIcon />
-				</RowButton>
+					<RowButton tooltip={`Clone graph "${graph.label}"`} onClick={cloneGraph}>
+						<CloneIcon />
+					</RowButton>
 
-				<RowButton tooltip={`Export graph "${graph.label}"`} onClick={exportGraph}>
-					<ExportIcon />
-				</RowButton>
+					<RowButton tooltip={`Export graph "${graph.label}"`} onClick={exportGraph}>
+						<ExportIcon />
+					</RowButton>
 
-				<RowButton tooltip={`Copy graph "${graph.label}" as text`} onClick={copyGraphAsText}>
-					<CopyTextIcon />
-				</RowButton>
+					<RowButton tooltip={`Copy graph "${graph.label}" as text`} onClick={copyGraphAsText}>
+						<CopyTextIcon />
+					</RowButton>
 
-				<RowButton
-					tooltip={`Delete graph "${graph.label}"`}
-					className="hover:text-(--vscode-errorForeground,#f66)"
-					onClick={deleteGraph}
-				>
-					<TrashIcon />
-				</RowButton>
-			</div>
+					<RowButton
+						tooltip={`Delete graph "${graph.label}"`}
+						className="hover:text-(--vscode-errorForeground,#f66)"
+						onClick={deleteGraph}
+					>
+						<TrashIcon />
+					</RowButton>
+				</div>
+			</>)}
 		</div>
 	);
 }
