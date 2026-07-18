@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { addActiveEditorSymbolAsPinCommand } from './commands/addPinCommand';
+import { addActiveEditorSymbolReferencesCommand } from './commands/addReferencesCommand';
 import { showPanelCommand } from './commands/showPanelCommand';
 import { setupDev } from './setupDev';
 import { createAppCtx } from './createAppCtx';
@@ -13,6 +14,7 @@ export function activate(vscodeContext: vscode.ExtensionContext) {
 
 	vscodeContext.subscriptions.push(
 		vscode.commands.registerCommand('code-pins.addPin', () => addActiveEditorSymbolAsPinCommand(appCtx)),
+		vscode.commands.registerCommand('code-pins.addReferences', () => addActiveEditorSymbolReferencesCommand(appCtx)),
 		vscode.commands.registerCommand('code-pins.showPanel', () => showPanelCommand(appCtx)),
 		vscode.commands.registerCommand('code-pins.clearActiveGraph', () => removeAllNodesOfActiveGraph(appCtx)),
 		vscode.window.onDidChangeActiveTextEditor(() => updateLastActiveFilePath(appCtx))

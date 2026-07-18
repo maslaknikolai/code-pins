@@ -18,6 +18,10 @@
         "title": "Code Pins: Add pin"
       },
       {
+        "command": "code-pins.addReferences",
+        "title": "Code Pins: Add All References of Symbol"
+      },
+      {
         "command": "code-pins.showPanel",
         "title": "Code Pins: Show Panel"
       },
@@ -36,6 +40,13 @@
           "command": "code-pins.wipeStorage",
           "when": "codePins.isDev"
         }
+      ],
+      "editor/context": [
+        {
+          "command": "code-pins.addReferences",
+          "when": "editorTextFocus",
+          "group": "codePins"
+        }
       ]
     },
     "keybindings": [
@@ -44,6 +55,12 @@
         "key": "ctrl+y",
         "mac": "ctrl+y",
         "when": "editorTextFocus || (!editorIsOpen && !terminalFocus)"
+      },
+      {
+        "command": "code-pins.addReferences",
+        "key": "ctrl+shift+y",
+        "mac": "ctrl+shift+y",
+        "when": "editorTextFocus"
       }
     ]
   },

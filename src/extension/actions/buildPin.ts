@@ -9,11 +9,17 @@ import { resolveSymbolDefinitionPath } from './resolveSymbolDefinitionPath';
  * Builds a pin for the entity under the cursor: resolves its definition
  * (same lookup as cmd+click) and collects the enclosing-scope breadcrumb lines.
  */
-export async function buildPin(
+export function buildPin(
 	editor: vscode.TextEditor
 ): Promise<{ filePath: string; pin: Pin } | undefined> {
-	const document = editor.document;
-	const position = editor.selection.active;
+	return buildPinAt(editor.document, editor.selection.active);
+}
+
+/** Same as {@link buildPin}, but for any document position instead of the cursor. */
+export async function buildPinAt(
+	document: vscode.TextDocument,
+	position: vscode.Position
+): Promise<{ filePath: string; pin: Pin } | undefined> {
 	const wordRange = document.getWordRangeAtPosition(position);
 
 	if (!wordRange) {
