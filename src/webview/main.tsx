@@ -6,3 +6,6 @@ if (!container) {
 	throw new Error('code-pins: #root element missing in webview HTML');
 }
 createRoot(container).render(<App />);
+
+// The panel opens focused, but keyboard focus stays
+window.focus();
