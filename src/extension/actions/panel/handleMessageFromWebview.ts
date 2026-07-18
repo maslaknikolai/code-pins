@@ -12,6 +12,7 @@ import { moveActiveGraphFileNodes } from '../activeGraph/moveActiveGraphFileNode
 import { undoActiveGraph } from '../activeGraph/undoActiveGraph';
 import { removeFileNodesFromActiveGraph } from '../activeGraph/removeFileNodesFromActiveGraph';
 import { renameGraph } from '../graphs/renameGraph';
+import { reorderGraphs } from '../graphs/reorderGraphs';
 import { removePinFromActiveGraph } from '../activeGraph/removePinFromActiveGraph';
 import { sendGraphsToWebview } from "./sendGraphsToWebview";
 import { sendActiveFileToWebview } from "./sendActiveFileToWebview";
@@ -71,5 +72,8 @@ export function handleMessageFromWebview(
     }
     if (message.type === WebviewMessageType.CopyGraphAsText) {
         copyGraphAsText(message.id, appCtx);
+    }
+    if (message.type === WebviewMessageType.ReorderGraphs) {
+        reorderGraphs(message.ids, appCtx);
     }
 }

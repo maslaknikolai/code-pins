@@ -6,7 +6,7 @@ export function saveOrAddGraph(pinsGraph: PinsGraph, { pinsGraphsStore }: AppCtx
 	const index = graphs.findIndex((graph) => graph.id === pinsGraph.id);
 
 	if (index === -1) {
-		graphs.push(pinsGraph);
+		graphs.unshift(pinsGraph);
 	} else {
 		graphs[index] = pinsGraph;
 	}

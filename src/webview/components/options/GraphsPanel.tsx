@@ -4,7 +4,7 @@ import { allGraphsAtom } from '../../atoms';
 import { useSelectGraphByOffset } from '../../hooks/useSelectGraphByOffset';
 import { sendToExtension } from '../../utils/vscodeApi';
 import { HotkeyHint } from '../HotkeyHint';
-import { GraphListItem } from './GraphListItem';
+import { SortableGraphList } from './SortableGraphList';
 import { ChevronDownIcon, ChevronUpIcon, ImportIcon, PlusIcon } from './icons';
 
 const STEP_BUTTON_CLASS = 'flex cursor-pointer flex-col items-center gap-0.5 rounded border border-(--vscode-editorWidget-border) px-1.5 py-1 opacity-70 hover:bg-(--vscode-list-hoverBackground) hover:opacity-100 disabled:cursor-default disabled:opacity-25 disabled:hover:bg-transparent';
@@ -50,12 +50,7 @@ export function GraphsPanel() {
 						<div className="px-1 py-2 opacity-60">No saved graphs.</div>
 					)}
 
-					{graphs.map((graph) => (
-						<GraphListItem
-							key={graph.id}
-							graph={graph}
-						/>
-					))}
+					<SortableGraphList />
 				</div>
 
 				<div className="flex shrink-0 flex-col gap-1">

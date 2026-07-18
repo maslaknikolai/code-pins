@@ -1,3 +1,5 @@
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { useAtomValue } from 'jotai';
 import { useEffect, useRef } from 'react';
 import { WebviewMessageType } from '../../../shared/messages';
@@ -11,6 +13,7 @@ export function GraphListItem({ graph }: { graph: PinsGraph; }) {
 	const activeGraph = useAtomValue(activeGraphAtom);
 	const isActive = graph.id === activeGraph?.id
 	const rowRef = useRef<HTMLDivElement>(null);
+	const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({ id: graph.id });
 
 	useEffect(() => {
 		if (isActive) {
@@ -51,14 +54,21 @@ export function GraphListItem({ graph }: { graph: PinsGraph; }) {
 
 	return (
 		<div
-			ref={rowRef}
+			ref={node => {
+				rowRef.current = node;
+				setNodeRef(node);
+			}}
 			className={cn(
 				'group flex cursor-pointer items-center gap-0.5 rounded px-2 py-1',
 				isActive
 					? 'bg-(--vscode-list-activeSelectionBackground) text-(--vscode-list-activeSelectionForeground)'
-					: 'hover:bg-(--vscode-list-hoverBackground)'
+					: 'hover:bg-(--vscode-list-hoverBackground)',
+				isDragging && 'relative z-10 opacity-80'
 			)}
+			style={{ transform: CSS.Transform.toString(transform), transition }}
 			onClick={switchGraph}
+			{...attributes}
+			{...listeners}
 		>
 			<span className="min-w-0 flex-1 truncate">{graph.label}</span>
 
