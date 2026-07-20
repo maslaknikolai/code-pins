@@ -14,20 +14,16 @@
   "contributes": {
     "commands": [
       {
+        "command": "code-pins.showPanel",
+        "title": "Code Pins: Show Panel"
+      },
+      {
         "command": "code-pins.addPin",
         "title": "Code Pins: Add pin"
       },
       {
         "command": "code-pins.addReferences",
         "title": "Code Pins: Add All References of Symbol"
-      },
-      {
-        "command": "code-pins.showPanel",
-        "title": "Code Pins: Show Panel"
-      },
-      {
-        "command": "code-pins.clearActiveGraph",
-        "title": "Code Pins: Clear Active Graph"
       },
       {
         "command": "code-pins.wipeStorage",
@@ -42,6 +38,11 @@
         }
       ],
       "editor/context": [
+        {
+          "command": "code-pins.addPin",
+          "when": "editorTextFocus",
+          "group": "codePins"
+        },
         {
           "command": "code-pins.addReferences",
           "when": "editorTextFocus",
