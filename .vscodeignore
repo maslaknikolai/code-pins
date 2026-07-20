@@ -12,3 +12,10 @@ vsc-extension-quickstart.md
 **/*.map
 **/*.ts
 **/.vscode-test.*
+.claude/**
+CLAUDE.md
+pub.txt
+all.md
+tasks.md
+pnpm-lock.yaml
+components.json
